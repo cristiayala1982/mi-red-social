@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <title>VISTA PERFIL</title>
+  <link rel="stylesheet" href="home css/navbar.css">
+  <link rel="stylesheet" href="home css/panelChats.css">
+  <link rel="stylesheet" href="home css/modal-listaamigos.css">
+  <link rel="stylesheet" href="home css/chats.css">
+  <link rel="stylesheet" href="vistaPerfil.css">
+</head>
+<body>
+<nav class="app-navbar">
+  <div class="app-navbar-logo">
+    <a href="home.html">
+      <img src="img/icono home.webp" alt="Inicio" width="40" height="40">
+    </a>
+    <span id="bienvenida" class="bienvenida-texto"></span>
+  </div>
+
+  <!-- Buscador -->
+  <form id="form-busqueda" class="buscador-usuarios">
+    <span class="icono-lupa">🔍</span>
+    <input type="text" id="input-busqueda" placeholder="Buscar usuario..." autocomplete="off">
+    <ul id="resultados-busqueda" class="resultados-autocompletado"></ul>
+  </form>
+
+  <!-- Íconos de mensaje y amigos -->
+  <div class="nav-icons">
+    <button id="btn-amigos" class="icono-btn">👥</button>
+    <button id="btn-mensajes" class="icono-btn">💬</button>
+  </div>
+
+  <!-- Foto de perfil con menú -->
+  <div class="perfil-menu">
+    <img id="nav-foto-perfil" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono-nav">
+    <ul class="dropdown-menu">
+      <li><a href="miPerfil.html">Mi perfil</a></li>
+      <li><a href="#">Cerrar sesión</a></li>
+    </ul>
+  </div>
+</nav>
+<!-- Contenido del perfil público -->
+<main class="perfil-publico">
+  <!-- Mensaje personalizado -->
+  <p class="mensaje-perfil">
+    Este es el perfil público de <span id="nombre-visitado"></span>
+  </p>
+
+  <div class="perfil-encabezado">
+    <div class="foto-perfil-container">
+      <img id="foto-perfil" src="img/usuario-camara.png" alt="Foto de perfil">
+    </div>
+    <div class="datos-usuario">
+      <p><strong>Nombre:</strong> <span id="nombre"></span></p>
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>Fecha de nacimiento:</strong> <span id="fecha-nac"></span></p>
+      <p><strong>Nacionalidad:</strong> <span id="nacionalidad"></span></p>
+
+      <!-- Acciones sobre el perfil visitado -->
+      <div id="acciones-perfil" class="acciones-perfil"></div>
+    </div>
+  </div>
+
+  <!-- Galería del usuario -->
+  <section class="galeria-usuario">
+    <h2>Galería</h2>
+    <div id="galeria" class="grid-galeria"></div>
+  </section>
+</main>
+<!-- ------Modal Lista de Amigos------ -->
+<div id="modal-amigos" class="modal-amigos">
+  <div class="modal-contenido">
+    <div class="modal-header">
+      <h2>Lista de Amigos</h2>
+      <span id="cerrar-modal-amigos" class="cerrar-modal">&times;</span>
+    </div>
+    <div class="modal-body">
+      <ul id="lista-amigos" class="lista-amigos"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- Panel lateral de chats -->
+<div id="panel-chats" class="panel">
+  <span class="cerrar-panel">&times;</span>
+  <h2>Mis chats</h2>
+  <ul id="lista-chats"></ul>
+</div>
+
+
+  <!-- Script -->
+   <script type="module" src="HOME_JS/navbar.js"></script>
+  <script type="module" src="PERFIL-JS/vistaPerfil.js"></script>
+  <script type="module" src="HOME_JS/cerrarSesion.js"></script>
+  <script type="module" src="HOME_JS/listaAmigosYchats.js"></script>
+  <script type="module" src="HOME_JS/buscador.js"></script>
+
+</div>
+</body>
+</html>
+

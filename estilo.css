@@ -1,0 +1,137 @@
+   body {
+       font-family: Arial, sans-serif;
+       margin: 0;
+       padding: 0;
+   }
+
+   .barra-navegacion {
+       background-color: #0a8b7a;
+       color: #fff;
+       padding: 1.5em;
+       position: relative;
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+   }
+
+   .barra-navegacion ul {
+       list-style: none;
+       margin: 0;
+       padding: 0;
+       display: flex;
+       align-items: center;
+   }
+
+   .barra-navegacion li {
+       margin-right: 20px;
+   }
+
+   .barra-navegacion a {
+       color: #fff;
+       text-decoration: none;
+       font-size: 1.5em;
+       transition: color 0.2s ease;
+   }
+
+   .barra-navegacion a:hover {
+       color: #ccc;
+   }
+
+   .barra-navegacion .usuario {
+       position: relative;
+   }
+
+   .barra-navegacion .menu-desplegable {
+       position: absolute;
+       top: 100%;
+       right: 0;
+       background-color: #09bea6c2;
+       border:solid 1px rgb(3, 73, 3);
+      
+       /* Color más cálido */
+      /* padding: 0;
+       /* Más ancho */
+       /*border-radius: 5px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+       display: none;
+       width: 250px;
+       /* Ancho fijo */
+}
+
+   .barra-navegacion .usuario:hover .menu-desplegable {
+       display: block;
+       
+       
+   }
+*/
+   .barra-navegacion .menu-desplegable li {
+    margin-bottom: 15px;
+      border: solid 1px black;
+       height: 100%;
+       width: 50%;
+       background-color: red;
+       margin: auto;
+   }*/
+
+   .barra-navegacion .menu-desplegable a {
+       color: #fff;
+       text-decoration: none;
+       font-size: 1.2em;
+       border:solid 1px rgb(3, 73, 3) ;
+       height: 100%;
+       width: 100%;
+    
+   }
+
+   .barra-navegacion .menu-desplegable a:hover {
+       color: #333;
+   }
+
+   /*-------------------*/
+   nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav li.usuario {
+  position: relative;
+}
+
+nav .menu-desplegable {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #09bea6c2;
+  border: solid 1px rgb(3, 73, 3);
+  padding: 0;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: none;
+  width: 250px;
+}
+
+nav .usuario:hover .menu-desplegable {
+  display: block;
+}
+
+nav .menu-desplegable li {
+  border-bottom: solid 1px rgb(3, 73, 3);
+}
+
+nav .menu-desplegable li:last-child {
+  border-bottom: none;
+}
+
+nav .menu-desplegable a {
+  display: block;
+  padding: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+nav .menu-desplegable a:hover {
+  background-color: #0a8b7a;
+  color: #333;
+}

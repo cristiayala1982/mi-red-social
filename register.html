@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow p-3 mb-5 bg-white rounded">
+                    <h1 class="text-center mb-4">Regístrate</h1>
+                    <form id="form-registro">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com"
+                                autocomplete="email">
+                            <p id="mensajeEmail"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="usuario" class="form-label">Crea tu Usuario</label>
+                            <input type="text" class="form-control" id="usuario" placeholder="name1982"
+                                autocomplete="username">
+                            <p id="mensajeUsuario"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Crea tu password</label>
+                            <input type="password" class="form-control" id="password" placeholder="1234"
+                                autocomplete="current-password">
+                            <p id="mensajePassword"></p>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Agregar</button>
+                        <p id="formEnviado"></p>
+                        <p class="text-center mt-3">¿Ya tienes cuenta? <a href="login.html" class="text-primary">Inicia sesión</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script>
+const formRegistro = document.getElementById('form-registro');
+
+formRegistro.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById('email').value.trim();
+  const usuario = document.getElementById('usuario').value.trim();
+  const password = document.getElementById('password').value.trim();
+
+  const mensajeEmail = document.getElementById('mensajeEmail');
+  const mensajeUsuario = document.getElementById('mensajeUsuario');
+  const mensajePassword = document.getElementById('mensajePassword');
+  const formEnviado = document.getElementById('formEnviado');
+
+  // Reset mensajes
+  mensajeEmail.textContent = '';
+  mensajeUsuario.textContent = '';
+  mensajePassword.textContent = '';
+  formEnviado.textContent = '';
+
+  // Validación de campos vacíos
+  if (!email) {
+    mensajeEmail.textContent = 'Falta completar este campo.';
+    mensajeEmail.style.color = 'blue';
+    return;
+  }
+  if (!usuario) {
+    mensajeUsuario.textContent = 'Falta completar este campo.';
+    mensajeUsuario.style.color = 'blue';
+    return;
+  }
+  if (!password) {
+    mensajePassword.textContent = 'Falta completar este campo.';
+    mensajePassword.style.color = 'blue';
+    return;
+  }
+
+  // Validación de formato de email
+  const emailRegla = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegla.test(email)) {
+    mensajeEmail.textContent = 'Ingrese un email válido';
+    mensajeEmail.style.color = 'red';
+    return;
+  }
+
+  // Validación de usuario (mínimo 6 caracteres, letras y números)
+  const usuarioRegla = /^[a-zA-Z0-9]{6,}$/;
+  if (!usuarioRegla.test(usuario)) {
+    mensajeUsuario.textContent = 'El usuario debe tener al menos 6 caracteres (letras y números).';
+    mensajeUsuario.style.color = 'red';
+    return;
+  }
+
+  // Validación de password (mínimo 8 caracteres, mayúscula, minúscula, número y especial)
+  const passwordRegla = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,}$/;
+  if (!passwordRegla.test(password)) {
+    mensajePassword.textContent = 'La contraseña debe tener 8 caracteres, mayúscula, minúscula, número y especial.';
+    mensajePassword.style.color = 'red';
+    return;
+  }
+
+  // Enviar al backend
+  fetch('http://localhost:3000/api/usuario/registro', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, usuario, password })
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("📦 Respuesta del backend:", data);
+
+      if (data.success) {
+        formEnviado.textContent = data.mensaje;
+        formEnviado.style.color = 'green';
+
+        // Limpiar campos
+        document.getElementById('email').value = '';
+        document.getElementById('usuario').value = '';
+        document.getElementById('password').value = '';
+
+        // Redirigir después de 2 segundos
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+      } else {
+        formEnviado.textContent = data.mensaje || "Error en el registro";
+        formEnviado.style.color = 'red';
+      }
+    })
+    .catch(err => {
+      console.error("❌ Error en el registro:", err);
+      formEnviado.textContent = "Error al conectar con el servidor.";
+      formEnviado.style.color = 'red';
+    });
+});
+
+
+        
+    </script>
+</body>
+
+</html>

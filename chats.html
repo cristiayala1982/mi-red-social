@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <title>Home</title>
+  <link rel="stylesheet" href="home css/navbar.css">
+  <link rel="stylesheet" href="home css/panelChats.css">
+  <link rel="stylesheet" href="home css/modal-listaamigos.css">
+  <link rel="stylesheet" href="home css/chats.css">
+  
+  
+</head>
+
+<body>
+<nav class="app-navbar">
+  <div class="app-navbar-logo">
+    <a href="home.html">
+      <img src="img/icono home.webp" alt="Inicio" width="40" height="40">
+    </a>
+    <span id="bienvenida" class="bienvenida-texto"></span>
+  </div>
+
+  <!-- Buscador -->
+  <form id="form-busqueda" class="buscador-usuarios">
+    <span class="icono-lupa">🔍</span>
+    <input type="text" id="input-busqueda" placeholder="Buscar usuario..." autocomplete="off">
+    <ul id="resultados-busqueda" class="resultados-autocompletado"></ul>
+  </form>
+
+  <!-- Íconos de mensaje y amigos -->
+  <div class="nav-icons">
+    <button id="btn-amigos" class="icono-btn">👥</button>
+    <button id="btn-mensajes" class="icono-btn">💬</button>
+  </div>
+
+  <!-- Foto de perfil con menú -->
+  <div class="perfil-menu">
+    <img id="nav-foto-perfil" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono-nav">
+    <ul class="dropdown-menu">
+      <li><a href="miPerfil.html">Mi perfil</a></li>
+      <li><a href="#">Cerrar sesión</a></li>
+    </ul>
+  </div>
+</nav>
+<!-- Contenedor principal de la app -->
+<div class="app-container">
+  <!-- MODAL AMIGOS -->
+<div id="modal-amigos" class="modal-amigos">
+  <div class="modal-contenido">
+    <div class="modal-header">
+      <h2>Lista de Amigos</h2>
+      <span id="cerrar-modal-amigos" class="cerrar-modal">&times;</span>
+    </div>
+    <div class="modal-body">
+      <ul id="lista-amigos" class="lista-amigos"></ul>
+    </div>
+  </div>
+</div>
+
+ <!-- Panel lateral de chats (oculto al inicio) -->
+  <div id="panel-chats" class="panel oculto">
+    <span class="cerrar-panel">&times;</span>
+    <h2>Mis chats</h2>
+    <ul id="lista-chats"></ul>
+  </div>
+<main class="chat-container">
+  <!-- Encabezado del chat -->
+  <div class="encabezado-chat">
+    <img src="img/usuario-camara.png" alt="Foto" class="foto-chat" id="foto-chat">
+    <span class="nombre-chat" id="nombre-chat"></span>
+    <button id="btn-borrar-chat" title="Eliminar este chat">🗑️</button>
+  </div>
+  <!--NOTIFICACION DE BORRAR MENSAJE-->
+  <div id="notificacion-chat" class="notificacion oculto"></div>
+
+  <!-- Cuadro de mensajes con scroll independiente -->
+  <div class="mensajes-wrapper">
+    <div class="mensajes-centro">
+      <ul id="lista-mensajes"></ul>
+    </div>
+  </div>
+
+  <!-- Input de mensaje -->
+  <div class="input-container">
+    <textarea id="nuevo-mensaje" rows="1" placeholder="Escribe un mensaje..."></textarea>
+    <button id="enviar">Enviar</button>
+  </div>
+</main>
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Scripts principales en orden -->
+    
+    <script type="module" src="HOME_JS/navbar.js"></script>
+    <script type="module" src="HOME_JS/buscador.js"></script>
+    <script type="module" src="HOME_JS/cerrarSesion.js"></script>
+    <script type="module" src="HOME_JS/listaAmigosYchats.js"></script>
+    <script>
+   async function cargarMensajes(chatId) {
+  const lista = document.getElementById("lista-mensajes");
+  lista.innerHTML = "";
+
+  try {
+    const res = await fetch(`http://localhost:3000/api/chats/${chatId}`, {
+      credentials: "include"
+    });
+    const data = await res.json();
+
+    if (!data.success) {
+      lista.innerHTML = "<li>Error al cargar mensajes</li>";
+      return;
+    }
+
+    // ✅ Mostrar nombre y foto del otro usuario
+    document.getElementById("nombre-chat").textContent = data.nombre;
+
+    const fotoValida = typeof data.fotoPerfil === "string" && data.fotoPerfil.trim() !== "";
+    const foto = fotoValida
+      ? `http://localhost:3000/uploads/${data.fotoPerfil}?t=${Date.now()}`
+      : "img/usuario-camara.png";
+
+    const fotoChat = document.getElementById("foto-chat");
+    if (fotoChat) {
+      fotoChat.onerror = () => {
+        fotoChat.src = "img/usuario-camara.png";
+      };
+      fotoChat.src = foto;
+    }
+
+    // ✅ Pintar mensajes
+    data.mensajes.forEach(msg => {
+      const li = document.createElement("li");
+      const fecha = new Date(msg.fecha_envio);
+      const hora = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      li.innerHTML = `
+        <div class="contenido">
+          <strong>${msg.emisor_nombre}:</strong> ${msg.contenido}
+          <span class="hora">${hora}</span>
+        </div>
+      `;
+
+      if (String(msg.emisor_id) === String(data.usuarioActualId)) {
+        li.classList.add("mio");
+      } else {
+        li.classList.add("otro");
+      }
+
+      lista.appendChild(li);
+    });
+
+    // ✅ Scroll automático
+    lista.scrollTop = lista.scrollHeight;
+
+  } catch (error) {
+    console.error("Error al cargar mensajes:", error);
+    lista.innerHTML = "<li>Error de conexión</li>";
+  }
+}
+
+// ✅ Notificación visual
+function mostrarNotificacion(texto, tipo = "success") {
+  const box = document.getElementById("notificacion-chat");
+  if (!box) return; // seguridad
+
+  box.textContent = texto;
+  box.style.background = tipo === "error" ? "#d11a2a" : "#4caf50";
+  box.classList.remove("oculto");
+  box.classList.add("visible");
+
+  setTimeout(() => {
+    box.classList.remove("visible");
+    box.classList.add("oculto");
+  }, 3000);
+}
+
+// ✅ Enviar mensajes
+async function enviarMensaje(chatId) {
+  const contenido = document.getElementById("nuevo-mensaje").value;
+  if (!contenido.trim()) return;
+
+  await fetch(`http://localhost:3000/api/chats/${chatId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ contenido })
+  });
+
+  document.getElementById("nuevo-mensaje").value = "";
+  cargarMensajes(chatId);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const chatId = params.get("id");
+
+  cargarMensajes(chatId);
+
+  // ✅ Botón enviar
+  document.getElementById("enviar").addEventListener("click", () => {
+    enviarMensaje(chatId);
+  });
+
+  // ✅ Enviar con Enter
+  document.getElementById("nuevo-mensaje").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      if (!e.shiftKey) {
+        e.preventDefault();
+        enviarMensaje(chatId);
+      }
+    }
+  });
+
+  // ✅ Botón borrar chat (ahora sí ve chatId)
+  document.getElementById("btn-borrar-chat").addEventListener("click", async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/chats/${chatId}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const result = await res.json();
+
+      if (result.success) {
+        mostrarNotificacion("✅ Chat eliminado correctamente");
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, 1500);
+      } else {
+        mostrarNotificacion("❌ No se pudo borrar el chat", "error");
+      }
+    } catch (err) {
+      console.error("❌ Error borrando el chat:", err);
+      mostrarNotificacion("❌ Error de conexión al borrar", "error");
+    }
+  });
+});
+
+</script>
+</div>
+</body>
+</html>

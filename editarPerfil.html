@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar perfil</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="estiloPerfil.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+  <div class="container py-5">
+    <h1 class="text-center mb-4">Editar perfil</h1>
+
+    <form id="form-editar" enctype="multipart/form-data" class="card p-4 shadow mx-auto" style="max-width: 600px;">
+      <div class="mb-3 text-center">
+        <img id="preview-imagen" src="img/usuario-camara.png" alt="Tu selfie" class="rounded-circle" width="150" height="150">
+      </div>
+
+          <div class="text-center mt-2 text-muted">
+            <i class="bi bi-camera-fill me-2"></i>
+            <i class="bi bi-lock-fill me-1"></i>
+            <span>La foto de perfil se edita desde <a href="miPerfil.html">Mi perfil</a></span>
+          </div>
+
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre completo</label>
+        <input type="text" id="nombre" name="nombre" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label for="fecha-nac" class="form-label">Fecha de nacimiento</label>
+        <input type="date" id="fecha-nac" name="fecha-nac" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label for="nacionalidad" class="form-label">Nacionalidad</label>
+        <input type="text" id="nacionalidad" name="nacionalidad" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <input type="email" id="email" name="email" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label for="usuario" class="form-label">Usuario</label>
+        <input type="text" id="usuario" name="usuario" class="form-control" autocomplete="username">
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+       <input type="password" id="password" name="password" class="form-control" autocomplete="current-password">
+
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Guardar cambios</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('form-editar');
+  const preview = document.getElementById('preview-imagen');
+  const btnSubmit = form.querySelector('button[type="submit"]');
+
+  cargarDatosUsuario(); // ✅ sin ID
+  configurarFormulario(); // ✅ sin ID
+  agregarBotonCancelar();
+});
+
+// 🧩 Toast visual con Bootstrap
+function mostrarToast(mensaje, tipo = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast align-items-center text-bg-${tipo} border-0 show position-fixed bottom-0 end-0 m-3`;
+  toast.role = 'alert';
+  toast.innerHTML = `
+    <div class="d-flex">
+      <div class="toast-body">${mensaje}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+
+// 🧩 Spinner de carga en botón
+function mostrarCarga(btn) {
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Guardando...`;
+}
+
+function restaurarBoton(btn) {
+  btn.disabled = false;
+  btn.textContent = 'Guardar cambios';
+}
+
+// 🧩 Cargar datos del usuario logueado
+function cargarDatosUsuario() {
+  fetch("http://localhost:3000/api/usuarios/mis-datos", {
+    credentials: "include"
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) return mostrarToast('No se pudo cargar el perfil', 'danger');
+      const u = data.usuario;
+      document.getElementById('nombre').value = u.nombre || '';
+      document.getElementById('fecha-nac').value = u.fecha_nac?.split('T')[0] || '';
+      document.getElementById('nacionalidad').value = u.nacionalidad || '';
+      document.getElementById('email').value = u.email || '';
+      document.getElementById('usuario').value = u.usuario || '';
+      document.getElementById('password').value = u.password || '';
+      if (u.foto_perfil) {
+        document.getElementById('preview-imagen').src = `http://localhost:3000/uploads/${u.foto_perfil}`;
+      }
+    })
+    .catch(() => mostrarToast('Error al conectar con el servidor', 'danger'));
+}
+
+// 🧩 Validación de campos
+function validarCampos() {
+  const campos = ['nombre', 'fecha-nac', 'nacionalidad', 'email', 'usuario', 'password'];
+  for (const id of campos) {
+    const valor = document.getElementById(id).value.trim();
+    if (!valor) {
+      mostrarToast(`El campo "${id}" está vacío`, 'warning');
+      return false;
+    }
+  }
+  return true;
+}
+
+// 🧩 Enviar formulario (sin imagen)
+function configurarFormulario() {
+  const form = document.getElementById('form-editar');
+  const btn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!validarCampos()) return;
+
+    mostrarCarga(btn);
+
+    const formData = new FormData(form);
+
+    fetch("http://localhost:3000/api/usuario/editar-perfil", {
+      method: 'POST',
+      body: formData,
+      credentials: "include"
+    })
+      .then(res => res.json())
+      .then(data => {
+        restaurarBoton(btn);
+        if (data.success) {
+          mostrarToast('Perfil actualizado con éxito', 'success');
+          setTimeout(() => window.location.href = 'miPerfil.html', 1500);
+        } else {
+          mostrarToast(data.message || 'Error al actualizar perfil', 'danger');
+        }
+      })
+      .catch(() => {
+        restaurarBoton(btn);
+        mostrarToast('Error de conexión con el servidor', 'danger');
+      });
+  });
+}
+
+// 🧩 Botón cancelar
+function agregarBotonCancelar() {
+  const form = document.getElementById('form-editar');
+  const btnCancelar = document.createElement('button');
+  btnCancelar.type = 'button';
+  btnCancelar.className = 'btn btn-outline-secondary w-100 mt-2';
+  btnCancelar.textContent = 'Cancelar';
+  btnCancelar.onclick = () => window.location.href = 'miPerfil.html';
+  form.appendChild(btnCancelar);
+}
+  </script>
+</body>
+</html>

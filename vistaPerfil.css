@@ -1,0 +1,198 @@
+/* === Perfil público === */
+.perfil-publico {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.perfil-encabezado {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.foto-perfil-container img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 12px rgba(0,0,0,0.2);
+  border: 3px solid #0077cc;
+}
+
+.datos-usuario p {
+  margin: 12px 0;
+  font-size: 1.1em;
+  line-height: 1.4;
+}
+
+/* === Galería === */
+.galeria-usuario h2 {
+  font-size: 1.4em;
+  margin-bottom: 20px;
+  color: #0077cc;
+  text-align: center;
+  font-weight: 600;
+}
+
+.grid-galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px;
+  padding: 10px;
+}
+
+.grid-galeria img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  cursor: pointer;
+}
+
+.grid-galeria img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+/* Efecto de overlay al pasar el mouse */
+.grid-galeria img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.grid-galeria img:hover::after {
+  opacity: 1;
+}
+
+/* === Mensaje personalizado === */
+.mensaje-perfil {
+  font-size: 1.2em;
+  margin-bottom: 25px;
+  color: #222;
+  font-weight: 500;
+  text-align: center;
+}
+/*boton seguir o dejar de seguir*/
+.acciones-perfil {
+  margin-top: 8px;
+}
+
+#btn-seguir {
+  background: #1877f2;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .2s;
+}
+
+#btn-seguir:hover {
+  background: #145ec1;
+}
+
+/* Estado “Siguiendo” */
+#btn-seguir.siguiendo {
+  background: #e4e6eb;
+  color: #111;
+}
+
+#btn-seguir.siguiendo:hover {
+  background: #d8dadf;
+}
+
+/*---*/
+#btn-seguir {
+  background: #1877f2;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .2s;
+}
+
+#btn-seguir:hover {
+  background: #145ec1;
+}
+
+#btn-seguir.siguiendo {
+  background: #d8dadf;
+  color: #111;
+}
+
+#btn-seguir.siguiendo:hover {
+  background: #d8dadf;
+}
+/*boton mensaje*/
+.acciones-perfil {
+  display: flex;
+  gap: 12px;        /* espacio entre botones */
+  margin-top: 10px;
+}
+
+.btn-seguir,
+.btn-mensaje {
+  padding: 8px 16px;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-seguir {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-mensaje {
+  background-color: #d6d6d6; /* gris más oscuro */
+               /* texto más fuerte */
+}
+
+.btn-mensaje:hover {
+  background-color: #bfbfbf; /* gris aún más marcado al pasar */
+  color: #000;               /* texto negro para contraste */
+}
+
+/*formato fecha*/
+.item-galeria {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.imagen-galeria {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease;
+}
+
+.imagen-galeria:hover {
+  transform: scale(1.02);
+}
+
+.fecha-imagen {
+  margin-top: 8px;
+  font-size: 14px;          /* 👈 un poquito más grande */
+  color: #007bff;           /* 👈 azul para resaltar */
+  font-weight: 600;         /* 👈 números más marcados */
+  background: rgba(0, 123, 255, 0.1); /* 👈 fondo suave */
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;    /* 👈 más legible */
+}
+

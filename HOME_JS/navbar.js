@@ -1,0 +1,59 @@
+let usuarioId = null;
+export let datosUsuario = null;
+
+// 👉 función para obtener siempre el usuarioId actualizado
+export function getUsuarioId() {
+  return usuarioId;
+}
+
+// 🔄 Cargar foto y nombre de perfil en la navbar
+async function cargarDatosNavbar() {
+  console.log("🔍 Llamando a /mis-datos con cookie...");
+
+  try {
+    const res = await fetch("http://localhost:3000/api/usuarios/mis-datos", {
+      method: "GET",
+      credentials: "include" // 👈 manda la cookie automáticamente
+    });
+
+    const data = await res.json();
+    console.log("📦 Respuesta de /mis-datos:", data);
+
+    if (data.success && data.usuario) {
+      datosUsuario = data.usuario;       // guarda todo el objeto
+      usuarioId = datosUsuario.id;       // guarda solo el id para comparaciones rápidas
+      console.log("✅ Usuario cargado:", datosUsuario.nombre);
+
+      // Mostrar foto de perfil con validación
+      const navFoto = document.getElementById("nav-foto-perfil");
+      if (navFoto) {
+        const foto = datosUsuario.foto_perfil && datosUsuario.foto_perfil.trim() !== ""
+          ? `http://localhost:3000/uploads/${datosUsuario.foto_perfil}?t=${Date.now()}`
+          : "img/usuario-camara.png"; // 👉 icono por defecto
+
+        navFoto.src = foto;
+      }
+
+      // Mostrar saludo en el home (si existe)
+      const bienvenida = document.getElementById("bienvenida");
+      if (bienvenida) {
+        bienvenida.textContent = `Hola ${datosUsuario.nombre} 👋`;
+      }
+
+    } else {
+      console.warn("⚠️ No autenticado, navbar vacío (no se redirige)");
+    }
+  } catch (error) {
+    console.error("❌ Error al cargar datos del usuario", error);
+    console.warn("⚠️ No se pudieron cargar datos, navbar vacío");
+  }
+}
+
+// 🚀 Ejecutar al cargar la página con delay
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    cargarDatosNavbar();
+  }, 300); // ⏱ espera 300ms para que la cookie esté lista
+});
+
+

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Font Awesome (solo la versión más nueva) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+  <!-- Tus estilos (orden correcto: generales primero, galería último) -->
+  
+  <link rel="stylesheet" href="estiloPerfil.css">
+  <link rel="stylesheet" href="estiloGaleria.css">
+  <link rel="stylesheet" href="home css/modal-listaamigos.css">
+  <link rel="stylesheet" href="home css/chats.css">
+  <link rel="stylesheet" href="home css/navbar.css">
+  <link rel="stylesheet" href="home css/panelChats.css">
+
+
+  <title>Mi perfil</title>
+</head>
+
+<body>
+
+  <!-- Barra de navegación -->
+  <nav class="app-navbar">
+    <div class="app-navbar-logo">
+      <a href="home.html">
+        <img src="img/icono home.webp" alt="Inicio" width="40" height="40">
+      </a>
+      <span id="bienvenida" class="bienvenida-texto"></span>
+    </div>
+    <div class="nav-icons">
+      <button id="btn-amigos" class="icono-btn">👥</button>
+      <button id="btn-mensajes" class="icono-btn">💬</button>
+    </div>
+    <div class="perfil-menu">
+      <img id="nav-foto-perfil" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono-nav">
+      <ul class="dropdown-menu">
+        <li><a href="miPerfil.html">Mi perfil</a></li>
+        <li><a href="#">Cerrar sesión</a></li>
+      </ul>
+    </div>
+  </nav>
+
+<div class="container py-5">
+  <h1 class="text-center mb-5">Mi perfil</h1>
+  <div class="card shadow mx-auto" style="max-width: 900px;">
+    <!-- fila con espacio entre columnas -->
+    <div class="row g-3">
+
+      <!-- Foto de perfil -->
+      <div class="col-12 col-md-5 bg-light p-4 d-flex flex-column align-items-center">
+        <div
+          class="circulo-perfil border mb-4 d-flex justify-content-center align-items-center bg-secondary-subtle position-relative">
+          <img id="foto-perfil" class="perfil-icono d-none" src="" alt="Foto de perfil">
+          <img id="placeholder-icon" class="perfil-icono" src="img/usuario-camara.png" alt="Ícono de perfil">
+
+          <!-- Menú de cámara -->
+          <div class="overlay-camara-menu">
+            <button id="opcion-selfie" class="btn btn-sm btn-light">📸 Selfie</button>
+            <button id="opcion-subir" class="btn btn-sm btn-light">📁 Subir imagen</button>
+          </div>
+        </div>
+
+        <button id="btn-selfie" class="btn btn-outline-success w-100 mb-2">Tomarse una selfie</button>
+        <input type="file" id="input-imagen" accept="image/*" class="form-control mb-2">
+        <button id="btn-usar-imagen" class="btn btn-primary w-100 mb-2 d-none">¿Usar imagen de perfil?</button>
+
+        <div id="confirmacion-accion" class="alert alert-warning text-center d-none w-100">
+          <p class="mb-3">¿Usar esta imagen como perfil?</p>
+          <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <button id="btn-confirmar-si" class="btn btn-success px-4">Sí</button>
+            <button id="btn-confirmar-no" class="btn btn-outline-secondary px-4">No</button>
+          </div>
+        </div>
+
+        <div id="mensaje-imagen" class="alert alert-success text-center w-100 d-none">
+          Imagen lista para usar como perfil
+        </div>
+
+        <video id="video-selfie" class="mt-3 w-100 rounded d-none" autoplay playsinline></video>
+        <div id="cuenta-regresiva" class="fs-1 fw-bold text-center text-danger d-none">3</div>
+        <canvas id="canvas-selfie" class="d-none"></canvas>
+      </div>
+
+      <!-- Datos del perfil -->
+      <div class="col-12 col-md-7 p-4 d-flex flex-column justify-content-between">
+        <div>
+          <ul class="list-unstyled mb-4">
+            <li class="mb-3"><strong>Nombre completo:</strong> <span id="nombre"></span></li>
+            <li class="mb-3"><strong>Fecha de nacimiento:</strong> <span id="fecha-nac"></span></li>
+            <li class="mb-3"><strong>Nacionalidad:</strong> <span id="nacionalidad"></span></li>
+            <li class="mb-3"><strong>Email:</strong> <span id="email"></span></li>
+            <li class="mb-3"><strong>Usuario:</strong> <span id="usuario"></span></li>
+            <li class="mb-3"><strong>Password:</strong> <span id="password"></span></li>
+          </ul>
+        </div>
+        <!-- botones con flex-wrap para que no se salgan -->
+        <div class="d-flex justify-content-end gap-3 mt-3 flex-wrap">
+          <a href="editarPerfil.html" class="btn btn-outline-primary">Editar perfil</a>
+          <button id="eliminar-usuario" class="btn btn-outline-danger">Eliminar usuario</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mensaje-estado"></div>
+    <div id="notificacion-card" class="alert alert-info text-center mx-4 my-3 d-none" role="alert">
+      Imagen seleccionada como foto de perfil...
+    </div>
+  </div>
+
+  <!-- Subida de imagen a galería -->
+  <div class="text-center mt-5">
+    <h2>Subir nueva imagen a la galería</h2>
+    <div class="d-flex flex-column align-items-center mt-3">
+      <input type="file" id="input-galeria" accept="image/*" class="form-control mb-2" style="max-width: 300px;">
+      <button id="btn-subir-galeria" class="btn btn-outline-primary">Subir a galería</button>
+      <div id="mensaje-subida" class="alert alert-success text-center mt-3 d-none">Imagen subida con éxito</div>
+    </div>
+  </div>
+
+  <!-- Galería de fotos -->
+  <h2 class="text-center mt-5" style="color: darkblue; font-size: 22px; font-weight: 600; margin-bottom: 20px;">
+    Mis fotos
+  </h2>
+  <div id="galeria-fotos"></div>
+
+  <!-- Notificación flotante -->
+  <div id="notificacion-flotante" class="d-none" style="
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    z-index: 1000;
+  "></div>
+
+  <!-- Modal de confirmación -->
+  <div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-danger">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="modalConfirmacionLabel">Eliminar imagen</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+            aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p class="mb-0">⚠️ Esta imagen será eliminada de tu galería y perfil.</p>
+          <p class="mb-0">¿Estás seguro de continuar?</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------Modal Lista de Amigos------ -->
+  <div id="modal-amigos" class="modal-amigos">
+    <div class="modal-contenido">
+      <div class="modal-header">
+        <h2>Lista de Amigos</h2>
+        <span id="cerrar-modal-amigos" class="cerrar-modal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <ul id="lista-amigos" class="lista-amigos"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel lateral de chats -->
+  <div id="panel-chats" class="panel">
+    <span class="cerrar-panel">&times;</span>
+    <h2>Mis chats</h2>
+    <ul id="lista-chats"></ul>
+  </div>
+</div>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="PERFIL-JS/init.js"></script>
+    <script type="module" src="PERFIL-JS/perfil.js"></script>
+    <script type="module" src="HOME_JS/navbar.js"></script>
+    <script type="module" src="HOME_JS/cerrarSesion.js"></script>
+    <script type="module" src="HOME_JS/listaAmigosYchats.js"></script>
+</body>
+</html>

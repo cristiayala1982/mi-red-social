@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <title>Home</title>
+  <link rel="stylesheet" href="home css/navbar.css">
+  <link rel="stylesheet" href="home css/panelChats.css">
+  <link rel="stylesheet" href="home css/publicaciones.css">
+  <link rel="stylesheet" href="home css/form-publicaciones.css">
+  <link rel="stylesheet" href="home css/modal-listaamigos.css">
+  
+  
+</head>
+
+<body>
+<nav class="app-navbar">
+  <div class="app-navbar-logo">
+    <a href="home.html">
+      <img src="img/icono home.webp" alt="Inicio" width="40" height="40">
+    </a>
+    <span id="bienvenida" class="bienvenida-texto"></span>
+  </div>
+
+  <!-- Buscador -->
+  <form id="form-busqueda" class="buscador-usuarios">
+    <span class="icono-lupa">🔍</span>
+    <input type="text" id="input-busqueda" placeholder="Buscar usuario..." autocomplete="off">
+    <ul id="resultados-busqueda" class="resultados-autocompletado"></ul>
+  </form>
+
+  <!-- Íconos de mensaje y amigos -->
+  <div class="nav-icons">
+    <button id="btn-amigos" class="icono-btn">👥</button>
+    <button id="btn-mensajes" class="icono-btn">💬</button>
+  </div>
+
+  <!-- Foto de perfil con menú -->
+  <div class="perfil-menu">
+    <img id="nav-foto-perfil" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono-nav">
+    <ul class="dropdown-menu">
+      <li><a href="miPerfil.html">Mi perfil</a></li>
+      <li><a href="#">Cerrar sesión</a></li>
+    </ul>
+  </div>
+</nav>
+<!-- Bloque de publicación estilo Facebook -->
+<div id="form-publicacion" class="publicacion-box">
+  <div class="publicacion-header">
+    <img id="perfil-autor" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono">
+    <textarea id="descripcion" placeholder="¿Qué estás pensando?"></textarea>
+
+    <div class="acciones-publicacion">
+      <label for="imagen" class="icono-imagen" title="Agregar foto">🖼️</label>
+      <input type="file" id="imagen" accept="image/*" hidden>
+      <button id="btn-cancelar" class="btn-cancelar" type="button">Cancelar</button>
+      <button id="btn-publicar" class="btn-publicar" type="button">Publicar</button>
+    </div>
+  </div>
+
+  <img id="preview-imagen" style="display:none;">
+</div>
+
+<!-- Contenedor donde se mostrarán las publicaciones -->
+<div id="lista-publicaciones"></div>
+
+<!-- ------Modal Lista de Amigos------ -->
+<div id="modal-amigos" class="modal-amigos">
+  <div class="modal-contenido">
+    <div class="modal-header">
+      <h2>Lista de Amigos</h2>
+      <span id="cerrar-modal-amigos" class="cerrar-modal">&times;</span>
+    </div>
+    <div class="modal-body">
+      <ul id="lista-amigos" class="lista-amigos"></ul>
+    </div>
+  </div>
+</div>
+ <!-- Panel lateral de chats (oculto al inicio) -->
+  <div id="panel-chats" class="panel oculto">
+    <span class="cerrar-panel">&times;</span>
+    <h2>Mis chats</h2>
+    <ul id="lista-chats"></ul>
+  </div>
+<!-- Scripts principales en orden -->
+<script type="module" src="HOME_JS/home.js"></script>
+<script type="module" src="HOME_JS/navbar.js"></script>
+<script type="module" src="HOME_JS/buscador.js"></script>
+<script type="module" src="HOME_JS/cerrarSesion.js"></script>
+<script type="module" src="HOME_JS/publicaciones.js"></script>
+<script type="module" src="HOME_JS/listaAmigosYchats.js"></script>
+<script>
+  /*function inicializarPanelChats() {
+    const btnMensajes = document.getElementById("btn-mensajes");
+    const panelChats = document.getElementById("panel-chats");
+    const cerrarBtn = panelChats.querySelector(".cerrar-panel");
+
+    btnMensajes.addEventListener("click", () => {
+      panelChats.style.display = "block";
+      cargarChats();
+    });
+
+    cerrarBtn.addEventListener("click", () => {
+      panelChats.style.display = "none";
+    });
+  }
+
+  async function cargarChats() {
+    const listaChats = document.getElementById("lista-chats");
+    listaChats.innerHTML = "";
+
+    try {
+      const res = await fetch("http://localhost:3000/api/chats", { credentials: "include" });
+      const data = await res.json();
+
+      if (!data.success) {
+        listaChats.innerHTML = "<li>Error al cargar chats</li>";
+        return;
+      }
+
+      data.chats.forEach(chat => {
+        const li = document.createElement("li");
+        li.textContent = chat.nombre;
+        li.addEventListener("click", () => {
+          window.location.href = `chats.html?id=${chat.id}`;
+        });
+        listaChats.appendChild(li);
+      });
+    } catch (error) {
+      listaChats.innerHTML = "<li>Error de conexión</li>";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", inicializarPanelChats);*/
+</script>
+
+</body>
+</html>

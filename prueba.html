@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat de prueba</title>
+</head>
+<body>
+  <h2>Chat de prueba</h2>
+  <ul id="lista-mensajes"></ul>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const lista = document.getElementById("lista-mensajes");
+      const mensajes = [
+        { emisor: "Cristian", contenido: "Hola, cómo estás?" },
+        { emisor: "Joaquín", contenido: "Todo bien, y vos?" },
+        { emisor: "Cristian", contenido: "Bien también, gracias!" }
+      ];
+      mensajes.forEach(msg => {
+        const li = document.createElement("li");
+        li.textContent = `${msg.emisor}: ${msg.contenido}`;
+        lista.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html>

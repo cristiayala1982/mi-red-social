@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+</head>
+
+<body>
+<!--Car85#rom-->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow p-3 mb-5 bg-white rounded">
+                    <h1 class="text-center mb-4">Iniciar sesión</h1>
+                    <form id="form-login">
+                        <div class="mb-3">
+                            <label for="usuario-login" class="form-label">Usuario</label>
+                            <input type="text" class="form-control" id="usuario-login" placeholder="name1982" autocomplete="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password-login" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password-login" placeholder="1234" autocomplete="current-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
+                        <p class="text-center mt-3">¿No tienes cuenta? <a href="register.html" class="text-primary">Regístrate</a></p>
+                        <p id="mensaje-login"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>  
+        const formLogin = document.getElementById('form-login');
+        formLogin.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario-login').value;
+            const password = document.getElementById('password-login').value;
+            const mensajeLogin = document.getElementById('mensaje-login')
+
+            fetch('http://localhost:3000/api/usuario/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include', // 👈 esto permite que se guarde la cookie
+                body: JSON.stringify({usuario, password }),
+            })
+                //console.log(nombre,password)
+                .then((response) => response.json())
+                .then((data) => {
+                if (data.success) {
+                    window.location.href = 'home.html';
+                    } else {
+                        mensajeLogin.textContent = 'Usuario o contraseña incorrectos';
+                        mensajeLogin.style.color = 'red';
+                    }
+                    console.log(data)
+                })
+                .catch((error) => console.error(error));
+        })
+
+    </script>
+</body>

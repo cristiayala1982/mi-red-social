@@ -1,0 +1,161 @@
+/*FOTO DE PERFIL*/
+/* Contenedor circular para la imagen de perfil */
+.circulo-perfil {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #f8f9fa;
+  position: relative;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Imagen de perfil o placeholder */
+.perfil-icono {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+/*CAMARA  ICONO FOTO DE PERFIL*/
+.icono-camara-overlay {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background-color: rgba(0, 123, 255, 0.85);
+  color: white;
+  font-size: 22px;
+  padding: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 10;
+  display: none;
+}
+
+.circulo-perfil:hover .icono-camara-overlay {
+  display: block;
+  transform: scale(1.1);
+}
+
+/* Hover: zoom suave + sombra azul */
+.circulo-perfil:hover {
+  box-shadow: 0 0 18px rgba(0, 123, 255, 0.5);
+}
+
+.circulo-perfil:hover .perfil-icono {
+  transform: scale(1.07);
+}
+
+/*camara dentro del circulo perfil*/
+/* Animación de entrada: fade + zoom */
+@keyframes fadeZoom {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Menú de opciones centrado sobre la imagen de perfil */
+.overlay-camara-menu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  gap: 10px;
+  background-color: rgba(255,255,255,0.95);
+  padding: 8px 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+  opacity: 0;
+  animation: fadeZoom 0.3s ease forwards;
+}
+
+/* Mostrar menú cuando tiene la clase .visible */
+.overlay-camara-menu.visible {
+  display: flex;
+  opacity: 1;
+}
+
+/* Botones dentro del menú */
+.overlay-camara-menu button {
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.overlay-camara-menu button:hover {
+  background-color: #e2e6ea;
+}
+/* Foto de perfil en la barra */
+.perfil-navbar {
+  width: 50px;              /* más grande */
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;       /* círculo perfecto */
+  border: 3px solid #fff;   /* borde blanco más ancho */
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.perfil-navbar:hover {
+  transform: scale(1.15);   /* zoom más marcado */
+  border-color: violet;     /* borde violeta */
+  box-shadow: 0 0 12px violet; /* glow violeta alrededor */
+}
+/* ------------------- RESPONSIVE ------------------- */
+
+/* Tablet: pantallas menores a 768px */
+@media (max-width: 768px) {
+  .circulo-perfil {
+    width: 160px;
+    height: 160px;
+  }
+
+  .icono-camara-overlay {
+    font-size: 20px;
+    padding: 6px;
+  }
+
+  .perfil-navbar {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* Celular: pantallas menores a 576px */
+@media (max-width: 576px) {
+  .circulo-perfil {
+    width: 120px;
+    height: 120px;
+  }
+
+  .icono-camara-overlay {
+    font-size: 18px;
+    padding: 5px;
+  }
+
+  .perfil-navbar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .overlay-camara-menu button {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+}
+

@@ -1,0 +1,193 @@
+
+
+/* 💬 Chat principal */
+.chat-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  margin: 0 auto;
+  width: 100%;
+  max-width: 500px;
+  overflow: hidden;
+  /* 👇 clave: ocupa toda la altura disponible */
+  height: calc(100vh - 70px); /* resta la altura de la navbar si es fija */
+  overflow: hidden;
+}
+
+/* 🧢 Encabezado del chat */
+.encabezado-chat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background: #d6d6d6d0;
+  border-bottom: 1px solid #ccc;
+}
+
+.foto-chat {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nombre-chat {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 📜 Mensajes */
+.mensajes-wrapper {
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  overflow-y: auto;   /* 👈 solo aquí va el scroll */
+}
+
+.mensajes-centro {
+  width: 100%;
+  max-width: 500px;
+}
+
+#lista-mensajes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#lista-mensajes li {
+  margin: 8px 0;
+  padding: 10px 14px;
+  border-radius: 18px;
+  max-width: 70%;
+  word-wrap: break-word;
+  font-size: 14px;
+  animation: fadeIn 0.3s ease-in;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+/* Mensajes míos */
+#lista-mensajes li.mio {
+  background: #cce5ff;
+  color: #003366;
+  margin-left: auto;
+}
+
+#lista-mensajes li.mio:hover {
+  background: #b3d8ff;
+  transform: scale(1.02);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Mensajes del otro */
+#lista-mensajes li.otro {
+  background: #eeeeee;
+  color: #333;
+  margin-right: auto;
+}
+
+#lista-mensajes li.otro:hover {
+  background: #dddddd;
+  transform: scale(1.02);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* 🕒 Hora */
+#lista-mensajes li .hora {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+  text-align: right;
+}
+
+#lista-mensajes li.otro .hora {
+  text-align: left;
+}
+
+/* 📝 Input de mensaje */
+.input-container {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  background: #fff;
+}
+
+#nuevo-mensaje {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+  resize: none;
+}
+
+#enviar {
+  margin-left: 10px;
+  padding: 10px 20px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+#enviar:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+
+/* ✨ Animación de entrada */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/*BORRAR MENSAJES*/
+#btn-borrar-chat {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #888;
+  margin-left: auto;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+#btn-borrar-chat:hover {
+  color: #d11a2a;
+}
+/*CONFIRMACIO BORRAR*/
+.notificacion {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.notificacion.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.notificacion.oculto {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+
