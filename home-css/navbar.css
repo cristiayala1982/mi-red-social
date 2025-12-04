@@ -318,38 +318,62 @@
 }
 
 /* 📱 Celular */
+/* 📱 Celular optimizado */
 @media (max-width: 576px) {
   .app-navbar {
-    flex-direction: column; /* apila todo */
-    align-items: stretch;
-    padding: 10px 15px;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 10px;
   }
 
   .app-navbar-logo {
     justify-content: center;
-    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .app-navbar-logo img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .bienvenida-texto {
+    font-size: 0.95rem;
   }
 
   .buscador-usuarios {
     width: 100%;
-    max-width: none;
-    margin: 10px 0;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 6px 12px;
+  }
+
+  .buscador-usuarios input {
+    font-size: 14px;
+  }
+
+  .icono-lupa {
+    font-size: 18px;
+    margin-right: 6px;
   }
 
   .nav-icons {
     justify-content: center;
-    margin: 10px 0;
+    gap: 16px;
+  }
+
+  .icono-btn {
+    font-size: 20px;
   }
 
   .perfil-menu {
-    margin-left: 0;
-    display: flex;
+    margin-top: 8px;
     justify-content: center;
-    margin-top: 10px;
   }
 
   .perfil-icono-nav {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
   }
 }
+
