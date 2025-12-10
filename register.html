@@ -49,6 +49,7 @@
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
     <script>
+const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 const formRegistro = document.getElementById('form-registro');
 
 formRegistro.addEventListener('submit', (e) => {
@@ -93,7 +94,7 @@ formRegistro.addEventListener('submit', (e) => {
     mensajeEmail.style.color = 'red';
     return;
   }
-
+/*
   // Validación de usuario (mínimo 6 caracteres, letras y números)
   const usuarioRegla = /^[a-zA-Z0-9]{6,}$/;
   if (!usuarioRegla.test(usuario)) {
@@ -108,10 +109,10 @@ formRegistro.addEventListener('submit', (e) => {
     mensajePassword.textContent = 'La contraseña debe tener 8 caracteres, mayúscula, minúscula, número y especial.';
     mensajePassword.style.color = 'red';
     return;
-  }
+  }*/
 
   // Enviar al backend
-  fetch('http://localhost:3000/api/usuario/registro', {
+  fetch(`${API_URL}/api/usuario/registro`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, usuario, password })
@@ -149,3 +150,4 @@ formRegistro.addEventListener('submit', (e) => {
 
 
 </html>
+
