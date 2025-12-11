@@ -29,6 +29,7 @@
         </div>
     </div>
 <script>  
+        const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
         const formLogin = document.getElementById('form-login');
         formLogin.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -36,7 +37,7 @@
             const password = document.getElementById('password-login').value;
             const mensajeLogin = document.getElementById('mensaje-login')
 
-            fetch('http://localhost:3000/api/usuario/login', {
+            fetch(`${API_URL}/api/usuario/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include', // 👈 esto permite que se guarde la cookie
