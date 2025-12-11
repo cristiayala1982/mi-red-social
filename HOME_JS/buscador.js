@@ -9,7 +9,7 @@ const resultadosBusqueda = document.getElementById("resultados-busqueda");
 // 🔍 Función de búsqueda de usuarios
 async function buscarUsuarios(query) {
   try {
-    const res = await fetch(`http://localhost:3000/api/usuarios/buscar?query=${encodeURIComponent(query)}`, {
+    const res = await fetch(`https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/usuarios/buscar?query=${encodeURIComponent(query)}`, {
       method: 'GET',
       credentials: 'include' // 👈 importante para que funcione con sesión
     });
@@ -71,5 +71,6 @@ if (inputBusqueda && resultadosBusqueda) {
     }
   }, 30000);
 }
+
 
 
