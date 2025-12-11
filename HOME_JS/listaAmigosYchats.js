@@ -1,6 +1,6 @@
 async function cargarAmigos() {
   try {
-    const res = await fetch("http://localhost:3000/api/amigos", {
+    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/amigos", {
       credentials: "include"
     });
     const data = await res.json();
@@ -70,7 +70,7 @@ function inicializarModalAmigos() {
 // 👉 Panel derecho chats con datos reales
 async function cargarChats() {
   try {
-    const res = await fetch("http://localhost:3000/api/chats", {
+    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/chats", {
       credentials: "include"
     });
     const data = await res.json();
@@ -112,7 +112,7 @@ async function cargarChats() {
       li.querySelector(".btn-borrar-chat").addEventListener("click", async (e) => {
         e.stopPropagation(); // evita que se dispare abrirChat
         try {
-          const res = await fetch(`http://localhost:3000/api/chats/${chat.id}`, {
+          const res = await fetch(`https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/chats/${chat.id}`, {
             method: "DELETE",
             credentials: "include"
           });
@@ -180,5 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
 
 
