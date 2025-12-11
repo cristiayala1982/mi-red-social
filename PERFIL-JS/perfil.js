@@ -21,7 +21,7 @@ function formatearFechaDMY(fechaISO) {
 
 export async function cargarDatosUsuario() {
   try {
-    const res = await fetch("http://localhost:3000/api/usuarios/mis-datos", {
+    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/usuarios/mis-datos", {
       credentials: "include" // ✅ importante para enviar la cookie
     });
     const data = await res.json();
@@ -100,5 +100,6 @@ export async function enviarImagenAlBackend(imagenBlob) {
     console.error(error);
   }
 }
+
 
 
