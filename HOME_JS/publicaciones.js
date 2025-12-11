@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 1) Cargar foto del usuario logueado en el bloque de publicación
   try {
-    const meRes = await fetch("http://localhost:3000/api/usuarios/mis-datos", { credentials: "include" });
+    const meRes = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/usuarios/mis-datos", { credentials: "include" });
     const meData = await meRes.json();
     const foto = meData?.usuario?.foto_perfil;
     perfilAutor.src = foto ? `http://localhost:3000/uploads/${foto}` : "img/usuario-camara.png";
@@ -46,7 +46,7 @@ btnPublicar.addEventListener("click", async () => {
   if (imagen) formData.append("imagen", imagen); // 👈 solo si existe
 
   try {
-    const res = await fetch("http://localhost:3000/api/publicaciones", {
+    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/publicaciones", {
       method: "POST",
       body: formData,
       credentials: "include"
@@ -82,7 +82,7 @@ btnPublicar.addEventListener("click", async () => {
 // 📦 Listar publicaciones
 async function cargarPublicaciones() {
   try {
-    const res = await fetch("http://localhost:3000/api/publicaciones", { credentials: "include" });
+    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/publicaciones", { credentials: "include" });
     const data = await res.json();
 
     const contenedor = document.getElementById("lista-publicaciones");
@@ -169,7 +169,7 @@ function renderPublicacion(pub) {
     btnEliminar.addEventListener("click", async () => {
       if (!confirm("¿Seguro que quieres eliminar esta publicación?")) return;
       try {
-        const res = await fetch(`http://localhost:3000/api/publicaciones/${pub.id}`, {
+        const res = await fetch(`https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/publicaciones/${pub.id}`, {
           method: "DELETE",
           credentials: "include"
         });
@@ -192,85 +192,10 @@ function renderPublicacion(pub) {
   cargarComentarios(pub.id);
   return div;
 }
-
-/*function renderPublicacion(pub) {
-  const div = document.createElement("div");
-  div.className = "publicacion";
-
-  div.innerHTML = `
-    <div class="d-flex align-items-center gap-2 mb-2">
-      <img src="http://localhost:3000/uploads/${pub.autor_foto || "usuario-camara.png"}" 
-           alt="perfil" width="40" style="border-radius:50%; object-fit:cover;">
-      <div>
-        <strong>${pub.autor_nombre || "Usuario"}</strong>
-        <br><small class="text-muted">${tiempoRelativo(pub.fecha_publicacion)}</small>
-      </div>
-      ${pub.usuario_id === window.miUsuarioId
-      ? `<i class="fa fa-trash cursor-pointer btn-eliminar" 
-   data-id="${pub.id}" title="Eliminar publicación"></i>`
-      : `<i class="fa fa-eye-slash text-muted cursor-pointer btn-ocultar" 
-              data-id="${pub.id}" title="Ocultar publicación"></i>`}
-    </div>
-
-    <img src="http://localhost:3000/uploads/${pub.imagen}" 
-         alt="foto" class="publicacion-imagen">
-    <p class="mb-1">${pub.descripcion || ""}</p>
-
-    <!-- Bloque de comentarios -->
-    <div class="form-comentario mt-2">
-      <input id="input-comentario-${pub.id}" type="text" 
-             class="form-control form-control-sm mb-2" 
-             placeholder="Escribe un comentario..." required>
-      <button type="button" class="btn btn-sm btn-primary" 
-              onclick="enviarComentario(${pub.id})">Comentar</button>
-    </div>
-
-    <!-- 🔧 Este contenedor es clave para evitar el error -->
-    <div class="lista-comentarios mt-2" id="comentarios-${pub.id}"></div>
-  `;
-
-  // Listener para eliminar publicación
-  const btnEliminar = div.querySelector(".btn-eliminar");
-  if (btnEliminar) {
-    btnEliminar.addEventListener("click", async () => {
-      if (!confirm("¿Seguro que quieres eliminar esta publicación?")) return;
-
-      try {
-        const res = await fetch(`http://localhost:3000/api/publicaciones/${pub.id}`, {
-          method: "DELETE",
-          credentials: "include"
-        });
-        const data = await res.json();
-        if (data.success) {
-          div.remove();
-        } else {
-          alert("⚠️ No se pudo eliminar la publicación");
-        }
-      } catch (err) {
-        console.error("❌ Error al eliminar publicación:", err);
-      }
-    });
-  }
-
-  // Listener para ocultar publicación
-  const btnOcultar = div.querySelector(".btn-ocultar");
-  if (btnOcultar) {
-    btnOcultar.addEventListener("click", () => {
-      div.style.display = "none";
-    });
-  }
-
-  // ✅ Ahora este contenedor existe, así que esto no falla
-  cargarComentarios(pub.id);
-
-  return div;
-}*/
-
-
 // 💬 Listar comentarios de una publicación
 async function cargarComentarios(publicacionId) {
   try {
-    const res = await fetch(`http://localhost:3000/api/comentarios?publicacion_id=${publicacionId}`, {
+    const res = await fetch(`https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/comentarios?publicacion_id=${publicacionId}`, {
       credentials: "include"
     });
     const data = await res.json();
@@ -310,7 +235,7 @@ async function cargarComentarios(publicacionId) {
             if (!confirm("¿Seguro que quieres eliminar este comentario?")) return;
             const comentarioId = btnEliminar.dataset.id;
             try {
-              const res = await fetch(`http://localhost:3000/api/comentarios/${comentarioId}`, {
+              const res = await fetch(`https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/comentarios/${comentarioId}`, {
                 method: "DELETE",
                 credentials: "include"
               });
@@ -349,7 +274,7 @@ async function enviarComentario(publicacionId) {
   try {
     console.log({ publicacion_id: publicacionId, texto });
 
-    const res = await fetch("http://localhost:3000/api/comentarios", {
+    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/comentarios", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -385,3 +310,4 @@ function tiempoRelativo(fechaISO) {
   const diffDias = Math.floor(diffHoras / 24);
   return `subida hace ${diffDias} días`;
 }
+
