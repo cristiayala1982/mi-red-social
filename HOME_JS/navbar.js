@@ -11,7 +11,7 @@ async function cargarDatosNavbar() {
   console.log("🔍 Llamando a /mis-datos con cookie...");
 
   try {
-    const res = await fetch("http://localhost:3000/api/usuarios/mis-datos", {
+    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/usuarios/mis-datos", {
       method: "GET",
       credentials: "include" // 👈 manda la cookie automáticamente
     });
@@ -55,5 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });
+
 
 
