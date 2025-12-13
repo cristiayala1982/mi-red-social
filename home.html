@@ -88,6 +88,7 @@
     <h2>Mis chats</h2>
     <ul id="lista-chats"></ul>
   </div>
+<script>const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";</script>
 <!-- Scripts principales en orden -->
 <script type="module" src="HOME_JS/home.js"></script>
 <script type="module" src="HOME_JS/navbar.js"></script>
@@ -95,51 +96,6 @@
 <script type="module" src="HOME_JS/cerrarSesion.js"></script>
 <script type="module" src="HOME_JS/publicaciones.js"></script>
 <script type="module" src="HOME_JS/listaAmigosYchats.js"></script>
-<script>
-  /*function inicializarPanelChats() {
-    const btnMensajes = document.getElementById("btn-mensajes");
-    const panelChats = document.getElementById("panel-chats");
-    const cerrarBtn = panelChats.querySelector(".cerrar-panel");
-
-    btnMensajes.addEventListener("click", () => {
-      panelChats.style.display = "block";
-      cargarChats();
-    });
-
-    cerrarBtn.addEventListener("click", () => {
-      panelChats.style.display = "none";
-    });
-  }
-
-  async function cargarChats() {
-    const listaChats = document.getElementById("lista-chats");
-    listaChats.innerHTML = "";
-
-    try {
-      const res = await fetch("http://localhost:3000/api/chats", { credentials: "include" });
-      const data = await res.json();
-
-      if (!data.success) {
-        listaChats.innerHTML = "<li>Error al cargar chats</li>";
-        return;
-      }
-
-      data.chats.forEach(chat => {
-        const li = document.createElement("li");
-        li.textContent = chat.nombre;
-        li.addEventListener("click", () => {
-          window.location.href = `chats.html?id=${chat.id}`;
-        });
-        listaChats.appendChild(li);
-      });
-    } catch (error) {
-      listaChats.innerHTML = "<li>Error de conexión</li>";
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", inicializarPanelChats);*/
-</script>
-
 </body>
-
 </html>
+
