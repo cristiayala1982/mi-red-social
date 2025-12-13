@@ -97,7 +97,7 @@ function restaurarBoton(btn) {
 
 // 🧩 Cargar datos del usuario logueado
 function cargarDatosUsuario() {
-  fetch("http://localhost:3000/api/usuarios/mis-datos", {
+  fetch(`${API_URL}/api/usuarios/mis-datos`, {
     credentials: "include"
   })
     .then(res => res.json())
@@ -111,7 +111,7 @@ function cargarDatosUsuario() {
       document.getElementById('usuario').value = u.usuario || '';
       document.getElementById('password').value = u.password || '';
       if (u.foto_perfil) {
-        document.getElementById('preview-imagen').src = `http://localhost:3000/uploads/${u.foto_perfil}`;
+        document.getElementById('preview-imagen').src = `${API_URL}/uploads/${u.foto_perfil}`;
       }
     })
     .catch(() => mostrarToast('Error al conectar con el servidor', 'danger'));
@@ -143,7 +143,7 @@ function configurarFormulario() {
 
     const formData = new FormData(form);
 
-    fetch("http://localhost:3000/api/usuario/editar-perfil", {
+    fetch(`${API_URL}/api/usuario/editar-perfil`, {
       method: 'POST',
       body: formData,
       credentials: "include"
@@ -175,7 +175,8 @@ function agregarBotonCancelar() {
   btnCancelar.onclick = () => window.location.href = 'miPerfil.html';
   form.appendChild(btnCancelar);
 }
-  </script>
+  `</script>
 </body>
 
 </html>
+
