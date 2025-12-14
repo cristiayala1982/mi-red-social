@@ -146,7 +146,7 @@ async function usarComoFotoDePerfil(nombreArchivo) {
     formData.append('usuario', datosUsuario.usuario);
     formData.append('password', datosUsuario.password);
 
-    const res = await fetch(`API_URL/api/usuario/editar-perfil`, {
+    const res = await fetch(`${API_URL}/api/usuario/editar-perfil`, {
       method: 'POST',
       body: formData,
       credentials: "include"
@@ -156,7 +156,7 @@ async function usarComoFotoDePerfil(nombreArchivo) {
       mostrarNotificacion('✅ Foto de perfil actualizada');
 
       const timestamp = new Date().getTime();
-      const nuevaRuta = `API_URL/uploads/${nombreArchivo}?t=${timestamp}`;
+      const nuevaRuta = `${API_URL}/uploads/${nombreArchivo}?t=${timestamp}`;
       const imagen = document.getElementById('foto-perfil');
       const placeholder = document.getElementById('placeholder-icon');
       if (imagen) {
@@ -172,6 +172,7 @@ async function usarComoFotoDePerfil(nombreArchivo) {
     console.error(error);
   }
 }
+
 
 
 
