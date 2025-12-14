@@ -1,3 +1,4 @@
+const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 let usuarioId = null;
 export let datosUsuario = null;
 
@@ -11,7 +12,7 @@ async function cargarDatosNavbar() {
   console.log("🔍 Llamando a /mis-datos con cookie...");
 
   try {
-    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/usuarios/mis-datos", {
+    const res = await fetch(`${API_URL}/api/usuarios/mis-datos`, {
       method: "GET",
       credentials: "include" // 👈 manda la cookie automáticamente
     });
@@ -28,7 +29,7 @@ async function cargarDatosNavbar() {
       const navFoto = document.getElementById("nav-foto-perfil");
       if (navFoto) {
         const foto = datosUsuario.foto_perfil && datosUsuario.foto_perfil.trim() !== ""
-          ? `http://localhost:3000/uploads/${datosUsuario.foto_perfil}?t=${Date.now()}`
+          ? `${API_URL}/${datosUsuario.foto_perfil}?t=${Date.now()}`
           : "img/usuario-camara.png"; // 👉 icono por defecto
 
         navFoto.src = foto;
@@ -55,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });
+
 
 
 
