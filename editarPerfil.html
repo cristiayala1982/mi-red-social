@@ -131,12 +131,16 @@ function cargarDatosUsuario() {
       };
 
       if (u.foto_perfil) {
-          // Intentar cargar la foto de perfil del usuario desde el backend
-          previewImg.src = `${API_URL}/uploads/${u.foto_perfil}`;
+          // Determinar si u.foto_perfil es una URL completa (ej. Gravatar) o un nombre de archivo local
+          const fotoSrc = u.foto_perfil.startsWith('http://') || u.foto_perfil.startsWith('https://')
+              ? u.foto_perfil // Ya es una URL completa, usarla directamente
+              : `${API_URL}/uploads/${u.foto_perfil}`; // Es un nombre de archivo, construir la URL con API_URL/uploads/
+          previewImg.src = fotoSrc;
       } else {
           // Si el usuario no tiene foto, mostrar la de por defecto
           previewImg.src = defaultImgPath;
       }
+
     })
     .catch(error => {
       console.error("Error al conectar con el servidor o procesar datos:", error);
@@ -198,6 +202,7 @@ function agregarBotonCancelar() {
 </body>
 
 </html>
+
 
 
 
