@@ -1,3 +1,4 @@
+const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 // 📦 Importar función para mostrar notificaciones
 import { mostrarNotificacion } from './notificaciones.js';
 
@@ -41,7 +42,7 @@ function tiempoRelativo(fechaISO) {
 // 📦 Cargar galería del usuario autenticado (cookie)
 export async function cargarGaleria() {
   try {
-    const res = await fetch("http://localhost:3000/api/usuarios/galeria", {
+    const res = await fetch(`${API_URL}/api/usuarios/galeria`, {
       credentials: "include"
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -115,7 +116,7 @@ function mostrarConfirmacion(callback) {
 // 🗑️ Eliminar imagen de la galería (API DELETE)
 async function eliminarImagen(idImagen, elemento) {
   try {
-    const res = await fetch(`http://localhost:3000/api/galeria/${idImagen}`, {
+    const res = await fetch(`${API_URL}/api/galeria/${idImagen}`, {
       method: 'DELETE',
       credentials: "include"
     });
@@ -171,5 +172,6 @@ async function usarComoFotoDePerfil(nombreArchivo) {
     console.error(error);
   }
 }
+
 
 
