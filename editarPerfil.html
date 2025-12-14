@@ -110,6 +110,7 @@ function restaurarBoton(btn) {
     return true;
   }
 // 🧩 Cargar datos del usuario logueado
+// 🧩 Cargar datos del usuario logueado (VERSIÓN FINAL)
 function cargarDatosUsuario() {
   fetch(`${API_URL}/api/usuarios/mis-datos`, {
     credentials: "include"
@@ -118,7 +119,6 @@ function cargarDatosUsuario() {
     .then(data => {
       if (!data.success) {
         mostrarToast('No se pudo cargar el perfil', 'danger');
-        // Si no se pudo cargar el perfil, al menos mostrar la imagen por defecto
         document.getElementById('preview-imagen').src = "/img/usuario-camara.png";
         return;
       }
@@ -129,38 +129,34 @@ function cargarDatosUsuario() {
       document.getElementById('nacionalidad').value = u.nacionalidad || '';
       document.getElementById('email').value = u.email || '';
       document.getElementById('usuario').value = u.usuario || '';
-      // Aquí el campo de password no debería cargarse con el valor real por seguridad
-      document.getElementById('password').value = ''; // Siempre vacío o un valor no revelador
+      document.getElementById('password').value = ''; // Por seguridad, siempre vacío
 
       const previewImg = document.getElementById('preview-imagen');
-      const defaultImgPath = "/img/usuario-camara.png"; // Definimos la ruta por defecto aquí
+      const defaultImgPath = "/img/usuario-camara.png";
 
-      // Establecer el manejador onerror UNA SOLA VEZ
       previewImg.onerror = function() {
           console.error(`No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
           this.src = defaultImgPath;
-          this.onerror = null; // Para evitar bucles infinitos si la defaultImgPath también fallara
+          this.onerror = null;
       };
 
-      if (u.foto_perfil) {
-          // Determinar si u.foto_perfil es una URL completa (ej. Gravatar) o un nombre de archivo local
-          const fotoSrc = u.foto_perfil.startsWith('http://') || u.foto_perfil.startsWith('https://')
-              ? u.foto_perfil // Ya es una URL completa, usarla directamente
-              : `${API_URL}/uploads/${u.foto_perfil}`; // Es un nombre de archivo, construir la URL con API_URL/uploads/
-          previewImg.src = fotoSrc;
+      // --- LÓGICA MEJORADA AQUÍ ---
+      // Si el usuario tiene una foto de perfil Y NO es la de Gravatar por defecto...
+      if (u.foto_perfil && !u.foto_perfil.includes('gravatar.com')) {
+          // Es una foto subida por el usuario, construir la URL
+          previewImg.src = `${API_URL}/uploads/${u.foto_perfil}`;
       } else {
-          // Si el usuario no tiene foto, mostrar la de por defecto
+          // Si no tiene foto O si la que tiene es la de Gravatar, mostrar la nuestra por defecto.
           previewImg.src = defaultImgPath;
       }
-
     })
     .catch(error => {
       console.error("Error al conectar con el servidor o procesar datos:", error);
       mostrarToast('Error al conectar con el servidor', 'danger');
-      // En caso de cualquier error grave, asegúrate de mostrar la imagen por defecto
       document.getElementById('preview-imagen').src = "/img/usuario-camara.png";
     });
 }
+
 
 // ... (resto del código) ...
 
@@ -214,6 +210,7 @@ function agregarBotonCancelar() {
 </body>
 
 </html>
+
 
 
 
