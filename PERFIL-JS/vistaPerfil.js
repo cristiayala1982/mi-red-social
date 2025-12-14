@@ -1,3 +1,4 @@
+const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 // Util: formatear fecha ISO a dd-mm-aaaa evitando desajustes de zona horaria
 function formatearFechaDMY(fechaISO) {
   if (!fechaISO) return '';
@@ -11,7 +12,7 @@ function formatearFechaDMY(fechaISO) {
 // 🚀 Cargar datos del usuario logueado en el nav
 async function cargarNavUsuario() {
   try {
-    const res = await fetch("http://localhost:3000/api/usuario/perfil", {
+    const res = await fetch(`${API_URL}/api/usuario/perfil`, {
       credentials: "include"
     });
     const data = await res.json();
@@ -55,7 +56,7 @@ if (!idVisitado) {
 // 🚀 Cargar datos y galería del usuario visitado
 async function cargarDatosUsuario(id) {
   try {
-    const res = await fetch(`http://localhost:3000/api/usuario/perfil?id=${id}`, {
+    const res = await fetch(`${API_URL}/api/usuario/perfil?id=${id}`, {
       credentials: "include"
     });
     const data = await res.json();
@@ -92,7 +93,7 @@ async function cargarDatosUsuario(id) {
         contenedorImg.classList.add("item-galeria");
 
         const elemento = document.createElement("img");
-        elemento.src = `http://localhost:3000/uploads/${img.nombre_archivo}`;
+        elemento.src = `${API_URL}/uploads/${img.nombre_archivo}`;
         elemento.alt = "Imagen de galería";
         elemento.classList.add("imagen-galeria");
 
@@ -118,12 +119,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const perfilId = Number(params.get("id"));
 
   // Usuario logueado (usando tu endpoint /mis-datos)
-  const meRes = await fetch("http://localhost:3000/api/usuarios/mis-datos", { credentials: "include" });
+  const meRes = await fetch(`${API_URL}/api/usuarios/mis-datos`, { credentials: "include" });
   const meData = await meRes.json();
   const yoId = meData?.usuario?.id;
 
   // Datos del perfil visitado
-  const perfilRes = await fetch(`http://localhost:3000/api/usuario/perfil?id=${perfilId}`, { credentials: "include" });
+  const perfilRes = await fetch(`${API_URL}/api/usuario/perfil?id=${perfilId}`, { credentials: "include" });
   const perfilData = await perfilRes.json();
   const perfil = perfilData?.usuario;
 
@@ -134,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("fecha-nac").textContent = formatearFechaDMY(perfil?.fecha_nac);
   document.getElementById("nacionalidad").textContent = perfil?.nacionalidad || "";
   document.getElementById("foto-perfil").src = perfil?.foto_perfil
-    ? `http://localhost:3000/uploads/${perfil.foto_perfil}`
+    ? `${API_URL}/uploads/${perfil.foto_perfil}`
     : "img/usuario-camara.png";
 
   // Mostrar botón solo si no es tu propio perfil
@@ -143,7 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (perfilId && yoId && perfilId !== yoId) {
     // Verificar si ya lo sigues
-    const estadoRes = await fetch(`http://localhost:3000/api/seguir/${perfilId}`, {
+    const estadoRes = await fetch(`${API_URL}/api/seguir/${perfilId}`, {
       credentials: "include"
     });
     const estadoData = await estadoRes.json();
@@ -162,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         if (!btnSeguir.classList.contains("siguiendo")) {
           // Seguir
-          const res = await fetch("http://localhost:3000/api/seguir", {
+          const res = await fetch(`${API_URL}/api/seguir}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -175,7 +176,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         } else {
           // Dejar de seguir
-          const res = await fetch(`http://localhost:3000/api/seguir/${perfilId}`, {
+          const res = await fetch(`${API_URL}/api/seguir/${perfilId}`, {
             method: "DELETE",
             credentials: "include"
           });
@@ -204,6 +205,7 @@ function abrirChatConUsuario() {
     alert("No se pudo obtener el ID del usuario.");
   }
 }
+
 
 
 
