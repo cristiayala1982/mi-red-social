@@ -96,7 +96,19 @@ function restaurarBoton(btn) {
 }
 
 // ... (código anterior) ...
-
+  // 🧩 Validación de campos
+  // ¡ESTA FUNCIÓN DEBE ESTAR DEFINIDA ANTES DE QUE SE LLAME EN configurarFormulario!
+  function validarCampos() {
+    const campos = ['nombre', 'fecha-nac', 'nacionalidad', 'email', 'usuario', 'password'];
+    for (const id of campos) {
+      const valor = document.getElementById(id).value.trim();
+      if (!valor) {
+        mostrarToast(`El campo "${id}" está vacío`, 'warning');
+        return false;
+      }
+    }
+    return true;
+  }
 // 🧩 Cargar datos del usuario logueado
 function cargarDatosUsuario() {
   fetch(`${API_URL}/api/usuarios/mis-datos`, {
@@ -202,6 +214,7 @@ function agregarBotonCancelar() {
 </body>
 
 </html>
+
 
 
 
