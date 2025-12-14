@@ -34,4 +34,5 @@ export const configurarImagenPerfil = () => {
       mensajeImagen.classList.add('d-none');
     });
   };
+
 };
