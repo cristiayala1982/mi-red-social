@@ -47,7 +47,7 @@ export async function cargarDatosUsuario() {
     document.getElementById('password').textContent = u.password || '';
 
     if (u.foto_perfil) {
-      document.getElementById('foto-perfil').src = `http://localhost:3000/uploads/${u.foto_perfil}`;
+      document.getElementById('foto-perfil').src = `${API_URL}/uploads/${u.foto_perfil}`;
       document.getElementById('foto-perfil').classList.remove('d-none');
       document.getElementById('placeholder-icon').classList.add('d-none');
     }
@@ -90,7 +90,7 @@ export async function enviarImagenAlBackend(imagenBlob) {
 
       // Evitar caché al mostrar la nueva imagen
       const timestamp = new Date().getTime();
-      const nuevaRuta = `http://localhost:3000/uploads/${datosUsuario.foto_perfil}?t=${timestamp}`;
+      const nuevaRuta = `${API_URL}/uploads/${datosUsuario.foto_perfil}?t=${timestamp}`;
       const imagen = document.getElementById('foto-perfil');
       if (imagen) imagen.src = nuevaRuta;
     } else {
@@ -101,6 +101,7 @@ export async function enviarImagenAlBackend(imagenBlob) {
     console.error(error);
   }
 }
+
 
 
 
