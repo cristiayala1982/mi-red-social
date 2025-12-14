@@ -27,12 +27,30 @@ async function cargarDatosNavbar() {
 
       // Mostrar foto de perfil con validación
       const navFoto = document.getElementById("nav-foto-perfil");
-      if (navFoto) {
-        const foto = datosUsuario.foto_perfil && datosUsuario.foto_perfil.trim() !== ""
-          ? `${API_URL}/${datosUsuario.foto_perfil}?t=${Date.now()}`
-          : "img/usuario-camara.png"; // 👉 icono por defecto
+      const defaultImgPath = "/img/usuario-camara.png"; // Ruta a tu imagen por defecto
 
-        navFoto.src = foto;
+      if (navFoto) {
+        // Establecer el manejador onerror UNA SOLA VEZ
+        navFoto.onerror = function() {
+            console.error(`Navbar: No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
+            this.src = defaultImgPath;
+            this.onerror = null; // Evitar bucles infinitos
+        };
+
+        // --- LÓGICA MEJORADA PARA IMAGEN DE PERFIL EN NAVBAR ---
+        // Si el usuario tiene una foto de perfil Y NO es la de Gravatar por defecto...
+        if (datosUsuario.foto_perfil && !datosUsuario.foto_perfil.includes('gravatar.com')) {
+            // Es una foto subida por el usuario, construir la URL
+            // Asegúrate de que datosUsuario.foto_perfil sea solo el nombre del archivo
+            // Si tu backend devuelve la ruta completa como '/uploads/nombre.jpg', ajústalo
+            const fotoSrc = datosUsuario.foto_perfil.startsWith('/uploads/')
+                ? `${API_URL}${datosUsuario.foto_perfil}?t=${Date.now()}` // Ya incluye /uploads/
+                : `${API_URL}/uploads/${datosUsuario.foto_perfil}?t=${Date.now()}`; // Construir la ruta
+            navFoto.src = fotoSrc;
+        } else {
+            // Si no tiene foto O si la que tiene es la de Gravatar, mostrar la nuestra por defecto.
+            navFoto.src = defaultImgPath;
+        }
       }
 
       // Mostrar saludo en el home (si existe)
@@ -43,10 +61,20 @@ async function cargarDatosNavbar() {
 
     } else {
       console.warn("⚠️ No autenticado, navbar vacío (no se redirige)");
+      // Si no hay usuario autenticado, asegurar que la imagen de la navbar sea la por defecto
+      const navFoto = document.getElementById("nav-foto-perfil");
+      if (navFoto) {
+          navFoto.src = "/img/usuario-camara.png";
+      }
     }
   } catch (error) {
     console.error("❌ Error al cargar datos del usuario", error);
     console.warn("⚠️ No se pudieron cargar datos, navbar vacío");
+    // En caso de error, asegurar que la imagen de la navbar sea la por defecto
+    const navFoto = document.getElementById("nav-foto-perfil");
+    if (navFoto) {
+        navFoto.src = "/img/usuario-camara.png";
+    }
   }
 }
 
@@ -56,6 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });
+
+
 
 
 
