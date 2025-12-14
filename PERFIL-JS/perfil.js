@@ -20,6 +20,7 @@ function formatearFechaDMY(fechaISO) {
   return `${dia}-${mes}-${año}`;
 }
 
+// 🔄 Cargar datos del usuario desde el backend usando la cookie
 export async function cargarDatosUsuario() {
   try {
     const res = await fetch(`${API_URL}/api/usuarios/mis-datos`, {
@@ -30,6 +31,8 @@ export async function cargarDatosUsuario() {
 
     if (!data.success) {
       console.error("❌ No se pudo cargar el perfil");
+      // Si falla, asegúrate de mostrar la imagen por defecto
+      document.getElementById('foto-perfil').src = "/img/usuario-camara.png";
       return null;
     }
 
@@ -38,19 +41,39 @@ export async function cargarDatosUsuario() {
     setDatosUsuario(u); // ✅ también actualizar en galeria.js
     console.log("✅ datosUsuario actualizado:", datosUsuario);
 
-    // Mostrar en pantalla
+    // --- LÓGICA DE IMAGEN DE PERFIL MEJORADA ---
+    const fotoPerfilImg = document.getElementById('foto-perfil');
+    const placeholderIcon = document.getElementById('placeholder-icon');
+    const defaultImgPath = "/img/usuario-camara.png"; // Ruta a tu imagen por defecto
+
+    // Ocultar placeholder por defecto, la lógica decidirá qué mostrar
+    if (placeholderIcon) placeholderIcon.classList.add('d-none');
+    if (fotoPerfilImg) fotoPerfilImg.classList.remove('d-none');
+
+    // Establecer el manejador de errores
+    fotoPerfilImg.onerror = function() {
+        console.error(`Perfil: No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
+        this.src = defaultImgPath;
+        this.onerror = null; // Evitar bucles infinitos
+    };
+
+    // Decidir qué imagen mostrar
+    if (u.foto_perfil && !u.foto_perfil.includes('gravatar.com')) {
+        // Es una foto subida por el usuario, construir la URL
+        fotoPerfilImg.src = `${API_URL}/uploads/${u.foto_perfil}`;
+    } else {
+        // Si no tiene foto O si la que tiene es la de Gravatar, mostrar la nuestra por defecto.
+        fotoPerfilImg.src = defaultImgPath;
+    }
+    // --- FIN DE LÓGICA DE IMAGEN ---
+
+    // Mostrar el resto de los datos en pantalla
     document.getElementById('nombre').textContent = u.nombre || '';
     document.getElementById('fecha-nac').textContent = formatearFechaDMY(u.fecha_nac);
     document.getElementById('nacionalidad').textContent = u.nacionalidad || '';
     document.getElementById('email').textContent = u.email || '';
     document.getElementById('usuario').textContent = u.usuario || '';
-    document.getElementById('password').textContent = u.password || '';
-
-    if (u.foto_perfil) {
-      document.getElementById('foto-perfil').src = `${API_URL}/uploads/${u.foto_perfil}`;
-      document.getElementById('foto-perfil').classList.remove('d-none');
-      document.getElementById('placeholder-icon').classList.add('d-none');
-    }
+    // El campo de contraseña no se muestra por seguridad, lo cual es correcto.
 
     // 🔄 Cargar galería del usuario (importada desde galeria.js)
     cargarGaleria(u.id);
@@ -58,6 +81,9 @@ export async function cargarDatosUsuario() {
     return u;
   } catch (error) {
     console.error("❌ Error al conectar con el servidor", error);
+    // En caso de error, también mostrar la imagen por defecto
+    const fotoPerfilImg = document.getElementById('foto-perfil');
+    if(fotoPerfilImg) fotoPerfilImg.src = "/img/usuario-camara.png";
     return null;
   }
 }
@@ -67,7 +93,6 @@ export async function cargarDatosUsuario() {
 export async function enviarImagenAlBackend(imagenBlob) {
   try {
     const formData = new FormData();
-    // 👇 nombre del campo correcto para multer
     formData.append('foto', imagenBlob, 'archivo.jpg');
 
     console.log("📤 FormData enviado:", [...formData.entries()]);
@@ -75,7 +100,7 @@ export async function enviarImagenAlBackend(imagenBlob) {
     const res = await fetch(`${API_URL}/api/usuarios/foto`, {
       method: 'POST',
       body: formData,
-      credentials: "include" // 👈 importante para que viaje la cookie
+      credentials: "include"
     });
 
     const data = await res.json();
@@ -84,23 +109,29 @@ export async function enviarImagenAlBackend(imagenBlob) {
     if (data.success) {
       mostrarNotificacion('✅ Imagen de perfil actualizada');
 
-      // Recargar datos del usuario
-      const nuevosDatos = await cargarDatosUsuario();
-      datosUsuario = nuevosDatos;
-
-      // Evitar caché al mostrar la nueva imagen
+      // --- LÓGICA MEJORADA PARA ACTUALIZAR IMAGEN ---
+      // No es necesario recargar todos los datos, solo actualizar la imagen
       const timestamp = new Date().getTime();
-      const nuevaRuta = `${API_URL}/uploads/${datosUsuario.foto_perfil}?t=${timestamp}`;
+      // data.url debería contener la nueva ruta relativa, ej: /uploads/nombre-archivo.jpg
+      const nuevaRuta = `${API_URL}${data.url}?t=${timestamp}`; 
+      
       const imagen = document.getElementById('foto-perfil');
       if (imagen) imagen.src = nuevaRuta;
+
+      // Actualizar el objeto local 'datosUsuario' si es necesario
+      if (datosUsuario) {
+        datosUsuario.foto_perfil = data.url.replace('/uploads/', ''); // Guardar solo el nombre del archivo
+      }
+      
     } else {
-      mostrarNotificacion('❌ No se pudo actualizar la imagen');
+      mostrarNotificacion(data.message || '❌ No se pudo actualizar la imagen');
     }
   } catch (error) {
     mostrarNotificacion('❌ Error al enviar imagen');
     console.error(error);
   }
 }
+
 
 
 
