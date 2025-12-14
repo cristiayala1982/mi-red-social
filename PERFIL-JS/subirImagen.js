@@ -1,3 +1,4 @@
+const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 import { mostrarNotificacion } from './notificaciones.js';
 import { cargarGaleria } from './galeria.js';
 
@@ -18,7 +19,7 @@ export const configurarSubidaImagen = () => {
     formData.append('imagen', archivo);
 
     try {
-      const res = await fetch("http://localhost:3000/api/usuarios/galeria", {
+      const res = await fetch(`${API_URL}/api/usuarios/galeria`, {
         method: 'POST',
         body: formData,
         credentials: "include" // 👈 importante para que viaje la cookie
@@ -39,4 +40,5 @@ export const configurarSubidaImagen = () => {
     }
   };
 };
+
 
