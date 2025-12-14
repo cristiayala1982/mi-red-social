@@ -12,9 +12,9 @@
     <h1 class="text-center mb-4">Editar perfil</h1>
 
     <form id="form-editar" enctype="multipart/form-data" class="card p-4 shadow mx-auto" style="max-width: 600px;">
-      <div class="mb-3 text-center">
-       <img id="preview-imagen" src="/img/usuario-camara.png" alt="Tu selfie" class="rounded-circle" width="150" height="150">
-      </div>
+          <div class="mb-3 text-center">
+            <img id="preview-imagen" src="" alt="Tu selfie" class="rounded-circle" width="150" height="150">
+          </div>
 
           <div class="text-center mt-2 text-muted">
             <i class="bi bi-camera-fill me-2"></i>
@@ -95,6 +95,8 @@ function restaurarBoton(btn) {
   btn.textContent = 'Guardar cambios';
 }
 
+// ... (código anterior) ...
+
 // 🧩 Cargar datos del usuario logueado
 function cargarDatosUsuario() {
   fetch(`${API_URL}/api/usuarios/mis-datos`, {
@@ -102,33 +104,50 @@ function cargarDatosUsuario() {
   })
     .then(res => res.json())
     .then(data => {
-      if (!data.success) return mostrarToast('No se pudo cargar el perfil', 'danger');
+      if (!data.success) {
+        mostrarToast('No se pudo cargar el perfil', 'danger');
+        // Si no se pudo cargar el perfil, al menos mostrar la imagen por defecto
+        document.getElementById('preview-imagen').src = "/img/usuario-camara.png";
+        return;
+      }
+
       const u = data.usuario;
       document.getElementById('nombre').value = u.nombre || '';
       document.getElementById('fecha-nac').value = u.fecha_nac?.split('T')[0] || '';
       document.getElementById('nacionalidad').value = u.nacionalidad || '';
       document.getElementById('email').value = u.email || '';
       document.getElementById('usuario').value = u.usuario || '';
-      document.getElementById('password').value = u.password || '';
+      // Aquí el campo de password no debería cargarse con el valor real por seguridad
+      document.getElementById('password').value = ''; // Siempre vacío o un valor no revelador
+
+      const previewImg = document.getElementById('preview-imagen');
+      const defaultImgPath = "/img/usuario-camara.png"; // Definimos la ruta por defecto aquí
+
+      // Establecer el manejador onerror UNA SOLA VEZ
+      previewImg.onerror = function() {
+          console.error(`No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
+          this.src = defaultImgPath;
+          this.onerror = null; // Para evitar bucles infinitos si la defaultImgPath también fallara
+      };
+
       if (u.foto_perfil) {
-        document.getElementById('preview-imagen').src = `${API_URL}/uploads/${u.foto_perfil}`;
+          // Intentar cargar la foto de perfil del usuario desde el backend
+          previewImg.src = `${API_URL}/uploads/${u.foto_perfil}`;
+      } else {
+          // Si el usuario no tiene foto, mostrar la de por defecto
+          previewImg.src = defaultImgPath;
       }
     })
-    .catch(() => mostrarToast('Error al conectar con el servidor', 'danger'));
+    .catch(error => {
+      console.error("Error al conectar con el servidor o procesar datos:", error);
+      mostrarToast('Error al conectar con el servidor', 'danger');
+      // En caso de cualquier error grave, asegúrate de mostrar la imagen por defecto
+      document.getElementById('preview-imagen').src = "/img/usuario-camara.png";
+    });
 }
 
-// 🧩 Validación de campos
-function validarCampos() {
-  const campos = ['nombre', 'fecha-nac', 'nacionalidad', 'email', 'usuario', 'password'];
-  for (const id of campos) {
-    const valor = document.getElementById(id).value.trim();
-    if (!valor) {
-      mostrarToast(`El campo "${id}" está vacío`, 'warning');
-      return false;
-    }
-  }
-  return true;
-}
+// ... (resto del código) ...
+
 
 // 🧩 Enviar formulario (sin imagen)
 function configurarFormulario() {
@@ -179,6 +198,7 @@ function agregarBotonCancelar() {
 </body>
 
 </html>
+
 
 
 
