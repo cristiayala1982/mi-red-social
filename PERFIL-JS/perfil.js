@@ -56,24 +56,6 @@ export async function cargarDatosUsuario() {
         this.src = defaultImgPath;
         this.onerror = null; // Evitar bucles infinitos
     };
-
-    // Decidir qué imagen mostrar
-    // --- LÓGICA DE IMAGEN DE PERFIL MEJORADA ---
-   /*const fotoPerfilImg = document.getElementById('foto-perfil');
-    const placeholderIcon = document.getElementById('placeholder-icon');
-    const defaultImgPath = "/img/usuario-camara.png"; // Ruta a tu imagen por defecto
-
-    // Ocultar placeholder por defecto, la lógica decidirá qué mostrar
-    if (placeholderIcon) placeholderIcon.classList.add('d-none');
-    if (fotoPerfilImg) fotoPerfilImg.classList.remove('d-none');
-
-    // Establecer el manejador de errores
-    fotoPerfilImg.onerror = function() {
-        console.error(`Perfil: No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
-        this.src = defaultImgPath;
-        this.onerror = null; // Evitar bucles infinitos
-    };*/
-
     // Decidir qué imagen mostrar
     if (u.foto_perfil) { // Si hay alguna foto de perfil definida
         if (u.foto_perfil.includes('gravatar.com')) {
@@ -92,10 +74,6 @@ export async function cargarDatosUsuario() {
         fotoPerfilImg.src = defaultImgPath;
     }
     // --- FIN DE LÓGICA DE IMAGEN ---
-
-    }
-    // --- FIN DE LÓGICA DE IMAGEN ---
-
     // Mostrar el resto de los datos en pantalla
     document.getElementById('nombre').textContent = u.nombre || '';
     document.getElementById('fecha-nac').textContent = formatearFechaDMY(u.fecha_nac);
@@ -116,9 +94,6 @@ export async function cargarDatosUsuario() {
     return null;
   }
 }
-
-
-// 📤 Enviar imagen al backend
 // 📤 Enviar imagen al backend
 export async function enviarImagenAlBackend(imagenBlob) {
   try {
@@ -161,6 +136,7 @@ export async function enviarImagenAlBackend(imagenBlob) {
     console.error(error);
   }
 }
+
 
 
 
