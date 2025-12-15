@@ -2,7 +2,7 @@ const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 // 📦 Importar funciones necesarias
 import { mostrarNotificacion } from './notificaciones.js';
 import { cargarGaleria, setDatosUsuario } from './galeria.js';
-import { cargarDatosNavbar } from '../home_js/navbar.js';
+import { cargarDatosNavbar } from '/home_js/navbar.js';
 
 
 // 🧠 Variable global para guardar los datos del usuario
@@ -143,6 +143,7 @@ export async function enviarImagenAlBackend(imagenBlob) {
     console.error(error);
   }
 }
+
 
 
 
