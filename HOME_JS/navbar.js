@@ -8,7 +8,7 @@ export function getUsuarioId() {
 }
 
 // 🔄 Cargar foto y nombre de perfil en la navbar
-async function cargarDatosNavbar() {
+export async function cargarDatosNavbar() {
   console.log("🔍 Llamando a /mis-datos con cookie...");
 
   try {
@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });
+
 
 
 
