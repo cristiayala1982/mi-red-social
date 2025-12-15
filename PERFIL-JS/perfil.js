@@ -59,7 +59,6 @@ export async function cargarDatosUsuario() {
 
     // Decidir qué imagen mostrar
     // --- LÓGICA DE IMAGEN DE PERFIL MEJORADA ---
-    //const fotoPerfilImg = document.getElementById('foto-perfil'); CREO que esta declarada dos veces
     const placeholderIcon = document.getElementById('placeholder-icon');
     const defaultImgPath = "/img/usuario-camara.png"; // Ruta a tu imagen por defecto
 
@@ -161,6 +160,7 @@ export async function enviarImagenAlBackend(imagenBlob) {
     console.error(error);
   }
 }
+
 
 
 
