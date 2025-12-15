@@ -117,7 +117,7 @@ export async function enviarImagenAlBackend(imagenBlob) {
       // --- LÓGICA MEJORADA PARA ACTUALIZAR IMAGEN ---
       // data.url ya es la URL completa de GCS, la usamos directamente
       const timestamp = new Date().getTime();
-      const nuevaRuta = `${data.url}?t=${timestamp}`; // <-- CORRECCIÓN AQUÍ: ELIMINAMOS API_URL
+      const nuevaRuta = `${data.url}?t=${timestamp}`; 
 
       const imagen = document.getElementById('foto-perfil');
       if (imagen) imagen.src = nuevaRuta;
@@ -128,6 +128,10 @@ export async function enviarImagenAlBackend(imagenBlob) {
         datosUsuario.foto_perfil = data.url; 
       }
       
+      // 👇 ¡ESTA ES LA LÍNEA QUE DEBES AGREGAR AQUÍ! 👇
+      cargarGaleria(); 
+      // ------------------------------------------------------------------
+      
     } else {
       mostrarNotificacion(data.message || '❌ No se pudo actualizar la imagen');
     }
@@ -136,6 +140,8 @@ export async function enviarImagenAlBackend(imagenBlob) {
     console.error(error);
   }
 }
+
+
 
 
 
