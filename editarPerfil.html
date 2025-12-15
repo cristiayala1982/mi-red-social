@@ -109,7 +109,6 @@ function restaurarBoton(btn) {
     }
     return true;
   }
-// 🧩 Cargar datos del usuario logueado
 // 🧩 Cargar datos del usuario logueado (VERSIÓN FINAL)
 function cargarDatosUsuario() {
   fetch(`${API_URL}/api/usuarios/mis-datos`, {
@@ -140,15 +139,24 @@ function cargarDatosUsuario() {
           this.onerror = null;
       };
 
-      // --- LÓGICA MEJORADA AQUÍ ---
-      // Si el usuario tiene una foto de perfil Y NO es la de Gravatar por defecto...
-      if (u.foto_perfil && !u.foto_perfil.includes('gravatar.com')) {
-          // Es una foto subida por el usuario, construir la URL
-          previewImg.src = `${API_URL}/uploads/${u.foto_perfil}`;
+      // --- LÓGICA MEJORADA AQUÍ para manejar URLs de GCS ---
+      if (u.foto_perfil) { // Si hay alguna foto de perfil definida
+          if (u.foto_perfil.includes('gravatar.com')) {
+              // Si es Gravatar, mostrar la por defecto (o la de Gravatar si la quieres)
+              previewImg.src = defaultImgPath; // O u.foto_perfil si Gravatar es la por defecto
+          } else if (u.foto_perfil.startsWith('https://storage.googleapis.com/')) {
+              // Si ya es una URL completa de GCS, la usamos directamente
+              previewImg.src = u.foto_perfil;
+          } else {
+              // Si es un nombre de archivo antiguo (local) o cualquier otra cosa,
+              // construimos la URL con API_URL/uploads/ (por si acaso, para compatibilidad)
+              previewImg.src = `${API_URL}/uploads/${u.foto_perfil}`;
+          }
       } else {
-          // Si no tiene foto O si la que tiene es la de Gravatar, mostrar la nuestra por defecto.
+          // Si no hay foto_perfil definida, mostrar la por defecto
           previewImg.src = defaultImgPath;
       }
+      // --- FIN DE LÓGICA MEJORADA ---
     })
     .catch(error => {
       console.error("Error al conectar con el servidor o procesar datos:", error);
@@ -156,6 +164,7 @@ function cargarDatosUsuario() {
       document.getElementById('preview-imagen').src = "/img/usuario-camara.png";
     });
 }
+
 
 
 // ... (resto del código) ...
@@ -210,6 +219,7 @@ function agregarBotonCancelar() {
 </body>
 
 </html>
+
 
 
 
