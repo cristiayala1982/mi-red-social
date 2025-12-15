@@ -42,7 +42,7 @@ export async function cargarDatosUsuario() {
     console.log("✅ datosUsuario actualizado:", datosUsuario);
 
     // --- LÓGICA DE IMAGEN DE PERFIL MEJORADA ---
-    //const fotoPerfilImg = document.getElementById('foto-perfil');
+    const fotoPerfilImg = document.getElementById('foto-perfil');
     const placeholderIcon = document.getElementById('placeholder-icon');
     const defaultImgPath = "/img/usuario-camara.png"; // Ruta a tu imagen por defecto
 
@@ -59,7 +59,7 @@ export async function cargarDatosUsuario() {
 
     // Decidir qué imagen mostrar
     // --- LÓGICA DE IMAGEN DE PERFIL MEJORADA ---
-    const placeholderIcon = document.getElementById('placeholder-icon');
+   /*const fotoPerfilImg = document.getElementById('foto-perfil');
     const placeholderIcon = document.getElementById('placeholder-icon');
     const defaultImgPath = "/img/usuario-camara.png"; // Ruta a tu imagen por defecto
 
@@ -72,7 +72,7 @@ export async function cargarDatosUsuario() {
         console.error(`Perfil: No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
         this.src = defaultImgPath;
         this.onerror = null; // Evitar bucles infinitos
-    };
+    };*/
 
     // Decidir qué imagen mostrar
     if (u.foto_perfil) { // Si hay alguna foto de perfil definida
@@ -161,6 +161,7 @@ export async function enviarImagenAlBackend(imagenBlob) {
     console.error(error);
   }
 }
+
 
 
 
