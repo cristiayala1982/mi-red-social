@@ -58,12 +58,41 @@ export async function cargarDatosUsuario() {
     };
 
     // Decidir qué imagen mostrar
-    if (u.foto_perfil && !u.foto_perfil.includes('gravatar.com')) {
-        // Es una foto subida por el usuario, construir la URL
-        fotoPerfilImg.src = `${API_URL}/uploads/${u.foto_perfil}`;
+    // --- LÓGICA DE IMAGEN DE PERFIL MEJORADA ---
+    const fotoPerfilImg = document.getElementById('foto-perfil');
+    const placeholderIcon = document.getElementById('placeholder-icon');
+    const defaultImgPath = "/img/usuario-camara.png"; // Ruta a tu imagen por defecto
+
+    // Ocultar placeholder por defecto, la lógica decidirá qué mostrar
+    if (placeholderIcon) placeholderIcon.classList.add('d-none');
+    if (fotoPerfilImg) fotoPerfilImg.classList.remove('d-none');
+
+    // Establecer el manejador de errores
+    fotoPerfilImg.onerror = function() {
+        console.error(`Perfil: No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
+        this.src = defaultImgPath;
+        this.onerror = null; // Evitar bucles infinitos
+    };
+
+    // Decidir qué imagen mostrar
+    if (u.foto_perfil) { // Si hay alguna foto de perfil definida
+        if (u.foto_perfil.includes('gravatar.com')) {
+            // Si es Gravatar, mostrar la por defecto
+            fotoPerfilImg.src = defaultImgPath;
+        } else if (u.foto_perfil.startsWith('https://storage.googleapis.com/')) {
+            // Si ya es una URL completa de GCS, la usamos directamente
+            fotoPerfilImg.src = u.foto_perfil;
+        } else {
+            // Si es un nombre de archivo antiguo (local) o cualquier otra cosa,
+            // construimos la URL con API_URL/uploads/ (por si acaso)
+            fotoPerfilImg.src = `${API_URL}/uploads/${u.foto_perfil}`;
+        }
     } else {
-        // Si no tiene foto O si la que tiene es la de Gravatar, mostrar la nuestra por defecto.
+        // Si no hay foto_perfil definida, mostrar la por defecto
         fotoPerfilImg.src = defaultImgPath;
+    }
+    // --- FIN DE LÓGICA DE IMAGEN ---
+
     }
     // --- FIN DE LÓGICA DE IMAGEN ---
 
@@ -132,6 +161,7 @@ export async function enviarImagenAlBackend(imagenBlob) {
     console.error(error);
   }
 }
+
 
 
 
