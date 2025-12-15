@@ -90,6 +90,7 @@ export async function cargarDatosUsuario() {
 
 
 // 📤 Enviar imagen al backend
+// 📤 Enviar imagen al backend
 export async function enviarImagenAlBackend(imagenBlob) {
   try {
     const formData = new FormData();
@@ -110,17 +111,17 @@ export async function enviarImagenAlBackend(imagenBlob) {
       mostrarNotificacion('✅ Imagen de perfil actualizada');
 
       // --- LÓGICA MEJORADA PARA ACTUALIZAR IMAGEN ---
-      // No es necesario recargar todos los datos, solo actualizar la imagen
+      // data.url ya es la URL completa de GCS, la usamos directamente
       const timestamp = new Date().getTime();
-      // data.url debería contener la nueva ruta relativa, ej: /uploads/nombre-archivo.jpg
-      const nuevaRuta = `${API_URL}${data.url}?t=${timestamp}`; 
-      
+      const nuevaRuta = `${data.url}?t=${timestamp}`; // <-- CORRECCIÓN AQUÍ: ELIMINAMOS API_URL
+
       const imagen = document.getElementById('foto-perfil');
       if (imagen) imagen.src = nuevaRuta;
 
       // Actualizar el objeto local 'datosUsuario' si es necesario
       if (datosUsuario) {
-        datosUsuario.foto_perfil = data.url.replace('/uploads/', ''); // Guardar solo el nombre del archivo
+        // Almacenamos la URL completa de GCS, ya que es lo que el backend devuelve ahora
+        datosUsuario.foto_perfil = data.url; 
       }
       
     } else {
@@ -131,7 +132,6 @@ export async function enviarImagenAlBackend(imagenBlob) {
     console.error(error);
   }
 }
-
 
 
 
