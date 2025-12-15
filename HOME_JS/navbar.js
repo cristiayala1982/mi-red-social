@@ -38,19 +38,24 @@ async function cargarDatosNavbar() {
         };
 
         // --- LÓGICA MEJORADA PARA IMAGEN DE PERFIL EN NAVBAR ---
-        // Si el usuario tiene una foto de perfil Y NO es la de Gravatar por defecto...
-        if (datosUsuario.foto_perfil && !datosUsuario.foto_perfil.includes('gravatar.com')) {
-            // Es una foto subida por el usuario, construir la URL
-            // Asegúrate de que datosUsuario.foto_perfil sea solo el nombre del archivo
-            // Si tu backend devuelve la ruta completa como '/uploads/nombre.jpg', ajústalo
-            const fotoSrc = datosUsuario.foto_perfil.startsWith('/uploads/')
-                ? `${API_URL}${datosUsuario.foto_perfil}?t=${Date.now()}` // Ya incluye /uploads/
-                : `${API_URL}/uploads/${datosUsuario.foto_perfil}?t=${Date.now()}`; // Construir la ruta
-            navFoto.src = fotoSrc;
+        if (datosUsuario.foto_perfil) { // Si hay alguna foto de perfil definida
+            if (datosUsuario.foto_perfil.includes('gravatar.com')) {
+                // Si es Gravatar, mostrar la por defecto
+                navFoto.src = defaultImgPath;
+            } else if (datosUsuario.foto_perfil.startsWith('https://storage.googleapis.com/')) {
+                // Si ya es una URL completa de GCS, la usamos directamente
+                // Añadimos el timestamp para evitar problemas de caché si la URL cambia
+                navFoto.src = `${datosUsuario.foto_perfil}?t=${Date.now()}`; 
+            } else {
+                // Por si acaso, si es un nombre de archivo local antiguo que no es GCS
+                // construimos la URL con API_URL/uploads/
+                navFoto.src = `${API_URL}/uploads/${datosUsuario.foto_perfil}?t=${Date.now()}`;
+            }
         } else {
-            // Si no tiene foto O si la que tiene es la de Gravatar, mostrar la nuestra por defecto.
+            // Si no hay foto_perfil definida, mostrar la por defecto
             navFoto.src = defaultImgPath;
         }
+        // --- FIN LÓGICA MEJORADA PARA IMAGEN DE PERFIL EN NAVBAR ---
       }
 
       // Mostrar saludo en el home (si existe)
@@ -84,6 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });
+
+
 
 
 
