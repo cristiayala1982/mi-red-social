@@ -135,17 +135,17 @@ async function eliminarImagen(idImagen, elemento) {
 }
 
 // 👤 Usar imagen como foto de perfil y actualizar vista
+// 👤 Usar imagen como foto de perfil y actualizar vista
 async function usarComoFotoDePerfil(urlCompleta) {
   try {
     const formData = new FormData();
-    formData.append('foto_perfil', nombreArchivo);
+    formData.append('foto_perfil', urlCompleta); // ✅ enviamos la URL completa
 
     formData.append('nombre', datosUsuario.nombre);
     formData.append('fecha-nac', datosUsuario.fecha_nac);
     formData.append('nacionalidad', datosUsuario.nacionalidad);
     formData.append('email', datosUsuario.email);
     formData.append('usuario', datosUsuario.usuario);
-    
 
     const res = await fetch(`${API_URL}/api/usuario/editar-perfil`, {
       method: 'POST',
@@ -156,14 +156,14 @@ async function usarComoFotoDePerfil(urlCompleta) {
     if (res.ok) {
       mostrarNotificacion('✅ Foto de perfil actualizada');
 
-      const timestamp = new Date().getTime();
-      const nuevaRuta = `${urlCompleta}/uploads/${nombreArchivo}?t=${timestamp}`;
+      const timestamp = Date.now();
+      const nuevaRuta = `${urlCompleta}?t=${timestamp}`; // ✅ usamos la URL completa
       const imagen = document.getElementById('foto-perfil');
       const placeholder = document.getElementById('placeholder-icon');
       if (imagen) {
         imagen.src = nuevaRuta;
         imagen.classList.remove('d-none');
-        placeholder.classList.add('d-none');
+        if (placeholder) placeholder.classList.add('d-none');
       }
     } else {
       mostrarNotificacion('❌ No se pudo actualizar la foto de perfil');
@@ -173,6 +173,8 @@ async function usarComoFotoDePerfil(urlCompleta) {
     console.error(error);
   }
 }
+
+
 
 
 
