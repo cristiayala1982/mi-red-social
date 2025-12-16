@@ -135,7 +135,6 @@ async function eliminarImagen(idImagen, elemento) {
 }
 
 // 👤 Usar imagen como foto de perfil y actualizar vista
-// 👤 Usar imagen como foto de perfil y actualizar vista
 async function usarComoFotoDePerfil(urlCompleta) {
   try {
     const formData = new FormData();
@@ -165,6 +164,11 @@ async function usarComoFotoDePerfil(urlCompleta) {
         imagen.classList.remove('d-none');
         if (placeholder) placeholder.classList.add('d-none');
       }
+
+      // 👇 refrescar también la navbar
+      if (typeof cargarDatosNavbar === "function") {
+        cargarDatosNavbar();
+      }
     } else {
       mostrarNotificacion('❌ No se pudo actualizar la foto de perfil');
     }
@@ -173,6 +177,8 @@ async function usarComoFotoDePerfil(urlCompleta) {
     console.error(error);
   }
 }
+
+
 
 
 
