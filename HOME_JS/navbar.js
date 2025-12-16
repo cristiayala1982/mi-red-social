@@ -38,32 +38,18 @@ export async function cargarDatosNavbar() {
         };
 
         // --- LÓGICA MEJORADA PARA IMAGEN DE PERFIL EN NAVBAR ---
-        if (datosUsuario.foto_perfil) { // Si hay alguna foto de perfil definida
-            if (datosUsuario.foto_perfil.includes('gravatar.com')) {
-                // Si es Gravatar, mostrar la por defecto
-                navFoto.src = defaultImgPath;
-            } else if (datosUsuario.foto_perfil.startsWith('https://storage.googleapis.com/')) {
-                // Si ya es una URL completa de GCS, la usamos directamente
-                // Añadimos el timestamp para evitar problemas de caché si la URL cambia
-                navFoto.src = `${datosUsuario.foto_perfil}?t=${Date.now()}`; 
-            } else {
-                // Por si acaso, si es un nombre de archivo local antiguo que no es GCS
-                // construimos la URL con API_URL/uploads/
-                navFoto.src = `${API_URL}/uploads/${datosUsuario.foto_perfil}?t=${Date.now()}`;
-            }
+        if (datosUsuario.foto_perfil && datosUsuario.foto_perfil.startsWith("http")) {
+            // ✅ Siempre guardamos URL completa en la DB, la usamos directamente
+            navFoto.src = `${datosUsuario.foto_perfil}?t=${Date.now()}`;
         } else {
-            // Si no hay foto_perfil definida, mostrar la por defecto
+            // Si no hay foto válida, mostramos la imagen por defecto
             navFoto.src = defaultImgPath;
         }
-        // --- FIN LÓGICA MEJORADA PARA IMAGEN DE PERFIL EN NAVBAR ---
-      }
-
       // Mostrar saludo en el home (si existe)
       const bienvenida = document.getElementById("bienvenida");
       if (bienvenida) {
         bienvenida.textContent = `Hola ${datosUsuario.nombre} 👋`;
       }
-
     } else {
       console.warn("⚠️ No autenticado, navbar vacío (no se redirige)");
       // Si no hay usuario autenticado, asegurar que la imagen de la navbar sea la por defecto
@@ -72,16 +58,16 @@ export async function cargarDatosNavbar() {
           navFoto.src = "/img/usuario-camara.png";
       }
     }
-  } catch (error) {
-    console.error("❌ Error al cargar datos del usuario", error);
-    console.warn("⚠️ No se pudieron cargar datos, navbar vacío");
-    // En caso de error, asegurar que la imagen de la navbar sea la por defecto
-    const navFoto = document.getElementById("nav-foto-perfil");
-    if (navFoto) {
-        navFoto.src = "/img/usuario-camara.png";
+    } catch (error) {
+      console.error("❌ Error al cargar datos del usuario", error);
+      console.warn("⚠️ No se pudieron cargar datos, navbar vacío");
+      // En caso de error, asegurar que la imagen de la navbar sea la por defecto
+      const navFoto = document.getElementById("nav-foto-perfil");
+      if (navFoto) {
+          navFoto.src = "/img/usuario-camara.png";
+      }
     }
   }
-}
 
 // 🚀 Ejecutar al cargar la página con delay
 document.addEventListener("DOMContentLoaded", () => {
@@ -89,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });
+
 
 
 
