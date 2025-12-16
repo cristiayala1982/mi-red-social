@@ -32,19 +32,21 @@ export async function cargarDatosNavbar() {
       if (navFoto) {
         // Establecer el manejador onerror UNA SOLA VEZ
         navFoto.onerror = function() {
-            console.error(`Navbar: No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
-            this.src = defaultImgPath;
-            this.onerror = null; // Evitar bucles infinitos
+          console.error(`Navbar: No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
+          this.src = defaultImgPath;
+          this.onerror = null; // Evitar bucles infinitos
         };
 
         // --- LÓGICA MEJORADA PARA IMAGEN DE PERFIL EN NAVBAR ---
         if (datosUsuario.foto_perfil && datosUsuario.foto_perfil.startsWith("http")) {
-            // ✅ Siempre guardamos URL completa en la DB, la usamos directamente
-            navFoto.src = `${datosUsuario.foto_perfil}?t=${Date.now()}`;
+          // ✅ Siempre guardamos URL completa en la DB, la usamos directamente
+          navFoto.src = `${datosUsuario.foto_perfil}?t=${Date.now()}`;
         } else {
-            // Si no hay foto válida, mostramos la imagen por defecto
-            navFoto.src = defaultImgPath;
+          // Si no hay foto válida, mostramos la imagen por defecto
+          navFoto.src = defaultImgPath;
         }
+      }
+
       // Mostrar saludo en el home (si existe)
       const bienvenida = document.getElementById("bienvenida");
       if (bienvenida) {
@@ -55,26 +57,28 @@ export async function cargarDatosNavbar() {
       // Si no hay usuario autenticado, asegurar que la imagen de la navbar sea la por defecto
       const navFoto = document.getElementById("nav-foto-perfil");
       if (navFoto) {
-          navFoto.src = "/img/usuario-camara.png";
+        navFoto.src = "/img/usuario-camara.png";
       }
     }
-    } catch (error) {
-      console.error("❌ Error al cargar datos del usuario", error);
-      console.warn("⚠️ No se pudieron cargar datos, navbar vacío");
-      // En caso de error, asegurar que la imagen de la navbar sea la por defecto
-      const navFoto = document.getElementById("nav-foto-perfil");
-      if (navFoto) {
-          navFoto.src = "/img/usuario-camara.png";
-      }
+  } catch (error) {
+    console.error("❌ Error al cargar datos del usuario", error);
+    console.warn("⚠️ No se pudieron cargar datos, navbar vacío");
+    // En caso de error, asegurar que la imagen de la navbar sea la por defecto
+    const navFoto = document.getElementById("nav-foto-perfil");
+    if (navFoto) {
+      navFoto.src = "/img/usuario-camara.png";
     }
   }
-}
+} // ✅ cierre correcto de la función cargarDatosNavbar
+
 // 🚀 Ejecutar al cargar la página con delay
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });
+
+
 
 
 
