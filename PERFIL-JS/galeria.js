@@ -1,6 +1,7 @@
 const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 // 📦 Importar función para mostrar notificaciones
 import { mostrarNotificacion } from './notificaciones.js';
+import { cargarDatosNavbar } from '../HOME_JS/navbar.js';
 
 // 🧠 Variable local para guardar los datos del usuario
 let datosUsuario = null;
@@ -177,6 +178,7 @@ async function usarComoFotoDePerfil(urlCompleta) {
     console.error(error);
   }
 }
+
 
 
 
