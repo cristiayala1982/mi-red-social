@@ -85,7 +85,7 @@ export async function cargarGaleria() {
         // 👤 Botón usar como foto de perfil
         const btnUsar = col.querySelector('.usar-btn');
         btnUsar.onclick = () => {
-          usarComoFotoDePerfil(filename);
+          usarComoFotoDePerfil(urlCompleta);
         };
 
         galeria.appendChild(col);
@@ -135,7 +135,7 @@ async function eliminarImagen(idImagen, elemento) {
 }
 
 // 👤 Usar imagen como foto de perfil y actualizar vista
-async function usarComoFotoDePerfil(nombreArchivo) {
+async function usarComoFotoDePerfil(urlCompleta) {
   try {
     const formData = new FormData();
     formData.append('foto_perfil', nombreArchivo);
@@ -173,6 +173,7 @@ async function usarComoFotoDePerfil(nombreArchivo) {
     console.error(error);
   }
 }
+
 
 
 
