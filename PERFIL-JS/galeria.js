@@ -145,7 +145,7 @@ async function usarComoFotoDePerfil(nombreArchivo) {
     formData.append('nacionalidad', datosUsuario.nacionalidad);
     formData.append('email', datosUsuario.email);
     formData.append('usuario', datosUsuario.usuario);
-    formData.append('password', datosUsuario.password);
+    
 
     const res = await fetch(`${API_URL}/api/usuario/editar-perfil`, {
       method: 'POST',
@@ -173,6 +173,7 @@ async function usarComoFotoDePerfil(nombreArchivo) {
     console.error(error);
   }
 }
+
 
 
 
