@@ -68,13 +68,14 @@ export async function cargarDatosNavbar() {
       }
     }
   }
-
+}
 // 🚀 Ejecutar al cargar la página con delay
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });
+
 
 
 
