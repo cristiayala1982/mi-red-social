@@ -60,7 +60,8 @@ export async function cargarGaleria() {
         const col = document.createElement("div");
         col.className = "col";
 
-        const filename = imagen.url.split('/').pop();
+        //const filename = imagen.url.split('/').pop();
+        const urlCompleta = imagen.url;
         const fechaTexto = tiempoRelativo(imagen.fecha_subida);
 
         col.innerHTML = `
@@ -156,7 +157,7 @@ async function usarComoFotoDePerfil(nombreArchivo) {
       mostrarNotificacion('✅ Foto de perfil actualizada');
 
       const timestamp = new Date().getTime();
-      const nuevaRuta = `${API_URL}/uploads/${nombreArchivo}?t=${timestamp}`;
+      const nuevaRuta = `${urlCompleta}/uploads/${nombreArchivo}?t=${timestamp}`;
       const imagen = document.getElementById('foto-perfil');
       const placeholder = document.getElementById('placeholder-icon');
       if (imagen) {
@@ -172,6 +173,7 @@ async function usarComoFotoDePerfil(nombreArchivo) {
     console.error(error);
   }
 }
+
 
 
 
