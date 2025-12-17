@@ -4,7 +4,6 @@ import { mostrarNotificacion } from './notificaciones.js';
 import { cargarDatosNavbar } from '../HOME_JS/navbar.js';
 import { cargarDatosUsuario } from './perfil.js';
 
-
 // 🧠 Variable local para guardar los datos del usuario
 let datosUsuario = null;
 export function setDatosUsuario(datos) {
@@ -40,8 +39,6 @@ function tiempoRelativo(fechaISO) {
   return relativo;
 }
 
-
-// 📦 Cargar galería del usuario
 // 📦 Cargar galería del usuario autenticado (cookie)
 export async function cargarGaleria() {
   try {
@@ -63,7 +60,6 @@ export async function cargarGaleria() {
         const col = document.createElement("div");
         col.className = "col";
 
-        //const filename = imagen.url.split('/').pop();
         const urlCompleta = imagen.url;
         const fechaTexto = tiempoRelativo(imagen.fecha_subida);
 
@@ -104,7 +100,6 @@ export async function cargarGaleria() {
   }
 }
 
-
 // ⚠️ Confirmación antes de eliminar (abre modal Bootstrap)
 function mostrarConfirmacion(callback) {
   const modal = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
@@ -117,85 +112,7 @@ function mostrarConfirmacion(callback) {
   };
 }
 
-// 🗑️ Eliminar imagen de la galería (API DELETE)
-// 🗑️ Eliminar imagen de la galería (API DELETE)
-async function eliminarImagen(idImagen, elemento) {
-  try {
-    const res = await fetch(`${API_URL}/api/galeria/${idImagen}`, {
-      method: 'DELETE',
-      credentials: "include"
-    });
-
-    if (res.ok) {
-      elemento.remove();
-      mostrarNotificacion('✅ Imagen eliminada');
-
-      // 🔄 Recargar datos completos del usuario (perfil + navbar)
-      if (typeof cargarDatosUsuario === "function") {
-        cargarDatosUsuario();
-      }
-
-      // 🔄 Refrescar también la navbar
-      if (typeof cargarDatosNavbar === "function") {
-        cargarDatosNavbar();
-      }
-
-    } else {
-      mostrarNotificacion('❌ No se pudo eliminar la imagen');
-    }
-  } catch (error) {
-    mostrarNotificacion('❌ Error al eliminar imagen');
-    console.error(error);
-  }
-}
-
-
-
-
-// 👤 Usar imagen como foto de perfil y actualizar vista
-async function usarComoFotoDePerfil(urlCompleta) {
-  try {
-    const formData = new FormData();
-    formData.append('foto_perfil', urlCompleta); // ✅ enviamos la URL completa
-
-    formData.append('nombre', datosUsuario.nombre);
-    formData.append('fecha-nac', datosUsuario.fecha_nac);
-    formData.append('nacionalidad', datosUsuario.nacionalidad);
-    formData.append('email', datosUsuario.email);
-    formData.append('usuario', datosUsuario.usuario);
-
-    const res = await fetch(`${API_URL}/api/usuario/editar-perfil`, {
-      method: 'POST',
-      body: formData,
-      credentials: "include"
-    });
-
-    if (res.ok) {
-      mostrarNotificacion('✅ Foto de perfil actualizada');
-
-      const timestamp = Date.now();
-      const nuevaRuta = `${urlCompleta}?t=${timestamp}`; // ✅ usamos la URL completa
-      const imagen = document.getElementById('foto-perfil');
-      const placeholder = document.getElementById('placeholder-icon');
-      if (imagen) {
-        imagen.src = nuevaRuta;
-        imagen.classList.remove('d-none');
-        if (placeholder) placeholder.classList.add('d-none');
-      }
-
-      // 👇 refrescar también la navbar
-      if (typeof cargarDatosNavbar === "function") {
-        cargarDatosNavbar();
-      }
-    } else {
-      mostrarNotificacion('❌ No se pudo actualizar la foto de perfil');
-    }
-  } catch (error) {
-    mostrarNotificacion('❌ Error al actualizar foto de perfil');
-    console.error(error);
-  }
-}
-
+// 🗑️ Eliminar imagen de
 
 
 
