@@ -1,4 +1,5 @@
 const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
+
 // 📦 Importar función para mostrar notificaciones
 import { mostrarNotificacion } from './notificaciones.js';
 import { cargarDatosNavbar } from '../HOME_JS/navbar.js';
@@ -37,6 +38,50 @@ function tiempoRelativo(fechaISO) {
   else relativo = ` ${formatoFecha}`; // 👈 solo fecha, sin duplicar
 
   return relativo;
+}
+
+// 👤 Usar imagen como foto de perfil y actualizar vista
+async function usarComoFotoDePerfil(urlCompleta) {
+  try {
+    const formData = new FormData();
+    formData.append('foto_perfil', urlCompleta); // ✅ enviamos la URL completa
+
+    formData.append('nombre', datosUsuario.nombre);
+    formData.append('fecha-nac', datosUsuario.fecha_nac);
+    formData.append('nacionalidad', datosUsuario.nacionalidad);
+    formData.append('email', datosUsuario.email);
+    formData.append('usuario', datosUsuario.usuario);
+
+    const res = await fetch(`${API_URL}/api/usuario/editar-perfil`, {
+      method: 'POST',
+      body: formData,
+      credentials: "include"
+    });
+
+    if (res.ok) {
+      mostrarNotificacion('✅ Foto de perfil actualizada');
+
+      const timestamp = Date.now();
+      const nuevaRuta = `${urlCompleta}?t=${timestamp}`; // ✅ usamos la URL completa
+      const imagen = document.getElementById('foto-perfil');
+      const placeholder = document.getElementById('placeholder-icon');
+      if (imagen) {
+        imagen.src = nuevaRuta;
+        imagen.classList.remove('d-none');
+        if (placeholder) placeholder.classList.add('d-none');
+      }
+
+      // 👇 refrescar también la navbar
+      if (typeof cargarDatosNavbar === "function") {
+        cargarDatosNavbar();
+      }
+    } else {
+      mostrarNotificacion('❌ No se pudo actualizar la foto de perfil');
+    }
+  } catch (error) {
+    mostrarNotificacion('❌ Error al actualizar foto de perfil');
+    console.error(error);
+  }
 }
 
 // 📦 Cargar galería del usuario autenticado (cookie)
@@ -112,7 +157,38 @@ function mostrarConfirmacion(callback) {
   };
 }
 
-// 🗑️ Eliminar imagen de
+// 🗑️ Eliminar imagen de la galería (API DELETE)
+async function eliminarImagen(idImagen, elemento) {
+  try {
+    const res = await fetch(`${API_URL}/api/galeria/${idImagen}`, {
+      method: 'DELETE',
+      credentials: "include"
+    });
+
+    if (res.ok) {
+      elemento.remove();
+      mostrarNotificacion('✅ Imagen eliminada');
+
+      // 🔄 Recargar datos completos del usuario (perfil + navbar)
+      if (typeof cargarDatosUsuario === "function") {
+        cargarDatosUsuario();
+      }
+
+      // 🔄 Refrescar también la navbar
+      if (typeof cargarDatosNavbar === "function") {
+        cargarDatosNavbar();
+      }
+
+    } else {
+      mostrarNotificacion('❌ No se pudo eliminar la imagen');
+    }
+  } catch (error) {
+    mostrarNotificacion('❌ Error al eliminar imagen');
+    console.error(error);
+  }
+}
+
+
 
 
 
