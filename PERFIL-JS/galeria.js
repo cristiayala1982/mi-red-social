@@ -2,6 +2,8 @@ const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 // 📦 Importar función para mostrar notificaciones
 import { mostrarNotificacion } from './notificaciones.js';
 import { cargarDatosNavbar } from '../HOME_JS/navbar.js';
+import { cargarDatosUsuario } from './perfil.js';
+
 
 // 🧠 Variable local para guardar los datos del usuario
 let datosUsuario = null;
@@ -116,6 +118,7 @@ function mostrarConfirmacion(callback) {
 }
 
 // 🗑️ Eliminar imagen de la galería (API DELETE)
+// 🗑️ Eliminar imagen de la galería (API DELETE)
 async function eliminarImagen(idImagen, elemento) {
   try {
     const res = await fetch(`${API_URL}/api/galeria/${idImagen}`, {
@@ -132,6 +135,11 @@ async function eliminarImagen(idImagen, elemento) {
         cargarDatosUsuario();
       }
 
+      // 🔄 Refrescar también la navbar
+      if (typeof cargarDatosNavbar === "function") {
+        cargarDatosNavbar();
+      }
+
     } else {
       mostrarNotificacion('❌ No se pudo eliminar la imagen');
     }
@@ -140,6 +148,7 @@ async function eliminarImagen(idImagen, elemento) {
     console.error(error);
   }
 }
+
 
 
 
@@ -186,6 +195,7 @@ async function usarComoFotoDePerfil(urlCompleta) {
     console.error(error);
   }
 }
+
 
 
 
