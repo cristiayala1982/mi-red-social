@@ -116,6 +116,7 @@ function mostrarConfirmacion(callback) {
 }
 
 // 🗑️ Eliminar imagen de la galería (API DELETE)
+// 🗑️ Eliminar imagen de la galería (API DELETE)
 async function eliminarImagen(idImagen, elemento) {
   try {
     const res = await fetch(`${API_URL}/api/galeria/${idImagen}`, {
@@ -126,6 +127,25 @@ async function eliminarImagen(idImagen, elemento) {
     if (res.ok) {
       elemento.remove();
       mostrarNotificacion('✅ Imagen eliminada');
+
+      // 🔄 Refrescar foto de perfil y navbar
+      const fotoPerfilImg = document.getElementById('foto-perfil');
+      const placeholderIcon = document.getElementById('placeholder-icon');
+      const defaultImgPath = "/img/usuario-camara.png"; // tu imagen por defecto
+
+      if (fotoPerfilImg) {
+        fotoPerfilImg.src = defaultImgPath;
+        fotoPerfilImg.classList.remove('d-none');
+      }
+      if (placeholderIcon) {
+        placeholderIcon.classList.add('d-none');
+      }
+
+      // 👇 refrescar también la navbar
+      if (typeof cargarDatosNavbar === "function") {
+        cargarDatosNavbar();
+      }
+
     } else {
       mostrarNotificacion('❌ No se pudo eliminar la imagen');
     }
@@ -134,6 +154,7 @@ async function eliminarImagen(idImagen, elemento) {
     console.error(error);
   }
 }
+
 
 // 👤 Usar imagen como foto de perfil y actualizar vista
 async function usarComoFotoDePerfil(urlCompleta) {
@@ -178,6 +199,7 @@ async function usarComoFotoDePerfil(urlCompleta) {
     console.error(error);
   }
 }
+
 
 
 
