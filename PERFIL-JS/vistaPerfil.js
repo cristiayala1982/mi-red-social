@@ -22,7 +22,7 @@ async function cargarNavUsuario() {
 
       // Foto de perfil
       document.getElementById("nav-foto-perfil").src = u.foto_perfil
-        ? `http://localhost:3000/uploads/${u.foto_perfil}`
+        ? `API_URL/uploads/${u.foto_perfil}`
         : "img/usuario-camara.png";
 
       // Nombre de usuario
@@ -80,7 +80,7 @@ async function cargarDatosUsuario(id) {
 
     // Foto de perfil del usuario visitado
     document.getElementById("foto-perfil").src = u.foto_perfil
-      ? `http://localhost:3000/uploads/${u.foto_perfil}`
+      ? `API_URL/uploads/${u.foto_perfil}`
       : "img/usuario-camara.png";
 
     // Galería
@@ -205,6 +205,7 @@ function abrirChatConUsuario() {
     alert("No se pudo obtener el ID del usuario.");
   }
 }
+
 
 
 
