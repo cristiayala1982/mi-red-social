@@ -15,7 +15,7 @@ async function cargarAmigos() {
 
     data.amigos.forEach(amigo => {
       const foto = amigo.foto_perfil && amigo.foto_perfil.trim() !== ""
-        ? `http://localhost:3000/uploads/${amigo.foto_perfil}`
+        ? (amigo.foto_perfil.startsWith("http") ? amigo.foto_perfil : "img/usuario-camara.png")
         : "img/usuario-camara.png";
 
       const li = document.createElement("li");
@@ -44,7 +44,6 @@ async function cargarAmigos() {
     listaAmigos.innerHTML = "<li>Error de conexión con el servidor</li>";
   }
 }
-
 
 function inicializarModalAmigos() {
   const btnAmigos = document.getElementById("btn-amigos");
@@ -86,7 +85,7 @@ async function cargarChats() {
     data.chats.forEach(chat => {
       const fotoValida = typeof chat.foto_perfil === "string" && chat.foto_perfil.trim() !== "";
       const foto = fotoValida
-        ? `http://localhost:3000/uploads/${chat.foto_perfil}?t=${Date.now()}`
+        ? (chat.foto_perfil.startsWith("http") ? chat.foto_perfil : "img/usuario-camara.png")
         : "img/usuario-camara.png";
 
       const li = document.createElement("li");
@@ -135,7 +134,6 @@ async function cargarChats() {
     listaChats.innerHTML = "<li>Error de conexión con el servidor</li>";
   }
 }
-//function mostrarNotificacion(texto, tipo = "success") {
 
 function mostrarNotificacion(texto, tipo = "success") {
   const box = document.getElementById("notificacion-chat");
@@ -151,10 +149,6 @@ function mostrarNotificacion(texto, tipo = "success") {
     box.classList.add("oculto");
   }, 3000);
 }
-
-
-
-
 
 function inicializarPanelChats() {
   const btnMensajes = document.getElementById("btn-mensajes");
@@ -176,10 +170,12 @@ document.addEventListener("DOMContentLoaded", () => {
   inicializarModalAmigos();
   inicializarPanelChats();
 });
+
 // 🚀 Función para abrir un chat
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
 
 
 
