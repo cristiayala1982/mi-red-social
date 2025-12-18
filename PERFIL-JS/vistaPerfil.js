@@ -1,4 +1,5 @@
 const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
+
 // Util: formatear fecha ISO a dd-mm-aaaa evitando desajustes de zona horaria
 function formatearFechaDMY(fechaISO) {
   if (!fechaISO) return '';
@@ -21,8 +22,8 @@ async function cargarNavUsuario() {
       const u = data.usuario;
 
       // Foto de perfil
-      document.getElementById("nav-foto-perfil").src = u.foto_perfil
-        ? `API_URL/uploads/${u.foto_perfil}`
+      document.getElementById("nav-foto-perfil").src = u.foto_perfil && u.foto_perfil.startsWith("http")
+        ? u.foto_perfil
         : "img/usuario-camara.png";
 
       // Nombre de usuario
@@ -79,8 +80,8 @@ async function cargarDatosUsuario(id) {
     document.getElementById("nombre-visitado").textContent = u.nombre || "";
 
     // Foto de perfil del usuario visitado
-    document.getElementById("foto-perfil").src = u.foto_perfil
-      ? `API_URL/uploads/${u.foto_perfil}`
+    document.getElementById("foto-perfil").src = u.foto_perfil && u.foto_perfil.startsWith("http")
+      ? u.foto_perfil
       : "img/usuario-camara.png";
 
     // Galería
@@ -93,7 +94,7 @@ async function cargarDatosUsuario(id) {
         contenedorImg.classList.add("item-galeria");
 
         const elemento = document.createElement("img");
-        elemento.src = `${API_URL}/uploads/${img.nombre_archivo}`;
+        elemento.src = img.url; // 👈 usar directamente la URL completa
         elemento.alt = "Imagen de galería";
         elemento.classList.add("imagen-galeria");
 
@@ -114,36 +115,30 @@ async function cargarDatosUsuario(id) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // ID del perfil visitado (ejemplo: /vistaPerfil.html?id=72)
   const params = new URLSearchParams(window.location.search);
   const perfilId = Number(params.get("id"));
 
-  // Usuario logueado (usando tu endpoint /mis-datos)
   const meRes = await fetch(`${API_URL}/api/usuarios/mis-datos`, { credentials: "include" });
   const meData = await meRes.json();
   const yoId = meData?.usuario?.id;
 
-  // Datos del perfil visitado
   const perfilRes = await fetch(`${API_URL}/api/usuario/perfil?id=${perfilId}`, { credentials: "include" });
   const perfilData = await perfilRes.json();
   const perfil = perfilData?.usuario;
 
-  // Rellenar datos en la vista
   document.getElementById("nombre-visitado").textContent = perfil?.nombre || "";
   document.getElementById("nombre").textContent = perfil?.nombre || "";
   document.getElementById("email").textContent = perfil?.email || "";
   document.getElementById("fecha-nac").textContent = formatearFechaDMY(perfil?.fecha_nac);
   document.getElementById("nacionalidad").textContent = perfil?.nacionalidad || "";
-  document.getElementById("foto-perfil").src = perfil?.foto_perfil
-    ? `${API_URL}/uploads/${perfil.foto_perfil}`
+  document.getElementById("foto-perfil").src = perfil?.foto_perfil && perfil.foto_perfil.startsWith("http")
+    ? perfil.foto_perfil
     : "img/usuario-camara.png";
 
-  // Mostrar botón solo si no es tu propio perfil
   const acciones = document.getElementById("acciones-perfil");
   acciones.innerHTML = "";
 
   if (perfilId && yoId && perfilId !== yoId) {
-    // Verificar si ya lo sigues
     const estadoRes = await fetch(`${API_URL}/api/seguir/${perfilId}`, {
       credentials: "include"
     });
@@ -162,7 +157,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnSeguir.addEventListener("click", async () => {
       try {
         if (!btnSeguir.classList.contains("siguiendo")) {
-          // Seguir
           const res = await fetch(`${API_URL}/api/seguir`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -175,7 +169,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             btnSeguir.textContent = "Siguiendo";
           }
         } else {
-          // Dejar de seguir
           const res = await fetch(`${API_URL}/api/seguir/${perfilId}`, {
             method: "DELETE",
             credentials: "include"
@@ -194,17 +187,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function abrirChatConUsuario() {
-  // Obtener el parámetro "id" de la URL del perfil
   const urlParams = new URLSearchParams(window.location.search);
   const usuarioId = urlParams.get("id");
 
   if (usuarioId) {
-    // Redirigir al chat con ese usuario
     window.location.href = `chats.html?id=${usuarioId}`;
   } else {
     alert("No se pudo obtener el ID del usuario.");
   }
 }
+
+
 
 
 
