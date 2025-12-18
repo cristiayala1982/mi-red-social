@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         if (!btnSeguir.classList.contains("siguiendo")) {
           // Seguir
-          const res = await fetch(`${API_URL}/api/seguir}`, {
+          const res = await fetch(`${API_URL}/api/seguir`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -205,6 +205,7 @@ function abrirChatConUsuario() {
     alert("No se pudo obtener el ID del usuario.");
   }
 }
+
 
 
 
