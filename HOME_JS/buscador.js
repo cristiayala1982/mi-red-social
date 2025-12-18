@@ -1,7 +1,5 @@
 import { mostrarNotificacion } from '../PERFIL-JS/notificaciones.js';
 
-
-
 // 📦 Referencias a los elementos del buscador
 const inputBusqueda = document.getElementById("input-busqueda");
 const resultadosBusqueda = document.getElementById("resultados-busqueda");
@@ -26,8 +24,8 @@ async function buscarUsuarios(query) {
         const li = document.createElement("li");
 
         const img = document.createElement("img");
-        img.src = u.foto_perfil 
-          ? `http://localhost:3000/uploads/${u.foto_perfil}`
+        img.src = u.foto_perfil && u.foto_perfil.startsWith("http")
+          ? u.foto_perfil
           : "img/usuario-camara.png";
 
         const span = document.createElement("span");
@@ -71,6 +69,7 @@ if (inputBusqueda && resultadosBusqueda) {
     }
   }, 30000);
 }
+
 
 
 
