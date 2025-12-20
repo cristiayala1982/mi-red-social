@@ -72,9 +72,12 @@ export async function cargarDatosNavbar() {
 } // ✅ cierre correcto de la función cargarDatosNavbar
 async function actualizarBadgeMensajes() {
   try {
-    const res = await fetch(`${API_URL}/api/chats/no-leidos`, { credentials: "include" });
+    const res = await fetch(`${API_URL}/api/chats/no-leidos`, 
+    { credentials: "include" });
     const data = await res.json();
     const badge = document.getElementById("badge-mensajes");
+    if (!badge) return; // 👈 seguridad: si no existe, no hacemos nada
+
     if (data.success && data.total > 0) {
       badge.textContent = data.total;
       badge.style.display = "inline-block";
@@ -86,6 +89,7 @@ async function actualizarBadgeMensajes() {
   }
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     cargarDatosNavbar();
@@ -96,12 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(actualizarBadgeMensajes, 30000);
 });
 
-/*// 🚀 Ejecutar al cargar la página con delay
-document.addEventListener("DOMContentLoaded", () => {
+// 🚀 Ejecutar al cargar la página con delay
+/*document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });*/
+
 
 
 
