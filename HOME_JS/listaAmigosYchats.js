@@ -178,7 +178,7 @@ function inicializarPanelChats() {
 document.addEventListener("DOMContentLoaded", () => {
   inicializarModalAmigos();
   inicializarPanelChats();
-  actualizarBadgeMensajes();
+  //actualizarBadgeMensajes();
   setInterval(actualizarBadgeMensajes, 30000); // refresca cada 30s
 });
 
@@ -186,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
 
 
 
