@@ -72,7 +72,7 @@ export async function cargarDatosNavbar() {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
+/*document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     cargarDatosNavbar();
     actualizarBadgeMensajes(); // refresca badge al cargar
@@ -80,14 +80,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // refrescar cada 30 segundos
   setInterval(actualizarBadgeMensajes, 30000);
-});
+});*/
 
 // 🚀 Ejecutar al cargar la página con delay
-/*document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
-});*/
+});
+
 
 
 
