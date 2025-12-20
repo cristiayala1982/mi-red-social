@@ -105,12 +105,14 @@
     <script type="module" src="HOME_JS/cerrarSesion.js"></script>
     <script type="module" src="HOME_JS/listaAmigosYchats.js"></script>
     <script>
-   async function cargarMensajes(chatId) {
+const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
+
+async function cargarMensajes(chatId) {
   const lista = document.getElementById("lista-mensajes");
   lista.innerHTML = "";
 
   try {
-    const res = await fetch(`http://localhost:3000/api/chats/${chatId}`, {
+    const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
       credentials: "include"
     });
     const data = await res.json();
@@ -125,7 +127,7 @@
 
     const fotoValida = typeof data.fotoPerfil === "string" && data.fotoPerfil.trim() !== "";
     const foto = fotoValida
-      ? `http://localhost:3000/uploads/${data.fotoPerfil}?t=${Date.now()}`
+      ? `${data.fotoPerfil}?t=${Date.now()}`   // usamos la URL completa que viene del backend
       : "img/usuario-camara.png";
 
     const fotoChat = document.getElementById("foto-chat");
@@ -166,86 +168,11 @@
     lista.innerHTML = "<li>Error de conexión</li>";
   }
 }
-
-// ✅ Notificación visual
-function mostrarNotificacion(texto, tipo = "success") {
-  const box = document.getElementById("notificacion-chat");
-  if (!box) return; // seguridad
-
-  box.textContent = texto;
-  box.style.background = tipo === "error" ? "#d11a2a" : "#4caf50";
-  box.classList.remove("oculto");
-  box.classList.add("visible");
-
-  setTimeout(() => {
-    box.classList.remove("visible");
-    box.classList.add("oculto");
-  }, 3000);
-}
-
-// ✅ Enviar mensajes
-async function enviarMensaje(chatId) {
-  const contenido = document.getElementById("nuevo-mensaje").value;
-  if (!contenido.trim()) return;
-
-  await fetch(`http://localhost:3000/api/chats/${chatId}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ contenido })
-  });
-
-  document.getElementById("nuevo-mensaje").value = "";
-  cargarMensajes(chatId);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const chatId = params.get("id");
-
-  cargarMensajes(chatId);
-
-  // ✅ Botón enviar
-  document.getElementById("enviar").addEventListener("click", () => {
-    enviarMensaje(chatId);
-  });
-
-  // ✅ Enviar con Enter
-  document.getElementById("nuevo-mensaje").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      if (!e.shiftKey) {
-        e.preventDefault();
-        enviarMensaje(chatId);
-      }
-    }
-  });
-
-  // ✅ Botón borrar chat (ahora sí ve chatId)
-  document.getElementById("btn-borrar-chat").addEventListener("click", async () => {
-    try {
-      const res = await fetch(`http://localhost:3000/api/chats/${chatId}`, {
-        method: "DELETE",
-        credentials: "include"
-      });
-      const result = await res.json();
-
-      if (result.success) {
-        mostrarNotificacion("✅ Chat eliminado correctamente");
-        setTimeout(() => {
-          window.location.href = "home.html";
-        }, 1500);
-      } else {
-        mostrarNotificacion("❌ No se pudo borrar el chat", "error");
-      }
-    } catch (err) {
-      console.error("❌ Error borrando el chat:", err);
-      mostrarNotificacion("❌ Error de conexión al borrar", "error");
-    }
-  });
-});
-
 </script>
+
+  
 </div>
 </body>
 
 </html>
+
