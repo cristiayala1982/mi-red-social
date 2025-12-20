@@ -96,12 +96,13 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(actualizarBadgeMensajes, 30000);
 });
 
-// 🚀 Ejecutar al cargar la página con delay
+/*// 🚀 Ejecutar al cargar la página con delay
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
-});
+});*/
+
 
 
 
