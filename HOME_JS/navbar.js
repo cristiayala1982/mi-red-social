@@ -69,24 +69,6 @@ export async function cargarDatosNavbar() {
       navFoto.src = "/img/usuario-camara.png";
     }
   }
-} // ✅ cierre correcto de la función cargarDatosNavbar
-async function actualizarBadgeMensajes() {
-  try {
-    const res = await fetch(`${API_URL}/api/chats/no-leidos`, 
-    { credentials: "include" });
-    const data = await res.json();
-    const badge = document.getElementById("badge-mensajes");
-    if (!badge) return; // 👈 seguridad: si no existe, no hacemos nada
-
-    if (data.success && data.total > 0) {
-      badge.textContent = data.total;
-      badge.style.display = "inline-block";
-    } else {
-      badge.style.display = "none";
-    }
-  } catch (err) {
-    console.error("❌ Error al actualizar badge de mensajes:", err);
-  }
 }
 
 
@@ -106,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });*/
+
 
 
 
