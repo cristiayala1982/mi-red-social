@@ -146,7 +146,7 @@ async function cargarChats() {
 // 🔔 Actualizar badge de mensajes no leídos en el ícono de nav
 async function actualizarBadgeMensajes() {
   try {
-    const res = await fetch(`${API_URL}/api/mensajes/no-leidos`, { credentials: "include" });
+    const res = await fetch(`${API_URL}/api/chats/no-leidos`, { credentials: "include" });
     const data = await res.json();
     const badge = document.getElementById("badge-mensajes");
     if (data.success && data.total > 0) {
@@ -203,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
 
 
 
