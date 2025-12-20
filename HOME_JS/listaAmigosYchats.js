@@ -1,8 +1,8 @@
+const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
+
 async function cargarAmigos() {
   try {
-    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/amigos", {
-      credentials: "include"
-    });
+    const res = await fetch(`${API_URL}/api/amigos`, { credentials: "include" });
     const data = await res.json();
 
     const listaAmigos = document.getElementById("lista-amigos");
@@ -10,6 +10,7 @@ async function cargarAmigos() {
 
     if (!data.success) {
       listaAmigos.innerHTML = "<li>Error al cargar amigos</li>";
+      mostrarNotificacion("❌ Error al cargar amigos", "error");
       return;
     }
 
@@ -32,7 +33,7 @@ async function cargarAmigos() {
 
       // ✅ El ícono de chat funciona aparte
       li.querySelector(".icono-chat").addEventListener("click", (e) => {
-        e.stopPropagation(); // evita que se dispare el click del li
+        e.stopPropagation();
         abrirChat(amigo.id, amigo.nombre);
       });
 
@@ -42,6 +43,7 @@ async function cargarAmigos() {
     console.error("❌ Error cargando amigos:", error);
     const listaAmigos = document.getElementById("lista-amigos");
     listaAmigos.innerHTML = "<li>Error de conexión con el servidor</li>";
+    mostrarNotificacion("❌ Error de conexión con el servidor", "error");
   }
 }
 
@@ -69,9 +71,7 @@ function inicializarModalAmigos() {
 // 👉 Panel derecho chats con datos reales
 async function cargarChats() {
   try {
-    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/chats", {
-      credentials: "include"
-    });
+    const res = await fetch(`${API_URL}/api/chats`, { credentials: "include" });
     const data = await res.json();
 
     const listaChats = document.getElementById("lista-chats");
@@ -79,6 +79,7 @@ async function cargarChats() {
 
     if (!data.success) {
       listaChats.innerHTML = "<li>Error al cargar chats</li>";
+      mostrarNotificacion("❌ Error al cargar chats", "error");
       return;
     }
 
@@ -91,38 +92,44 @@ async function cargarChats() {
       const li = document.createElement("li");
       li.classList.add("chat-item");
 
+      // Si más adelante tu backend devuelve un campo `noLeidos`, lo usamos aquí
+      const badge = chat.noLeidos && chat.noLeidos > 0
+        ? `<span class="badge">${chat.noLeidos}</span>`
+        : "";
+
       li.innerHTML = `
         <img src="${foto}" alt="Foto perfil" class="foto-chat">
         <div class="info-chat">
           <strong>${chat.nombre}</strong>
           <p>${chat.ultimo || ""}</p>
         </div>
+        ${badge}
         <button class="btn-borrar-chat" title="Eliminar chat">🗑️</button>
       `;
 
-      // 👉 abrir chat al hacer click en el li (excepto en el botón borrar)
       li.addEventListener("click", (e) => {
         if (!e.target.classList.contains("btn-borrar-chat")) {
-          abrirChat(chat.id, chat.nombre);  // ✅ importado de chats.js
+          abrirChat(chat.id, chat.nombre);
         }
       });
 
-      // 👉 evento para borrar chat
       li.querySelector(".btn-borrar-chat").addEventListener("click", async (e) => {
-        e.stopPropagation(); // evita que se dispare abrirChat
+        e.stopPropagation();
         try {
-          const res = await fetch(`https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/chats/${chat.id}`, {
+          const res = await fetch(`${API_URL}/api/chats/${chat.id}`, {
             method: "DELETE",
             credentials: "include"
           });
           const result = await res.json();
           if (result.success) {
-            li.remove(); // elimina del DOM
+            li.remove();
+            mostrarNotificacion("✅ Chat eliminado");
           } else {
-            alert("❌ No se pudo borrar el chat");
+            mostrarNotificacion("❌ No se pudo borrar el chat", "error");
           }
         } catch (err) {
           console.error("❌ Error borrando chat:", err);
+          mostrarNotificacion("❌ Error borrando chat", "error");
         }
       });
 
@@ -132,6 +139,24 @@ async function cargarChats() {
     console.error("❌ Error cargando chats:", error);
     const listaChats = document.getElementById("lista-chats");
     listaChats.innerHTML = "<li>Error de conexión con el servidor</li>";
+    mostrarNotificacion("❌ Error de conexión con el servidor", "error");
+  }
+}
+
+// 🔔 Actualizar badge de mensajes no leídos en el ícono de nav
+async function actualizarBadgeMensajes() {
+  try {
+    const res = await fetch(`${API_URL}/api/mensajes/no-leidos`, { credentials: "include" });
+    const data = await res.json();
+    const badge = document.getElementById("badge-mensajes");
+    if (data.success && data.total > 0) {
+      badge.textContent = data.total;
+      badge.style.display = "inline-block";
+    } else {
+      badge.style.display = "none";
+    }
+  } catch (err) {
+    console.error("❌ Error al actualizar badge de mensajes:", err);
   }
 }
 
@@ -157,7 +182,8 @@ function inicializarPanelChats() {
 
   btnMensajes.addEventListener("click", () => {
     panelChats.classList.add("visible");
-    cargarChats(); // 👉 ahora carga desde el backend
+    cargarChats();
+    actualizarBadgeMensajes(); // refresca badge al abrir
   });
 
   cerrarBtn.addEventListener("click", () => {
@@ -169,12 +195,17 @@ function inicializarPanelChats() {
 document.addEventListener("DOMContentLoaded", () => {
   inicializarModalAmigos();
   inicializarPanelChats();
+  actualizarBadgeMensajes();
+  setInterval(actualizarBadgeMensajes, 30000); // refresca cada 30s
 });
 
 // 🚀 Función para abrir un chat
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
+
+
 
 
 
