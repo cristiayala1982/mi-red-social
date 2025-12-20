@@ -93,6 +93,10 @@
   <div class="input-container">
     <textarea id="nuevo-mensaje" rows="1" placeholder="Escribe un mensaje..."></textarea>
     <button id="enviar">Enviar</button>
+      <!-- 🎤 Botón para grabar audio -->
+    <button id="btn-audio" title="Enviar audio">
+      <i class="fa fa-microphone"></i>
+    </button>
   </div>
 </main>
 
@@ -213,6 +217,58 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+//microfono
+      let mediaRecorder;
+let audioChunks = [];
+
+document.getElementById("btn-audio").addEventListener("click", async () => {
+  try {
+    // Pedir acceso al micrófono
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+
+    // Guardar fragmentos de audio
+    mediaRecorder.ondataavailable = event => {
+      audioChunks.push(event.data);
+    };
+
+    // Cuando se detiene la grabación
+    mediaRecorder.onstop = async () => {
+      const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+      audioChunks = [];
+
+      // Enviar al backend
+      const formData = new FormData();
+      formData.append("audio", audioBlob, "mensaje.webm");
+
+      const params = new URLSearchParams(window.location.search);
+      const chatId = params.get("id");
+
+      const res = await fetch(`${API_URL}/api/chats/${chatId}/audio`, {
+        method: "POST",
+        credentials: "include",
+        body: formData
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        cargarMensajes(chatId); // refrescar mensajes
+      } else {
+        alert("❌ No se pudo enviar el audio");
+      }
+    };
+
+    // 🎯 Iniciar grabación por 30 segundos
+    mediaRecorder.start();
+    setTimeout(() => mediaRecorder.stop(), 60000); // 60.000 ms = 60 segundos
+
+  } catch (err) {
+    console.error("❌ Error accediendo al micrófono:", err);
+    alert("No se pudo acceder al micrófono");
+  }
+});
+
+
 
 </script>
 
@@ -221,6 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </body>
 
 </html>
+
 
 
 
