@@ -70,6 +70,31 @@ export async function cargarDatosNavbar() {
     }
   }
 } // ✅ cierre correcto de la función cargarDatosNavbar
+async function actualizarBadgeMensajes() {
+  try {
+    const res = await fetch(`${API_URL}/api/mensajes/no-leidos`, { credentials: "include" });
+    const data = await res.json();
+    const badge = document.getElementById("badge-mensajes");
+    if (data.success && data.total > 0) {
+      badge.textContent = data.total;
+      badge.style.display = "inline-block";
+    } else {
+      badge.style.display = "none";
+    }
+  } catch (err) {
+    console.error("❌ Error al actualizar badge de mensajes:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    cargarDatosNavbar();
+    actualizarBadgeMensajes(); // refresca badge al cargar
+  }, 300);
+
+  // refrescar cada 30 segundos
+  setInterval(actualizarBadgeMensajes, 30000);
+});
 
 // 🚀 Ejecutar al cargar la página con delay
 document.addEventListener("DOMContentLoaded", () => {
@@ -77,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarDatosNavbar();
   }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });
+
 
 
 
