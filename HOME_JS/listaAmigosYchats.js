@@ -143,23 +143,6 @@ async function cargarChats() {
   }
 }
 
-// 🔔 Actualizar badge de mensajes no leídos en el ícono de nav
-async function actualizarBadgeMensajes() {
-  try {
-    const res = await fetch(`${API_URL}/api/chats/no-leidos`, { credentials: "include" });
-    const data = await res.json();
-    const badge = document.getElementById("badge-mensajes");
-    if (data.success && data.total > 0) {
-      badge.textContent = data.total;
-      badge.style.display = "inline-block";
-    } else {
-      badge.style.display = "none";
-    }
-  } catch (err) {
-    console.error("❌ Error al actualizar badge de mensajes:", err);
-  }
-}
-
 function mostrarNotificacion(texto, tipo = "success") {
   const box = document.getElementById("notificacion-chat");
   if (!box) return;
@@ -203,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
 
 
 
