@@ -170,6 +170,46 @@ async function cargarMensajes(chatId) {
     lista.innerHTML = "<li>Error de conexión</li>";
   }
 }
+
+      // 🚀 Inicialización al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Leer el parámetro id de la URL
+  const params = new URLSearchParams(window.location.search);
+  const chatId = params.get("id");
+
+  if (chatId) {
+    // 2. Cargar mensajes del chat
+    cargarMensajes(chatId);
+
+    // 3. Conectar botón enviar
+    const btnEnviar = document.getElementById("enviar");
+    btnEnviar.addEventListener("click", async () => {
+      const contenido = document.getElementById("nuevo-mensaje").value.trim();
+      if (!contenido) return;
+
+      try {
+        const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ contenido })
+        });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById("nuevo-mensaje").value = "";
+          cargarMensajes(chatId); // refrescar mensajes
+        } else {
+          alert("❌ No se pudo enviar el mensaje");
+        }
+      } catch (err) {
+        console.error("❌ Error enviando mensaje:", err);
+      }
+    });
+  } else {
+    document.getElementById("lista-mensajes").innerHTML = "<li>No se seleccionó chat</li>";
+  }
+});
+
 </script>
 
   
@@ -177,5 +217,6 @@ async function cargarMensajes(chatId) {
 </body>
 
 </html>
+
 
 
