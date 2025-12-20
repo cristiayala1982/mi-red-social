@@ -33,12 +33,14 @@
     <input type="text" id="input-busqueda" placeholder="Buscar usuario..." autocomplete="off">
     <ul id="resultados-busqueda" class="resultados-autocompletado"></ul>
   </form>
-
-  <!-- Íconos de mensaje y amigos -->
-  <div class="nav-icons">
-    <button id="btn-amigos" class="icono-btn">👥</button>
-    <button id="btn-mensajes" class="icono-btn">💬</button>
-  </div>
+ <!-- Íconos de mensaje y amigos -->
+<div class="nav-icons">
+  <button id="btn-amigos" class="icono-btn">👥</button>
+  <button id="btn-mensajes" class="icono-btn" style="position:relative;">
+    💬
+    <span id="badge-mensajes" class="badge" style="display:none;"></span>
+  </button>
+</div>
 
   <!-- Foto de perfil con menú -->
   <div class="perfil-menu">
@@ -175,4 +177,5 @@ async function cargarMensajes(chatId) {
 </body>
 
 </html>
+
 
