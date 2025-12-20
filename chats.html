@@ -111,7 +111,6 @@ const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 
 async function cargarMensajes(chatId) {
   const lista = document.getElementById("lista-mensajes");
-  lista.innerHTML = "";
 
   try {
     const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
@@ -128,41 +127,43 @@ async function cargarMensajes(chatId) {
     document.getElementById("nombre-chat").textContent = data.nombre;
 
     const fotoValida = typeof data.fotoPerfil === "string" && data.fotoPerfil.trim() !== "";
-    const foto = fotoValida
-      ? `${data.fotoPerfil}?t=${Date.now()}`   // usamos la URL completa que viene del backend
-      : "img/usuario-camara.png";
+    const foto = fotoValida ? `${data.fotoPerfil}?t=${Date.now()}` : "img/usuario-camara.png";
 
     const fotoChat = document.getElementById("foto-chat");
     if (fotoChat) {
-      fotoChat.onerror = () => {
-        fotoChat.src = "img/usuario-camara.png";
-      };
+      fotoChat.onerror = () => { fotoChat.src = "img/usuario-camara.png"; };
       fotoChat.src = foto;
     }
 
-    // ✅ Pintar mensajes
+    // ✅ Renderizar solo mensajes nuevos
+    const idsExistentes = new Set([...lista.querySelectorAll("li")].map(li => li.dataset.id));
+
     data.mensajes.forEach(msg => {
-      const li = document.createElement("li");
-      const fecha = new Date(msg.fecha_envio);
-      const hora = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (!idsExistentes.has(String(msg.id))) {
+        const li = document.createElement("li");
+        li.dataset.id = msg.id;
 
-      li.innerHTML = `
-        <div class="contenido">
-          <strong>${msg.emisor_nombre}:</strong> ${msg.contenido}
-          <span class="hora">${hora}</span>
-        </div>
-      `;
+        const fecha = new Date(msg.fecha_envio);
+        const hora = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      if (String(msg.emisor_id) === String(data.usuarioActualId)) {
-        li.classList.add("mio");
-      } else {
-        li.classList.add("otro");
+        li.innerHTML = `
+          <div class="contenido">
+            <strong>${msg.emisor_nombre}:</strong> ${msg.contenido}
+            <span class="hora">${hora}</span>
+          </div>
+        `;
+
+        if (String(msg.emisor_id) === String(data.usuarioActualId)) {
+          li.classList.add("mio");
+        } else {
+          li.classList.add("otro");
+        }
+
+        lista.appendChild(li);
       }
-
-      lista.appendChild(li);
     });
 
-    // ✅ Scroll automático
+    // ✅ Scroll automático al final
     lista.scrollTop = lista.scrollHeight;
 
   } catch (error) {
@@ -171,17 +172,14 @@ async function cargarMensajes(chatId) {
   }
 }
 
-      // 🚀 Inicialización al cargar la página
+// 🚀 Inicialización al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Leer el parámetro id de la URL
   const params = new URLSearchParams(window.location.search);
   const chatId = params.get("id");
 
   if (chatId) {
-    // 2. Cargar mensajes del chat
     cargarMensajes(chatId);
 
-    // 3. Conectar botón enviar
     const btnEnviar = document.getElementById("enviar");
     btnEnviar.addEventListener("click", async () => {
       const contenido = document.getElementById("nuevo-mensaje").value.trim();
@@ -205,17 +203,15 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("❌ Error enviando mensaje:", err);
       }
     });
+
+    // 🔄 Actualizar mensajes automáticamente cada 3 segundos
+    setInterval(() => {
+      cargarMensajes(chatId);
+    }, 3000);
   } else {
     document.getElementById("lista-mensajes").innerHTML = "<li>No se seleccionó chat</li>";
   }
 });
-      setInterval(() => {
-  const params = new URLSearchParams(window.location.search);
-  const chatId = params.get("id");
-  if (chatId) {
-    cargarMensajes(chatId);
-  }
-}, 3000); // cada 1 segundo
 
 
 </script>
@@ -225,6 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </body>
 
 </html>
+
 
 
 
