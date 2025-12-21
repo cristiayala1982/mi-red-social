@@ -119,7 +119,7 @@
     <script>
 const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 
-async function cargarMensajes(chatId) {
+/*async function cargarMensajes(chatId) {
   const lista = document.getElementById("lista-mensajes");
 
   try {
@@ -162,6 +162,84 @@ async function cargarMensajes(chatId) {
             <span class="hora">${hora}</span>
           </div>
         `;
+
+        if (String(msg.emisor_id) === String(data.usuarioActualId)) {
+          li.classList.add("mio");
+        } else {
+          li.classList.add("otro");
+        }
+
+        lista.appendChild(li);
+      }
+    });
+
+    // ✅ Scroll automático al final
+    lista.scrollTop = lista.scrollHeight;
+
+  } catch (error) {
+    console.error("Error al cargar mensajes:", error);
+    lista.innerHTML = "<li>Error de conexión</li>";
+  }
+}*/
+async function cargarMensajes(chatId) {
+  const lista = document.getElementById("lista-mensajes");
+
+  try {
+    const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
+      credentials: "include"
+    });
+    const data = await res.json();
+
+    if (!data.success) {
+      lista.innerHTML = "<li>Error al cargar mensajes</li>";
+      return;
+    }
+
+    // ✅ Mostrar nombre y foto del otro usuario
+    document.getElementById("nombre-chat").textContent = data.nombre;
+
+    const fotoValida = typeof data.fotoPerfil === "string" && data.fotoPerfil.trim() !== "";
+    const foto = fotoValida ? `${data.fotoPerfil}?t=${Date.now()}` : "img/usuario-camara.png";
+
+    const fotoChat = document.getElementById("foto-chat");
+    if (fotoChat) {
+      fotoChat.onerror = () => { fotoChat.src = "img/usuario-camara.png"; };
+      fotoChat.src = foto;
+    }
+
+    // ✅ Renderizar solo mensajes nuevos
+    const idsExistentes = new Set([...lista.querySelectorAll("li")].map(li => li.dataset.id));
+
+    data.mensajes.forEach(msg => {
+      if (!idsExistentes.has(String(msg.id))) {
+        const li = document.createElement("li");
+        li.dataset.id = msg.id;
+
+        const fecha = new Date(msg.fecha_envio);
+        const hora = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        // 👇 Diferenciar entre texto y audio
+        let contenidoHTML;
+        if (msg.tipo === "audio") {
+          // Renderizar reproductor de audio
+          contenidoHTML = `
+            <div class="contenido">
+              <strong>${msg.emisor_nombre}:</strong>
+              <audio controls src="${API_URL}/storage/${msg.contenido}"></audio>
+              <span class="hora">${hora}</span>
+            </div>
+          `;
+        } else {
+          // Renderizar texto normal
+          contenidoHTML = `
+            <div class="contenido">
+              <strong>${msg.emisor_nombre}:</strong> ${msg.contenido}
+              <span class="hora">${hora}</span>
+            </div>
+          `;
+        }
+
+        li.innerHTML = contenidoHTML;
 
         if (String(msg.emisor_id) === String(data.usuarioActualId)) {
           li.classList.add("mio");
@@ -297,6 +375,7 @@ btnAudio.addEventListener("click", async () => {
 </body>
 
 </html>
+
 
 
 
