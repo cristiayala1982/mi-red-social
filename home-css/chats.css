@@ -230,11 +230,12 @@
 
 .ondas {
   position: absolute;
-  left: 10px;
-  bottom: 8px;
+  left: 12px;
+  bottom: 10px;
   display: flex;
   gap: 3px;
   align-items: flex-end;
+  pointer-events: none;
 }
 
 .ondas span {
@@ -244,6 +245,7 @@
   background: #4caf50;
   animation: onda 1s infinite ease-in-out;
   border-radius: 2px;
+  opacity: 0.8;
 }
 
 .ondas span:nth-child(2) { animation-delay: 0.2s; }
@@ -258,6 +260,7 @@
 .oculto {
   display: none;
 }
+
 
 
 
