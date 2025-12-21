@@ -155,8 +155,9 @@ async function cargarMensajes(chatId) {
 
         let contenidoHTML;
         if (msg.tipo === "audio") {
-          // --- LÍNEA CORREGIDA ---
-          const audioURL = `https://storage.googleapis.com/${BUCKET_NAME}/${msg.contenido}`;
+          // --- ¡ESTA ES LA LÍNEA CORREGIDA! ---
+          const audioURL = `https://storage.googleapis.com/mi-red-social-imagenes/${msg.contenido}`;
+          
           contenidoHTML = `
             <div class="contenido">
               <strong>${msg.emisor_nombre}:</strong>
@@ -193,6 +194,7 @@ async function cargarMensajes(chatId) {
   }
 }
 
+/*--------------------------------------------------*/
 
 // 🚀 Inicialización al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
@@ -309,6 +311,7 @@ btnAudio.addEventListener("click", async () => {
 </body>
 
 </html>
+
 
 
 
