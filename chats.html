@@ -158,6 +158,7 @@ async function cargarMensajes(chatId) {
         let contenidoHTML;
         if (msg.tipo === "audio") {
           // --- ¡ESTA ES LA LÍNEA CORREGIDA! ---
+          console.log('¡Mensaje de audio detectado!', msg);
          const audioURL = `https://storage.googleapis.com/${BUCKET_NAME}/${msg.contenido}`;
           
           contenidoHTML = `
@@ -313,6 +314,7 @@ btnAudio.addEventListener("click", async () => {
 </body>
 
 </html>
+
 
 
 
