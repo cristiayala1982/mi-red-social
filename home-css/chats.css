@@ -211,7 +211,6 @@
   font-size: 14px;
 }
 
-/* 🎤 Botón micrófono / stop */
 .icono-audio {
   position: absolute;
   right: 10px;
@@ -229,7 +228,6 @@
   color: #388e3c;
 }
 
-/* 🔊 Ondas de grabación */
 .ondas {
   position: absolute;
   left: 10px;
