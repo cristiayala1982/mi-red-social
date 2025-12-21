@@ -225,53 +225,67 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //microfono
-      let mediaRecorder;
+let mediaRecorder;
 let audioChunks = [];
+let grabando = false;
 
-document.getElementById("btn-audio").addEventListener("click", async () => {
-  try {
-    // Pedir acceso al micrófono
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
+const btnAudio = document.getElementById("btn-audio");
+const ondas = document.getElementById("grabando-ondas");
 
-    // Guardar fragmentos de audio
-    mediaRecorder.ondataavailable = event => {
-      audioChunks.push(event.data);
-    };
-
-    // Cuando se detiene la grabación
-    mediaRecorder.onstop = async () => {
-      const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+btnAudio.addEventListener("click", async () => {
+  if (!grabando) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
       audioChunks = [];
 
-      // Enviar al backend
-      const formData = new FormData();
-      formData.append("audio", audioBlob, "mensaje.webm");
+      mediaRecorder.ondataavailable = event => {
+        audioChunks.push(event.data);
+      };
 
-      const params = new URLSearchParams(window.location.search);
-      const chatId = params.get("id");
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+        const formData = new FormData();
+        formData.append("audio", audioBlob, "mensaje.webm");
 
-      const res = await fetch(`${API_URL}/api/chats/${chatId}/audio`, {
-        method: "POST",
-        credentials: "include",
-        body: formData
-      });
+        const params = new URLSearchParams(window.location.search);
+        const chatId = params.get("id");
 
-      const data = await res.json();
-      if (data.success) {
-        cargarMensajes(chatId); // refrescar mensajes
-      } else {
-        alert("❌ No se pudo enviar el audio");
-      }
-    };
+        const res = await fetch(`${API_URL}/api/chats/${chatId}/audio`, {
+          method: "POST",
+          credentials: "include",
+          body: formData
+        });
 
-    // 🎯 Iniciar grabación por 30 segundos
-    mediaRecorder.start();
-    setTimeout(() => mediaRecorder.stop(), 60000); // 60.000 ms = 60 segundos
+        const data = await res.json();
+        if (data.success) {
+          cargarMensajes(chatId);
+        } else {
+          alert("❌ No se pudo enviar el audio");
+        }
 
-  } catch (err) {
-    console.error("❌ Error accediendo al micrófono:", err);
-    alert("No se pudo acceder al micrófono");
+        // Reset UI
+        btnAudio.innerHTML = `<i class="fa fa-microphone"></i>`;
+        ondas.classList.add("oculto");
+        grabando = false;
+      };
+
+      mediaRecorder.start();
+      btnAudio.innerHTML = "⏹️";
+      ondas.classList.remove("oculto");
+      grabando = true;
+
+      // Auto-stop después de 30 segundos
+      setTimeout(() => {
+        if (grabando) mediaRecorder.stop();
+      }, 30000);
+
+    } catch (err) {
+      console.error("❌ Error accediendo al micrófono:", err);
+      alert("No se pudo acceder al micrófono");
+    }
+  } else {
+    mediaRecorder.stop(); // parada manual
   }
 });
 
@@ -284,6 +298,7 @@ document.getElementById("btn-audio").addEventListener("click", async () => {
 </body>
 
 </html>
+
 
 
 
