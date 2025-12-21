@@ -93,12 +93,17 @@
 <div class="input-container">
   <div class="input-wrapper">
     <textarea id="nuevo-mensaje" rows="1" placeholder="Escribe un mensaje..."></textarea>
-    <button id="btn-audio" class="icono-audio" title="Enviar audio">
+    <button id="btn-audio" class="icono-audio" title="Grabar audio">
       <i class="fa fa-microphone"></i>
     </button>
+    <!-- 🔊 Animación de grabación -->
+    <div id="grabando-ondas" class="ondas oculto">
+      <span></span><span></span><span></span><span></span>
+    </div>
   </div>
   <button id="enviar">Enviar</button>
 </div>
+
 
 </main>
 
@@ -279,6 +284,7 @@ document.getElementById("btn-audio").addEventListener("click", async () => {
 </body>
 
 </html>
+
 
 
 
