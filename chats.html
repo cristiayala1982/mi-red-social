@@ -1,39 +1,125 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat</title>
-  <!-- Aquí van tus estilos CSS -->
-  <link rel="stylesheet" href="css/styles.css"> 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <title>Home</title>
+  <link rel="stylesheet" href="home-css/navbar.css">
+  <link rel="stylesheet" href="home-css/panelChats.css">
+  <link rel="stylesheet" href="home-css/modal-listaamigos.css">
+  <link rel="stylesheet" href="home-css/chats.css">
+  
+  
 </head>
-<body>
 
-  <div class="chat-container">
-    <div class="chat-header">
-      <img id="foto-chat" src="img/usuario-camara.png" alt="Foto de perfil" class="perfil-img-chat">
-      <h2 id="nombre-chat">Cargando...</h2>
+<body>
+<nav class="app-navbar">
+  <div class="app-navbar-logo">
+    <a href="home.html">
+      <img src="img/icono home.webp" alt="Inicio" width="40" height="40">
+    </a>
+    <span id="bienvenida" class="bienvenida-texto"></span>
+  </div>
+
+  <!-- Buscador -->
+  <form id="form-busqueda" class="buscador-usuarios">
+    <span class="icono-lupa">🔍</span>
+    <input type="text" id="input-busqueda" placeholder="Buscar usuario..." autocomplete="off">
+    <ul id="resultados-busqueda" class="resultados-autocompletado"></ul>
+  </form>
+ <!-- Íconos de mensaje y amigos -->
+<div class="nav-icons">
+  <button id="btn-amigos" class="icono-btn">👥</button>
+  <button id="btn-mensajes" class="icono-btn" style="position:relative;">
+    💬
+    <span id="badge-mensajes" class="badge" style="display:none;"></span>
+  </button>
+</div>
+
+  <!-- Foto de perfil con menú -->
+  <div class="perfil-menu">
+    <img id="nav-foto-perfil" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono-nav">
+    <ul class="dropdown-menu">
+      <li><a href="miPerfil.html">Mi perfil</a></li>
+      <li><a href="#">Cerrar sesión</a></li>
+    </ul>
+  </div>
+</nav>
+<!-- Contenedor principal de la app -->
+<div class="app-container">
+  <!-- MODAL AMIGOS -->
+<div id="modal-amigos" class="modal-amigos">
+  <div class="modal-contenido">
+    <div class="modal-header">
+      <h2>Lista de Amigos</h2>
+      <span id="cerrar-modal-amigos" class="cerrar-modal">&times;</span>
     </div>
-    <ul id="lista-mensajes" class="chat-messages"></ul>
-    <div class="input-container">
-      <div class="input-wrapper">
-        <textarea id="nuevo-mensaje" rows="1" placeholder="Escribe un mensaje..."></textarea>
-        <button id="btn-audio" class="icono-audio" title="Grabar audio">
-          <i class="fa fa-microphone"></i>
-        </button>
-        <div id="grabando-ondas" class="ondas oculto">
-          <span></span><span></span><span></span><span></span>
-        </div>
-      </div>
-      <button id="enviar">Enviar</button>
+    <div class="modal-body">
+      <ul id="lista-amigos" class="lista-amigos"></ul>
+    </div>
+  </div>
+</div>
+
+ <!-- Panel lateral de chats (oculto al inicio) -->
+  <div id="panel-chats" class="panel oculto">
+    <span class="cerrar-panel">&times;</span>
+    <h2>Mis chats</h2>
+    <ul id="lista-chats"></ul>
+  </div>
+<main class="chat-container">
+  <!-- Encabezado del chat -->
+  <div class="encabezado-chat">
+    <img src="img/usuario-camara.png" alt="Foto" class="foto-chat" id="foto-chat">
+    <span class="nombre-chat" id="nombre-chat"></span>
+    <button id="btn-borrar-chat" title="Eliminar este chat">🗑️</button>
+  </div>
+  <!--NOTIFICACION DE BORRAR MENSAJE-->
+  <div id="notificacion-chat" class="notificacion oculto"></div>
+
+  <!-- Cuadro de mensajes con scroll independiente -->
+  <div class="mensajes-wrapper">
+    <div class="mensajes-centro">
+      <ul id="lista-mensajes"></ul>
     </div>
   </div>
 
-<script>
+  <!-- Input de mensaje -->
+<div class="input-container">
+  <div class="input-wrapper">
+    <textarea id="nuevo-mensaje" rows="1" placeholder="Escribe un mensaje..."></textarea>
+    <!-- 🎤 Botón micrófono / stop -->
+    <button id="btn-audio" class="icono-audio" title="Grabar audio">
+      <i class="fa fa-microphone"></i>
+    </button>
+    <!-- 🔊 Ondas de grabación -->
+    <div id="grabando-ondas" class="ondas oculto">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+  <button id="enviar">Enviar</button>
+</div>
+</main>
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Scripts principales en orden -->
+    
+    <script type="module" src="HOME_JS/navbar.js"></script>
+    <script type="module" src="HOME_JS/buscador.js"></script>
+    <script type="module" src="HOME_JS/cerrarSesion.js"></script>
+    <script type="module" src="HOME_JS/listaAmigosYchats.js"></script>
+    <script>
 // --- CONFIGURACIÓN ---
 const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
-const BUCKET_NAME = "mi-red-social-imagenes";
+const BUCKET_NAME = "mi-red-social-imagenes"; // Asegúrate de que este sea el nombre correcto de tu bucket
 
 // --- ELEMENTOS DEL DOM ---
 const listaMensajes = document.getElementById("lista-mensajes");
@@ -102,7 +188,7 @@ btnAudio.addEventListener("click", async () => {
   }
 });
 
-// --- LÓGICA DE MENSAJES ---
+// --- LÓGICA DE MENSAJES (corregida para audio) ---
 async function cargarMensajes(chatId) {
   try {
     const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
@@ -204,10 +290,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-</script>
-
+</script>  
 </body>
 </html>
+
 
 
 
