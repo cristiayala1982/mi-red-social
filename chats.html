@@ -190,7 +190,7 @@ btnAudio.addEventListener("click", async () => {
 });
 
 // --- LÓGICA DE MENSAJES (corregida para audio) ---
-async function cargarMensajes(chatId) {
+/*async function cargarMensajes(chatId) {
   try {
     const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
       credentials: "include"
@@ -261,7 +261,92 @@ async function cargarMensajes(chatId) {
     console.error("Error al cargar mensajes:", error);
     listaMensajes.innerHTML = "<li>Error de conexión</li>";
   }
+}*/
+      async function cargarMensajes(chatId) {
+  const lista = document.getElementById("lista-mensajes");
+
+  try {
+    const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
+      credentials: "include"
+    });
+    const data = await res.json();
+
+    if (!data.success) {
+      lista.innerHTML = "<li>Error al cargar mensajes</li>";
+      return;
+    }
+
+    document.getElementById("nombre-chat").textContent = data.nombre;
+
+    const fotoValida = typeof data.fotoPerfil === "string" && data.fotoPerfil.trim() !== "";
+    const foto = fotoValida ? `${data.fotoPerfil}?t=${Date.now()}` : "img/usuario-camara.png";
+
+    const fotoChat = document.getElementById("foto-chat");
+    if (fotoChat) {
+      fotoChat.onerror = () => { fotoChat.src = "img/usuario-camara.png"; };
+      fotoChat.src = foto;
+    }
+
+    const idsExistentes = new Set([...lista.querySelectorAll("li")].map(li => li.dataset.id));
+
+    data.mensajes.forEach(msg => {
+      if (!idsExistentes.has(String(msg.id))) {
+        const li = document.createElement("li");
+        li.dataset.id = msg.id;
+
+        const fecha = new Date(msg.fecha_envio);
+        const hora = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        // --- AÑADIDO: Foto de perfil del emisor para cada mensaje ---
+        const emisorFoto = msg.emisor_id === data.usuarioActualId ? "img/mi-foto.png" : foto; // Asume una foto para ti o usa la del otro usuario
+        const emisorNombre = msg.emisor_nombre;
+
+        let contenidoMensajeHTML; // Cambiado a contenidoMensajeHTML para mayor claridad
+
+        if (msg.tipo === "audio") {
+          console.log('¡Mensaje de audio detectado!', msg); // Para depurar
+          const audioURL = `https://storage.googleapis.com/${BUCKET_NAME}/${msg.contenido}`;
+          contenidoMensajeHTML = `
+            <audio controls src="${audioURL}" style="width: 100%; max-width: 250px;"></audio>
+          `;
+        } else {
+          contenidoMensajeHTML = `
+            ${msg.contenido}
+          `;
+        }
+
+        // --- CONSTRUCCIÓN COMPLETA DEL LI ---
+        li.innerHTML = `
+          <div class="mensaje-bubble">
+            <img src="${emisorFoto}" alt="${emisorNombre}" class="perfil-img-mensaje">
+            <div class="mensaje-info">
+              <span class="nombre-emisor">${emisorNombre}:</span>
+              <div class="contenido-mensaje">
+                ${contenidoMensajeHTML}
+              </div>
+              <span class="hora-mensaje">${hora}</span>
+            </div>
+          </div>
+        `;
+
+        if (String(msg.emisor_id) === String(data.usuarioActualId)) {
+          li.classList.add("mio");
+        } else {
+          li.classList.add("otro");
+        }
+
+        lista.appendChild(li);
+      }
+    });
+
+    lista.scrollTop = lista.scrollHeight;
+
+  } catch (error) {
+    console.error("Error al cargar mensajes:", error);
+    lista.innerHTML = "<li>Error de conexión</li>";
+  }
 }
+
 
 // --- INICIALIZACIÓN ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -294,6 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>  
 </body>
 </html>
+
 
 
 
