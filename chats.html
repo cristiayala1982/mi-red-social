@@ -190,8 +190,6 @@ btnAudio.addEventListener("click", async () => {
 });
 
 // --- LÓGICA DE MENSAJES (corregida para audio) ---
-// --- LÓGICA DE MENSAJES (corregida para audio y texto) ---
-// --- LÓGICA DE MENSAJES (render completo y robusto) ---
 async function cargarMensajes(chatId) {
   try {
     const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
@@ -214,66 +212,62 @@ async function cargarMensajes(chatId) {
       fotoChat.src = foto;
     }
 
-    // Depuración útil
+    // Depuración
     console.log("📩 Mensajes recibidos:", data.mensajes);
 
-    // Reconstruir toda la lista cada vez
-    listaMensajes.innerHTML = "";
+    // --- Mejor: no vaciamos toda la lista, solo agregamos los nuevos ---
+    const idsExistentes = new Set([...listaMensajes.querySelectorAll("li")].map(li => li.dataset.id));
 
-    // Si el backend no ordena, opcionalmente ordenamos por fecha_envio ascendente
+    // Ordenar por fecha ascendente
     const mensajesOrdenados = Array.isArray(data.mensajes)
       ? [...data.mensajes].sort((a, b) => new Date(a.fecha_envio) - new Date(b.fecha_envio))
       : [];
 
     mensajesOrdenados.forEach(msg => {
-      const li = document.createElement("li");
-      li.dataset.id = String(msg.id);
+      if (!idsExistentes.has(String(msg.id))) {
+        const li = document.createElement("li");
+        li.dataset.id = String(msg.id);
 
-      const fecha = new Date(msg.fecha_envio);
-      const hora = isNaN(fecha.getTime())
-        ? ""
-        : fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const fecha = new Date(msg.fecha_envio);
+        const hora = isNaN(fecha.getTime())
+          ? ""
+          : fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      const emisorNombre = msg.emisor_nombre || "Usuario";
-      const esAudio = (msg.tipo === "audio") ||
-                      (typeof msg.contenido === "string" && msg.contenido.endsWith(".webm"));
+        const emisorNombre = msg.emisor_nombre || "Usuario";
+        const esAudio = (msg.tipo === "audio") ||
+                        (typeof msg.contenido === "string" && msg.contenido.endsWith(".webm"));
 
-      let contenidoHTML;
-
-      if (esAudio) {
-        let audioURL = msg.contenido || "";
-        if (audioURL && !audioURL.startsWith("http")) {
-          audioURL = `https://storage.googleapis.com/${BUCKET_NAME}/${audioURL}`;
+        let contenidoHTML;
+        if (esAudio) {
+          let audioURL = msg.contenido || "";
+          if (audioURL && !audioURL.startsWith("http")) {
+            audioURL = `https://storage.googleapis.com/${BUCKET_NAME}/${audioURL}`;
+          }
+          contenidoHTML = `
+            <div class="contenido">
+              <strong>${emisorNombre}:</strong>
+              <audio controls src="${audioURL}"></audio>
+              <span class="hora">${hora}</span>
+            </div>
+          `;
+        } else {
+          const textoSeguro = (msg.contenido ?? "").toString();
+          contenidoHTML = `
+            <div class="contenido">
+              <strong>${emisorNombre}:</strong> ${textoSeguro}
+              <span class="hora">${hora}</span>
+            </div>
+          `;
         }
-        contenidoHTML = `
-          <div class="contenido">
-            <strong>${emisorNombre}:</strong>
-            <audio controls src="${audioURL}"></audio>
-            <span class="hora">${hora}</span>
-          </div>
-        `;
-      } else {
-        const textoSeguro = (msg.contenido ?? "").toString();
-        contenidoHTML = `
-          <div class="contenido">
-            <strong>${emisorNombre}:</strong> ${textoSeguro}
-            <span class="hora">${hora}</span>
-          </div>
-        `;
+
+        li.innerHTML = contenidoHTML;
+        li.classList.add(String(msg.emisor_id) === String(data.usuarioActualId) ? "mio" : "otro");
+
+        listaMensajes.appendChild(li);
       }
-
-      li.innerHTML = contenidoHTML;
-
-      if (String(msg.emisor_id) === String(data.usuarioActualId)) {
-        li.classList.add("mio");
-      } else {
-        li.classList.add("otro");
-      }
-
-      listaMensajes.appendChild(li);
     });
 
-    // Scroll al final
+    // Scroll al último mensaje
     listaMensajes.scrollTop = listaMensajes.scrollHeight;
 
   } catch (error) {
@@ -281,11 +275,45 @@ async function cargarMensajes(chatId) {
     listaMensajes.innerHTML = "<li>Error de conexión</li>";
   }
 }
-
-
-
 // --- INICIALIZACIÓN ---
+      // --- INICIALIZACIÓN ---
 document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const chatId = params.get("id");
+
+  if (chatId) {
+    cargarMensajes(chatId);
+    setInterval(() => cargarMensajes(chatId), 5000); // Actualiza cada 5 segundos
+  }
+
+  // Enviar con botón
+  btnEnviar.addEventListener("click", async () => {
+    const contenido = nuevoMensaje.value.trim();
+    if (contenido) {
+      const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ contenido })
+      });
+      const data = await res.json();
+      if (data.success) {
+        nuevoMensaje.value = "";
+        cargarMensajes(chatId);
+      }
+    }
+  });
+
+  // Enviar con Enter (Shift+Enter sigue siendo salto de línea)
+  nuevoMensaje.addEventListener("keydown", async (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); // evita salto de línea
+      btnEnviar.click();  // dispara el mismo evento que el botón
+    }
+  });
+});
+
+/*document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const chatId = params.get("id");
 
@@ -310,11 +338,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-});
+});*/
 
 </script>  
 </body>
 </html>
+
 
 
 
