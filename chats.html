@@ -225,7 +225,7 @@ async function cargarMensajes(chatId) {
 
         let contenidoHTML;
         if (msg.tipo === "audio") {
-          console.log("¡Mensaje de audio detectado!", msg); // Para depurar
+          console.log("¡Mensaje de audio detectado!", msg);
           contenidoHTML = `
             <div class="contenido">
               <strong>${msg.emisor_nombre}:</strong>
@@ -294,6 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>  
 </body>
 </html>
+
 
 
 
