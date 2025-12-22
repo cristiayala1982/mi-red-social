@@ -191,6 +191,7 @@ btnAudio.addEventListener("click", async () => {
 
 // --- LÓGICA DE MENSAJES (corregida para audio) ---
 // --- LÓGICA DE MENSAJES (corregida para audio y texto) ---
+// --- LÓGICA DE MENSAJES (render completo y robusto) ---
 async function cargarMensajes(chatId) {
   try {
     const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
@@ -203,68 +204,76 @@ async function cargarMensajes(chatId) {
       return;
     }
 
-    document.getElementById("nombre-chat").textContent = data.nombre;
-
+    // Encabezado
+    document.getElementById("nombre-chat").textContent = data.nombre || "";
     const fotoValida = typeof data.fotoPerfil === "string" && data.fotoPerfil.trim() !== "";
     const foto = fotoValida ? `${data.fotoPerfil}?t=${Date.now()}` : "img/usuario-camara.png";
-
     const fotoChat = document.getElementById("foto-chat");
     if (fotoChat) {
       fotoChat.onerror = () => { fotoChat.src = "img/usuario-camara.png"; };
       fotoChat.src = foto;
     }
 
-    const idsExistentes = new Set([...listaMensajes.querySelectorAll("li")].map(li => String(li.dataset.id)));
-
+    // Depuración útil
     console.log("📩 Mensajes recibidos:", data.mensajes);
 
-    data.mensajes.forEach(msg => {
-      if (!idsExistentes.has(String(msg.id))) {
-        const li = document.createElement("li");
-        li.dataset.id = String(msg.id);
+    // Reconstruir toda la lista cada vez
+    listaMensajes.innerHTML = "";
 
-        const fecha = new Date(msg.fecha_envio);
-        const hora = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // Si el backend no ordena, opcionalmente ordenamos por fecha_envio ascendente
+    const mensajesOrdenados = Array.isArray(data.mensajes)
+      ? [...data.mensajes].sort((a, b) => new Date(a.fecha_envio) - new Date(b.fecha_envio))
+      : [];
 
-        let contenidoHTML;
+    mensajesOrdenados.forEach(msg => {
+      const li = document.createElement("li");
+      li.dataset.id = String(msg.id);
 
-        // --- AUDIO ---
-        if (msg.tipo === "audio" || (typeof msg.contenido === "string" && msg.contenido.endsWith(".webm"))) {
-          let audioURL = msg.contenido;
-          // Si no es URL completa, armarla con el bucket
-          if (!audioURL.startsWith("http")) {
-            audioURL = `https://storage.googleapis.com/${BUCKET_NAME}/${audioURL}`;
-          }
-          contenidoHTML = `
-            <div class="contenido">
-              <strong>${msg.emisor_nombre || "Usuario"}:</strong>
-              <audio controls src="${audioURL}"></audio>
-              <span class="hora">${hora}</span>
-            </div>
-          `;
-        } 
-        // --- TEXTO ---
-        else {
-          contenidoHTML = `
-            <div class="contenido">
-              <strong>${msg.emisor_nombre || "Usuario"}:</strong> ${msg.contenido}
-              <span class="hora">${hora}</span>
-            </div>
-          `;
+      const fecha = new Date(msg.fecha_envio);
+      const hora = isNaN(fecha.getTime())
+        ? ""
+        : fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      const emisorNombre = msg.emisor_nombre || "Usuario";
+      const esAudio = (msg.tipo === "audio") ||
+                      (typeof msg.contenido === "string" && msg.contenido.endsWith(".webm"));
+
+      let contenidoHTML;
+
+      if (esAudio) {
+        let audioURL = msg.contenido || "";
+        if (audioURL && !audioURL.startsWith("http")) {
+          audioURL = `https://storage.googleapis.com/${BUCKET_NAME}/${audioURL}`;
         }
-
-        li.innerHTML = contenidoHTML;
-
-        if (String(msg.emisor_id) === String(data.usuarioActualId)) {
-          li.classList.add("mio");
-        } else {
-          li.classList.add("otro");
-        }
-
-        listaMensajes.appendChild(li);
+        contenidoHTML = `
+          <div class="contenido">
+            <strong>${emisorNombre}:</strong>
+            <audio controls src="${audioURL}"></audio>
+            <span class="hora">${hora}</span>
+          </div>
+        `;
+      } else {
+        const textoSeguro = (msg.contenido ?? "").toString();
+        contenidoHTML = `
+          <div class="contenido">
+            <strong>${emisorNombre}:</strong> ${textoSeguro}
+            <span class="hora">${hora}</span>
+          </div>
+        `;
       }
+
+      li.innerHTML = contenidoHTML;
+
+      if (String(msg.emisor_id) === String(data.usuarioActualId)) {
+        li.classList.add("mio");
+      } else {
+        li.classList.add("otro");
+      }
+
+      listaMensajes.appendChild(li);
     });
 
+    // Scroll al final
     listaMensajes.scrollTop = listaMensajes.scrollHeight;
 
   } catch (error) {
@@ -272,6 +281,7 @@ async function cargarMensajes(chatId) {
     listaMensajes.innerHTML = "<li>Error de conexión</li>";
   }
 }
+
 
 
 // --- INICIALIZACIÓN ---
@@ -305,6 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>  
 </body>
 </html>
+
 
 
 
