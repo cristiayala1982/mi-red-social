@@ -213,19 +213,20 @@ async function cargarMensajes(chatId) {
       fotoChat.src = foto;
     }
 
-    const idsExistentes = new Set([...listaMensajes.querySelectorAll("li")].map(li => li.dataset.id));
+    const idsExistentes = new Set([...listaMensajes.querySelectorAll("li")].map(li => String(li.dataset.id)));
+
+    console.log("📩 Mensajes recibidos:", data.mensajes); // Depuración
 
     data.mensajes.forEach(msg => {
       if (!idsExistentes.has(String(msg.id))) {
         const li = document.createElement("li");
-        li.dataset.id = msg.id;
+        li.dataset.id = String(msg.id);
 
         const fecha = new Date(msg.fecha_envio);
         const hora = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         let contenidoHTML;
         if (msg.tipo === "audio") {
-          console.log("¡Mensaje de audio detectado!", msg);
           contenidoHTML = `
             <div class="contenido">
               <strong>${msg.emisor_nombre}:</strong>
@@ -262,7 +263,6 @@ async function cargarMensajes(chatId) {
   }
 }
 
-
 // --- INICIALIZACIÓN ---
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
@@ -294,6 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>  
 </body>
 </html>
+
 
 
 
