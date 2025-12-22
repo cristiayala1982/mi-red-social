@@ -225,6 +225,16 @@ async function cargarMensajes(chatId) {
 
         let contenidoHTML;
         if (msg.tipo === "audio") {
+            console.log('¡Mensaje de audio detectado!', msg); // Para depurar
+            contenidoHTML = `
+              <div class="contenido">
+                <strong>${msg.emisor_nombre}:</strong>
+                <audio controls src="${msg.contenido}"></audio>
+                <span class="hora">${hora}</span>
+              </div>
+            `;
+          }
+       /* if (msg.tipo === "audio") {
           console.log('¡Mensaje de audio detectado!', msg); // Para depurar
           const audioURL = `https://storage.googleapis.com/${BUCKET_NAME}/${msg.contenido}`;
           contenidoHTML = `
@@ -233,7 +243,7 @@ async function cargarMensajes(chatId) {
               <audio controls src="${audioURL}"></audio>
               <span class="hora">${hora}</span>
             </div>
-          `;
+          `;*/
         } else {
           contenidoHTML = `
             <div class="contenido">
@@ -295,6 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>  
 </body>
 </html>
+
 
 
 
