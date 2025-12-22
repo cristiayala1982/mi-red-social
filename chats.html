@@ -190,6 +190,7 @@ btnAudio.addEventListener("click", async () => {
 });
 
 // --- LÓGICA DE MENSAJES (corregida para audio) ---
+// --- LÓGICA DE MENSAJES (corregida para audio y texto) ---
 async function cargarMensajes(chatId) {
   try {
     const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
@@ -215,7 +216,7 @@ async function cargarMensajes(chatId) {
 
     const idsExistentes = new Set([...listaMensajes.querySelectorAll("li")].map(li => String(li.dataset.id)));
 
-    console.log("📩 Mensajes recibidos:", data.mensajes); // Depuración
+    console.log("📩 Mensajes recibidos:", data.mensajes);
 
     data.mensajes.forEach(msg => {
       if (!idsExistentes.has(String(msg.id))) {
@@ -226,18 +227,27 @@ async function cargarMensajes(chatId) {
         const hora = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         let contenidoHTML;
-        if (msg.tipo === "audio") {
+
+        // --- AUDIO ---
+        if (msg.tipo === "audio" || (typeof msg.contenido === "string" && msg.contenido.endsWith(".webm"))) {
+          let audioURL = msg.contenido;
+          // Si no es URL completa, armarla con el bucket
+          if (!audioURL.startsWith("http")) {
+            audioURL = `https://storage.googleapis.com/${BUCKET_NAME}/${audioURL}`;
+          }
           contenidoHTML = `
             <div class="contenido">
-              <strong>${msg.emisor_nombre}:</strong>
-              <audio controls src="${msg.contenido}"></audio>
+              <strong>${msg.emisor_nombre || "Usuario"}:</strong>
+              <audio controls src="${audioURL}"></audio>
               <span class="hora">${hora}</span>
             </div>
           `;
-        } else {
+        } 
+        // --- TEXTO ---
+        else {
           contenidoHTML = `
             <div class="contenido">
-              <strong>${msg.emisor_nombre}:</strong> ${msg.contenido}
+              <strong>${msg.emisor_nombre || "Usuario"}:</strong> ${msg.contenido}
               <span class="hora">${hora}</span>
             </div>
           `;
@@ -262,6 +272,7 @@ async function cargarMensajes(chatId) {
     listaMensajes.innerHTML = "<li>Error de conexión</li>";
   }
 }
+
 
 // --- INICIALIZACIÓN ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -294,6 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>  
 </body>
 </html>
+
 
 
 
