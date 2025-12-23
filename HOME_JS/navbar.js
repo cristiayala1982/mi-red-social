@@ -112,8 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 300);
 
   // refrescar cada 30 segundos
-  setInterval(actualizarBadgeMensajes, 30000);
+  setInterval(actualizarBadgeMensajes, 5000);
 });
+
 
 
 
