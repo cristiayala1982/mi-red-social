@@ -90,15 +90,19 @@ export async function actualizarBadgeMensajes() {
 
     if (data.success && data.total > 0) {
       badge.textContent = data.total;
-      badge.style.display = "inline-block";
-      badge.classList.add("bg-danger"); // rojo
+      badge.classList.remove("oculto");
+
+      // animación suave para que se note el cambio
+      badge.classList.add("updated");
+      setTimeout(() => badge.classList.remove("updated"), 300);
     } else {
-      badge.style.display = "none";
+      badge.classList.add("oculto");
     }
   } catch (error) {
     console.error("❌ Error al actualizar badge:", error);
   }
 }
+
 
 // 🚀 Ejecutar al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
@@ -110,6 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // refrescar cada 30 segundos
   setInterval(actualizarBadgeMensajes, 30000);
 });
+
 
 
 
