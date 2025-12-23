@@ -92,6 +92,97 @@ async function cargarChats() {
       const li = document.createElement("li");
       li.classList.add("chat-item");
 
+      // Badge y estilo si hay mensajes no leídos
+      if (chat.noLeidos && chat.noLeidos > 0) {
+        li.classList.add("chat-no-leido");
+      }
+
+      const badge = chat.noLeidos && chat.noLeidos > 0
+        ? `<span class="badge bg-danger">${chat.noLeidos}</span>`
+        : "";
+
+      li.innerHTML = `
+        <img src="${foto}" alt="Foto perfil" class="foto-chat">
+        <div class="info-chat">
+          <strong>${chat.nombre}</strong>
+          <p>${chat.ultimo || ""}</p>
+        </div>
+        ${badge}
+        <button class="btn-borrar-chat" title="Eliminar chat">🗑️</button>
+      `;
+
+      li.addEventListener("click", async (e) => {
+        if (!e.target.classList.contains("btn-borrar-chat")) {
+          abrirChat(chat.id, chat.nombre);
+
+          // Marcar como leído en backend
+          await fetch(`${API_URL}/api/chats/${chat.id}/marcarLeido`, {
+            method: "POST",
+            credentials: "include"
+          });
+
+          // Refrescar badge global
+          actualizarBadgeMensajes();
+        }
+      });
+
+      li.querySelector(".btn-borrar-chat").addEventListener("click", async (e) => {
+        e.stopPropagation();
+        try {
+          const res = await fetch(`${API_URL}/api/chats/${chat.id}`, {
+            method: "DELETE",
+            credentials: "include"
+          });
+          const result = await res.json();
+          if (result.success) {
+            li.remove();
+            mostrarNotificacion("✅ Chat eliminado");
+          } else {
+            mostrarNotificacion("❌ No se pudo borrar el chat", "error");
+          }
+        } catch (err) {
+          console.error("❌ Error borrando chat:", err);
+          mostrarNotificacion("❌ Error borrando chat", "error");
+        }
+      });
+
+      listaChats.appendChild(li);
+    });
+
+    // Refrescar badge global al terminar de cargar
+    actualizarBadgeMensajes();
+
+  } catch (error) {
+    console.error("❌ Error cargando chats:", error);
+    const listaChats = document.getElementById("lista-chats");
+    listaChats.innerHTML = "<li>Error de conexión con el servidor</li>";
+    mostrarNotificacion("❌ Error de conexión con el servidor", "error");
+  }
+}
+
+/*async function cargarChats() {
+  try {
+    const res = await fetch(`${API_URL}/api/chats`, { credentials: "include" });
+    const data = await res.json();
+
+    const listaChats = document.getElementById("lista-chats");
+    listaChats.innerHTML = "";
+
+    if (!data.success) {
+      listaChats.innerHTML = "<li>Error al cargar chats</li>";
+      mostrarNotificacion("❌ Error al cargar chats", "error");
+      return;
+    }
+
+    data.chats.forEach(chat => {
+      const fotoValida = typeof chat.foto_perfil === "string" && chat.foto_perfil.trim() !== "";
+      const foto = fotoValida
+        ? (chat.foto_perfil.startsWith("http") ? chat.foto_perfil : "img/usuario-camara.png")
+        : "img/usuario-camara.png";
+
+      const li = document.createElement("li");
+      li.classList.add("chat-item");
+
       // Si más adelante tu backend devuelve un campo `noLeidos`, lo usamos aquí
       const badge = chat.noLeidos && chat.noLeidos > 0
         ? `<span class="badge">${chat.noLeidos}</span>`
@@ -141,7 +232,7 @@ async function cargarChats() {
     listaChats.innerHTML = "<li>Error de conexión con el servidor</li>";
     mostrarNotificacion("❌ Error de conexión con el servidor", "error");
   }
-}
+}*/
 
 function mostrarNotificacion(texto, tipo = "success") {
   const box = document.getElementById("notificacion-chat");
@@ -186,6 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
 
 
 
