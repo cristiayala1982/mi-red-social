@@ -1,5 +1,5 @@
 const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
-
+import { actualizarBadgeMensajes } from "./navbar.js"; // 👈 importa la función
 async function cargarAmigos() {
   try {
     const res = await fetch(`${API_URL}/api/amigos`, { credentials: "include" });
@@ -186,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
 
 
 
