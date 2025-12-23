@@ -167,3 +167,11 @@
     font-size: 15px;
   }
 }
+/*resaltar chats no leidos*/
+.chat-no-leido {
+  background-color: #f0f8ff; /* azul claro */
+  font-weight: bold;
+  border-left: 4px solid #dc3545; /* rojo */
+}
+
+
