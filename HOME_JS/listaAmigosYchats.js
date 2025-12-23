@@ -249,7 +249,7 @@ function mostrarNotificacion(texto, tipo = "success") {
   }, 3000);
 }
 
-function inicializarPanelChats() {
+/*function inicializarPanelChats() {
   const btnMensajes = document.getElementById("btn-mensajes");
   const panelChats = document.getElementById("panel-chats");
   const cerrarBtn = panelChats.querySelector(".cerrar-panel");
@@ -263,7 +263,23 @@ function inicializarPanelChats() {
   cerrarBtn.addEventListener("click", () => {
     panelChats.classList.remove("visible");
   });
+}*/
+function inicializarPanelChats() {
+  const btnMensajes = document.getElementById("btn-mensajes");
+  const panelChats = document.getElementById("panel-chats");
+  const cerrarBtn = panelChats.querySelector(".cerrar-panel");
+
+  btnMensajes.addEventListener("click", () => {
+    panelChats.classList.remove("oculto"); // abre el panel lateral
+    cargarChats();
+    actualizarBadgeMensajes(); // refresca badge al abrir
+  });
+
+  cerrarBtn.addEventListener("click", () => {
+    panelChats.classList.add("oculto"); // cierra el panel lateral
+  });
 }
+
 
 // 🚀 Inicialización única
 document.addEventListener("DOMContentLoaded", () => {
@@ -277,6 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
 
 
 
