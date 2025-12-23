@@ -7,60 +7,64 @@
   </head>
   <body>
 <style>
-  /* Escala generosa en móvil: ocupa ancho completo y aumenta tamaños */
   .login-wrap {
     min-height: 100vh;
-    padding: 24px;
+    padding: 32px 16px;
     background: #f7f7f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+
   .login-card {
     width: 100%;
-    max-width: 900px; /* más ancho que antes */
+    max-width: 600px;
     border-radius: 16px;
+    padding: 32px;
   }
 
-  /* Títulos grandes y adaptativos */
-  h1, h2 {
-    font-weight: 700;
-    line-height: 1.2;
-  }
   h1 {
-    font-size: clamp(28px, 7vw, 44px);
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 24px;
   }
+
   h2 {
-    font-size: clamp(24px, 6vw, 38px);
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 24px;
+    text-align: center;
   }
 
-  /* Etiquetas e inputs grandes */
   .form-label {
-    font-size: clamp(18px, 4.8vw, 24px);
-  }
-  .form-control-lg {
-    font-size: clamp(18px, 4.8vw, 24px);
-    padding: 1.1rem 1.25rem;
-    height: auto; /* evita que se quede chico */
+    font-size: 20px;
+    margin-bottom: 8px;
   }
 
-  /* Botón bien grande */
+  .form-control-lg {
+    font-size: 20px;
+    padding: 14px 18px;
+    height: auto;
+  }
+
   .btn-lg {
-    font-size: clamp(18px, 5vw, 26px);
-    padding: 1.1rem 1.25rem;
+    font-size: 22px;
+    padding: 14px 18px;
     border-radius: 12px;
   }
 
-  /* Texto auxiliar más visible */
   .text-small {
-    font-size: clamp(16px, 4.5vw, 22px);
+    font-size: 18px;
   }
 </style>
 
 <div class="container-fluid p-0">
-  <div class="login-wrap d-flex align-items-center justify-content-center">
-    <div class="col-12 px-3">
-      <h1 class="text-center text-success mb-3">Última corrección</h1>
+  <div class="login-wrap">
+    <div class="col-12">
+      <h1 class="text-center text-success">Última corrección</h1>
 
-      <div class="card login-card shadow p-4 mb-4 bg-white">
-        <h2 class="text-center mb-4">Iniciar sesión</h2>
+      <div class="card login-card shadow bg-white">
+        <h2>Iniciar sesión</h2>
 
         <form id="form-login">
           <div class="mb-4">
@@ -78,7 +82,7 @@
           <button type="submit" class="btn btn-primary btn-lg w-100">Iniciar sesión</button>
 
           <p class="text-center mt-4 mb-0 text-small">
-            ¿No tienes cuenta...? <a href="register.html" class="text-primary">Regístrate</a>
+            ¿...No tienes cuenta? <a href="register.html" class="text-primary">Regístrate</a>
           </p>
           <p id="mensaje-login" class="text-center mt-3 text-small"></p>
         </form>
