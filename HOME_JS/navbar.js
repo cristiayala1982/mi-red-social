@@ -71,8 +71,37 @@ export async function cargarDatosNavbar() {
   }
 }
 
+// 🚀 Ejecutar al cargar la página con delay
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    cargarDatosNavbar();
+  }, 300); // ⏱ espera 300ms para que la cookie esté lista
+});
+// 👉 Actualizar badge de mensajes no leídos
+export async function actualizarBadgeMensajes() {
+  try {
+    const res = await fetch(`${API_URL}/api/chats/noLeidos/count`, {
+      credentials: "include"
+    });
+    const data = await res.json();
 
-/*document.addEventListener("DOMContentLoaded", () => {
+    const badge = document.getElementById("badge-mensajes");
+    if (!badge) return;
+
+    if (data.success && data.total > 0) {
+      badge.textContent = data.total;
+      badge.style.display = "inline-block";
+      badge.classList.add("bg-danger"); // rojo
+    } else {
+      badge.style.display = "none";
+    }
+  } catch (error) {
+    console.error("❌ Error al actualizar badge:", error);
+  }
+}
+
+// 🚀 Ejecutar al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     cargarDatosNavbar();
     actualizarBadgeMensajes(); // refresca badge al cargar
@@ -80,14 +109,9 @@ export async function cargarDatosNavbar() {
 
   // refrescar cada 30 segundos
   setInterval(actualizarBadgeMensajes, 30000);
-});*/
-
-// 🚀 Ejecutar al cargar la página con delay
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    cargarDatosNavbar();
-  }, 300); // ⏱ espera 300ms para que la cookie esté lista
 });
+
+
 
 
 
