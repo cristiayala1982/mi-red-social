@@ -270,15 +270,16 @@ function inicializarPanelChats() {
   const cerrarBtn = panelChats.querySelector(".cerrar-panel");
 
   btnMensajes.addEventListener("click", () => {
-    panelChats.classList.remove("oculto"); // abre el panel lateral
+    panelChats.classList.add("visible"); // abre el panel lateral con animación
     cargarChats();
     actualizarBadgeMensajes(); // refresca badge al abrir
   });
 
   cerrarBtn.addEventListener("click", () => {
-    panelChats.classList.add("oculto"); // cierra el panel lateral
+    panelChats.classList.remove("visible"); // cierra el panel lateral
   });
 }
+
 
 
 // 🚀 Inicialización única
@@ -293,6 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
 
 
 
