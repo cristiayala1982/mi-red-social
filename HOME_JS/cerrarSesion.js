@@ -6,7 +6,7 @@ function configurarCerrarSesion() {
   enlaceCerrarSesion.addEventListener("click", async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/api/usuario/logout", {
+      const res = await fetch(`${API_URL}/api/usuario/logout`, {
         method: "POST",
         credentials: "include"
       });
@@ -57,4 +57,5 @@ function mostrarNotificacion(mensaje) {
 
 // Ejecutar al cargar la página
 configurarCerrarSesion();
+
 
