@@ -1,3 +1,4 @@
+const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 // 🚪 Lógica de cerrar sesión con confirmación
 function configurarCerrarSesion() {
   const enlaceCerrarSesion = document.querySelector(".dropdown-menu a[href='#']");
@@ -57,5 +58,6 @@ function mostrarNotificacion(mensaje) {
 
 // Ejecutar al cargar la página
 configurarCerrarSesion();
+
 
 
