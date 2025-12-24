@@ -237,6 +237,109 @@ function renderPublicacion(pub) {
   // ✅ Un solo return al final
   return div;
 }
+
+/*function renderPublicacion(pub) {
+  const div = document.createElement("div");
+  div.className = "publicacion";
+
+  // Foto del autor
+  const autorFoto = pub.autor_foto
+    ? (pub.autor_foto.startsWith("http")
+        ? pub.autor_foto
+        : `${API_URL}/uploads/${pub.autor_foto}`)
+    : "img/usuario-camara.png";
+
+  div.innerHTML = `
+    <div class="d-flex align-items-center gap-2 mb-2">
+      <img src="${autorFoto}" alt="perfil" class="perfil-foto">
+      <div>
+        <strong>${pub.autor_nombre || "Usuario"}</strong>
+        <br><small class="text-muted">${tiempoRelativo(pub.fecha_publicacion)}</small>
+      </div>
+      ${pub.usuario_id === window.miUsuarioId
+        ? `<i class="fa fa-trash cursor-pointer btn-eliminar" data-id="${pub.id}" title="Eliminar publicación"></i>`
+        : `<i class="fa fa-eye-slash text-muted cursor-pointer btn-ocultar" data-id="${pub.id}" title="Ocultar publicación"></i>`}
+    </div>
+  `;
+
+  // Imagen de la publicación
+  if (pub.imagen) {
+    const img = document.createElement("img");
+    img.src = pub.imagen.startsWith("http")
+      ? pub.imagen
+      : `${API_URL}/uploads/${pub.imagen}`;
+    img.alt = "foto";
+    img.className = "publicacion-imagen";
+    div.appendChild(img);
+  }
+
+  // Texto
+  if (pub.descripcion) {
+    const texto = document.createElement("p");
+    texto.className = "mb-1";
+    texto.textContent = pub.descripcion;
+    div.appendChild(texto);
+  }
+
+  // Bloque de comentarios
+  const formComentario = document.createElement("div");
+  formComentario.className = "form-comentario mt-2";
+
+  const input = document.createElement("input");
+  input.id = `input-comentario-${pub.id}`;
+  input.type = "text";
+  input.className = "form-control";
+  input.placeholder = "Escribe un comentario...";
+  input.required = true;
+
+  const boton = document.createElement("button");
+  boton.type = "button";
+  boton.className = "btn btn-primary";
+  boton.textContent = "Comentar";
+  boton.onclick = () => enviarComentario(pub.id);
+
+  formComentario.appendChild(input);
+  formComentario.appendChild(boton);
+  div.appendChild(formComentario);
+
+  // Contenedor de comentarios
+  const listaComentarios = document.createElement("div");
+  listaComentarios.className = "lista-comentarios mt-2";
+  listaComentarios.id = `comentarios-${pub.id}`;
+  div.appendChild(listaComentarios);
+
+  // Listeners
+  const btnEliminar = div.querySelector(".btn-eliminar");
+  if (btnEliminar) {
+    btnEliminar.addEventListener("click", async () => {
+      if (!confirm("¿Seguro que quieres eliminar esta publicación?")) return;
+      try {
+        const res = await fetch(`${API_URL}/api/publicaciones/${pub.id}`, {
+          method: "DELETE",
+          credentials: "include"
+        });
+        const data = await res.json();
+        if (data.success) div.remove();
+        else alert("⚠️ No se pudo eliminar la publicación");
+      } catch (err) {
+        console.error("❌ Error al eliminar publicación:", err);
+      }
+    });
+  }
+
+  const btnOcultar = div.querySelector(".btn-ocultar");
+  if (btnOcultar) {
+    btnOcultar.addEventListener("click", () => {
+      div.style.display = "none";
+    });
+  }
+
+  // Cargar comentarios
+  cargarComentarios(pub.id);
+
+  // ✅ Un solo return al final
+  return div;
+}
   // Bloque de comentarios (con createElement para mejor control)
   const formComentario = document.createElement("div");
   formComentario.className = "form-comentario mt-2";
@@ -292,7 +395,7 @@ function renderPublicacion(pub) {
 
   cargarComentarios(pub.id);
   return div;
-}
+}*/
 // 💬 Listar comentarios de una publicación
 /*async function cargarComentarios(publicacionId) {
   try {
@@ -489,6 +592,7 @@ function tiempoRelativo(fechaISO) {
   const diffDias = Math.floor(diffHoras / 24);
   return `subida hace ${diffDias} días`;
 }
+
 
 
 
