@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
   </head>
   <body>
-<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
+<!--<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
   <div class="row w-100 justify-content-center">
     <div class="col-12 col-sm-11 col-md-9 col-lg-7 col-xl-6">
       <h1 class="text-center text-success mb-4">Última corrección</h1>
@@ -32,7 +32,39 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->
+        <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow p-3 mb-5 bg-white rounded">
+                    <h1 class="text-center mb-4">Iniciar sesión</h1>
+                    <form id="form-login">
+                        <div class="mb-4">
+                          <label for="usuario-login" class="form-label fs-4">Usuario</label>
+                          <input type="text" class="form-control form-control-lg" id="usuario-login"
+                          placeholder="name1982" autocomplete="username" required>
+                        </div>
+                        <div class="mb-4">
+                          <label for="password-login" class="form-label fs-4">Contraseña</label>
+                          <input type="password" class="form-control form-control-lg" id="password-login"
+                          placeholder="1234" autocomplete="current-password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Crea tu password</label>
+                            <input type="password" class="form-control" id="password" placeholder="1234"
+                                autocomplete="current-password">
+                            <p id="mensajePassword"></p>
+                        </div>
+                          <button type="submit" class="btn btn-primary btn-lg w-100 fs-4">Iniciar sesión</button>
+                          <p class="text-center mt-4 fs-5">
+                            ¿No tienes cuenta? <a href="register.html" class="text-primary">Regístrate</a>
+                          </p>
+                          <p id="mensaje-login" class="text-center mt-3 fs-5"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 <script>  
         const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
         const formLogin = document.getElementById('form-login');
