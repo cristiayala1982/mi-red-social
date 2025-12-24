@@ -79,10 +79,8 @@ btnPublicar.addEventListener("click", async () => {
   // 5) Cargar publicaciones al inicio
   cargarPublicaciones();
 });
-
 // 📦 Listar publicaciones
-// 📦 Listar publicaciones
-async function cargarPublicaciones() {
+/*async function cargarPublicaciones() {
   try {
     const res = await fetch(`${API_URL}/api/publicaciones`, { credentials: "include" });
     const data = await res.json();
@@ -136,7 +134,53 @@ function renderPublicacion(pub) {
     texto.className = "mb-1";
     texto.textContent = pub.descripcion;
     div.appendChild(texto);
+  }*/
+function renderPublicacion(pub) {
+  const div = document.createElement("div");
+  div.className = "publicacion";
+
+  // ✅ Foto del autor
+  const autorFoto = pub.autor_foto
+    ? (pub.autor_foto.startsWith("http")
+        ? pub.autor_foto
+        : `${API_URL}/uploads/${pub.autor_foto}`)
+    : "img/usuario-camara.png";
+
+  div.innerHTML = `
+    <div class="d-flex align-items-center gap-2 mb-2">
+      <img src="${autorFoto}" alt="perfil" class="perfil-foto">
+      <div>
+        <strong>${pub.autor_nombre || "Usuario"}</strong>
+        <br><small class="text-muted">${tiempoRelativo(pub.fecha_publicacion)}</small>
+      </div>
+      ${pub.usuario_id === window.miUsuarioId
+        ? `<i class="fa fa-trash cursor-pointer btn-eliminar" data-id="${pub.id}" title="Eliminar publicación"></i>`
+        : `<i class="fa fa-eye-slash text-muted cursor-pointer btn-ocultar" data-id="${pub.id}" title="Ocultar publicación"></i>`}
+    </div>
+  `;
+
+  // ✅ Imagen de la publicación
+  if (pub.imagen) {
+    const img = document.createElement("img");
+    img.src = pub.imagen.startsWith("http")
+      ? pub.imagen
+      : `${API_URL}/uploads/${pub.imagen}`;
+    img.alt = "foto";
+    img.className = "publicacion-imagen";
+    div.appendChild(img);
   }
+
+  // Texto
+  if (pub.descripcion) {
+    const texto = document.createElement("p");
+    texto.className = "mb-1";
+    texto.textContent = pub.descripcion;
+    div.appendChild(texto);
+  }
+
+  return div;
+}
+
 
   // Bloque de comentarios (con createElement para mejor control)
   const formComentario = document.createElement("div");
@@ -195,7 +239,7 @@ function renderPublicacion(pub) {
   return div;
 }
 // 💬 Listar comentarios de una publicación
-async function cargarComentarios(publicacionId) {
+/*async function cargarComentarios(publicacionId) {
   try {
     const res = await fetch(`${API_URL}/api/comentarios?publicacion_id=${publicacionId}`, {
       credentials: "include"
@@ -294,7 +338,85 @@ async function enviarComentario(publicacionId) {
   } catch (err) {
     console.error("❌ Error al enviar comentario:", err);
   }
+}*/
+// 💬 Listar comentarios de una publicación
+async function cargarComentarios(publicacionId) {
+  try {
+    const res = await fetch(`${API_URL}/api/comentarios?publicacion_id=${publicacionId}`, {
+      credentials: "include"
+    });
+    const data = await res.json();
+
+    const contenedor = document.getElementById(`comentarios-${publicacionId}`);
+    contenedor.innerHTML = "";
+
+    if (data.success && Array.isArray(data.comentarios)) {
+      data.comentarios.forEach(c => {
+        // ✅ Corrección: si la foto ya es URL completa, usarla tal cual
+        const foto = c.foto_perfil
+          ? (c.foto_perfil.startsWith("http")
+              ? c.foto_perfil
+              : `${API_URL}/uploads/${c.foto_perfil}`)
+          : "img/usuario-camara.png";
+
+        const comentarioDiv = document.createElement("div");
+        comentarioDiv.className = "comentario mb-1";
+
+        comentarioDiv.innerHTML = `
+          <div class="comentario-cuerpo">
+            <img src="${foto}" alt="perfil" class="comentario-foto">
+            <div class="comentario-contenido">
+              <div class="comentario-header">
+                <strong>${c.autor_nombre || "Usuario"}</strong>
+                <small>${tiempoRelativo(c.fecha_comentario)}</small>
+              </div>
+              <p class="comentario-texto">${c.texto}</p>
+            </div>
+            ${c.usuario_id === window.miUsuarioId
+              ? `<i class="fa fa-trash cursor-pointer btn-eliminar-comentario" data-id="${c.id}" title="Eliminar comentario"></i>`
+              : `<i class="fa fa-eye-slash cursor-pointer btn-ocultar-comentario" data-id="${c.id}" title="Ocultar comentario"></i>`}
+          </div>
+        `;
+
+        // Listener para eliminar comentario
+        const btnEliminar = comentarioDiv.querySelector(".btn-eliminar-comentario");
+        if (btnEliminar) {
+          btnEliminar.addEventListener("click", async () => {
+            if (!confirm("¿Seguro que quieres eliminar este comentario?")) return;
+            const comentarioId = btnEliminar.dataset.id;
+            try {
+              const res = await fetch(`${API_URL}/api/comentarios/${comentarioId}`, {
+                method: "DELETE",
+                credentials: "include"
+              });
+              const data = await res.json();
+              if (data.success) {
+                comentarioDiv.remove();
+              } else {
+                alert("⚠️ No se pudo eliminar el comentario");
+              }
+            } catch (err) {
+              console.error("❌ Error al eliminar comentario:", err);
+            }
+          });
+        }
+
+        // Listener para ocultar comentario
+        const btnOcultar = comentarioDiv.querySelector(".btn-ocultar-comentario");
+        if (btnOcultar) {
+          btnOcultar.addEventListener("click", () => {
+            comentarioDiv.style.display = "none";
+          });
+        }
+
+        contenedor.appendChild(comentarioDiv);
+      });
+    }
+  } catch (err) {
+    console.error("❌ Error al listar comentarios:", err);
+  }
 }
+
 
 // Exponer función al ámbito global para onclick en HTML
 window.enviarComentario = enviarComentario;
@@ -312,5 +434,6 @@ function tiempoRelativo(fechaISO) {
   const diffDias = Math.floor(diffHoras / 24);
   return `subida hace ${diffDias} días`;
 }
+
 
 
