@@ -614,7 +614,7 @@ function renderPublicacion(pub) {
   const div = document.createElement("div");
   div.className = "publicacion";
 
-  // Foto del autor
+  // Foto del autor (http vs uploads)
   const autorFoto = pub.autor_foto
     ? (pub.autor_foto.startsWith("http")
         ? pub.autor_foto
@@ -653,7 +653,7 @@ function renderPublicacion(pub) {
     div.appendChild(texto);
   }
 
-  // Bloque de comentarios
+  // Form comentario
   const formComentario = document.createElement("div");
   formComentario.className = "form-comentario mt-2";
 
@@ -680,7 +680,7 @@ function renderPublicacion(pub) {
   listaComentarios.id = `comentarios-${pub.id}`;
   div.appendChild(listaComentarios);
 
-  // Listeners
+  // Listeners publicación
   const btnEliminar = div.querySelector(".btn-eliminar");
   if (btnEliminar) {
     btnEliminar.addEventListener("click", async () => {
@@ -706,7 +706,9 @@ function renderPublicacion(pub) {
     });
   }
 
+  // Cargar comentarios de esta publicación
   cargarComentarios(pub.id);
+
   return div;
 }
 
@@ -717,6 +719,7 @@ async function cargarComentarios(publicacionId) {
       credentials: "include"
     });
     const data = await res.json();
+    console.log("Comentarios recibidos:", publicacionId, data); // debug
 
     const contenedor = document.getElementById(`comentarios-${publicacionId}`);
     if (!contenedor) return;
@@ -799,6 +802,7 @@ async function enviarComentario(publicacionId) {
     });
 
     const data = await res.json();
+    console.log("Comentario enviado:", data); // debug
 
     if (data.success) {
       input.value = "";
@@ -816,9 +820,13 @@ async function cargarPublicaciones() {
   try {
     const res = await fetch(`${API_URL}/api/publicaciones`, { credentials: "include" });
     const data = await res.json();
+    console.log("Publicaciones recibidas:", data); // debug
 
     const contenedor = document.getElementById("lista-publicaciones");
-    if (!contenedor) return;
+    if (!contenedor) {
+      console.warn("No existe #lista-publicaciones en el HTML");
+      return;
+    }
     contenedor.innerHTML = "";
 
     if (data.success && Array.isArray(data.publicaciones)) {
@@ -826,6 +834,8 @@ async function cargarPublicaciones() {
         const div = renderPublicacion(pub);
         contenedor.appendChild(div);
       });
+    } else {
+      contenedor.innerHTML = "<p class='text-muted'>No hay publicaciones todavía.</p>";
     }
   } catch (err) {
     console.error("❌ Error al listar publicaciones:", err);
@@ -835,10 +845,92 @@ async function cargarPublicaciones() {
 // ---------- Exponer funciones globales ----------
 window.cargarPublicaciones = cargarPublicaciones;
 window.cargarComentarios = cargarComentarios;
-window.enviarComentario
+window.enviarComentario = enviarComentario;
 
+// ---------- Inicio ----------
+document.addEventListener("DOMContentLoaded", async () => {
+  const descripcion = document.getElementById("descripcion");
+  const imagenInput = document.getElementById("imagen");
+  const preview = document.getElementById("preview-imagen");
+  const btnPublicar = document.getElementById("btn-publicar");
+  const btnCancelar = document.getElementById("btn-cancelar");
+  const perfilAutor = document.getElementById("perfil-autor");
 
+  // Mis datos
+  try {
+    const meRes = await fetch(`${API_URL}/api/usuarios/mis-datos`, { credentials: "include" });
+    const meData = await meRes.json();
+    window.miUsuarioId = meData?.usuario?.id;
+    const foto = meData?.usuario?.foto_perfil;
+    if (perfilAutor) {
+      perfilAutor.src = foto
+        ? (foto.startsWith("http") ? foto : `${API_URL}/uploads/${foto}`)
+        : "img/usuario-camara.png";
+    }
+    console.log("Usuario logueado:", window.miUsuarioId);
+  } catch (e) {
+    console.warn("No se pudo cargar mis datos");
+  }
 
+  // Preview
+  if (imagenInput && preview) {
+    imagenInput.addEventListener("change", () => {
+      const file = imagenInput.files?.[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+      } else {
+        preview.style.display = "none";
+      }
+    });
+  }
 
+  // Publicar
+  if (btnPublicar && descripcion) {
+    btnPublicar.addEventListener("click", async () => {
+      const imagen = imagenInput?.files?.[0];
+      const texto = descripcion.value.trim();
 
+      if (!imagen && !texto) {
+        alert("Debes escribir un comentario o subir una imagen.");
+        return;
+      }
 
+      const formData = new FormData();
+      formData.append("descripcion", texto);
+      if (imagen) formData.append("imagen", imagen);
+
+      try {
+        const res = await fetch(`${API_URL}/api/publicaciones`, {
+          method: "POST",
+          body: formData,
+          credentials: "include"
+        });
+        const data = await res.json();
+        console.log("Publicación creada:", data); // debug
+        if (data.success) {
+          descripcion.value = "";
+          if (imagenInput) imagenInput.value = "";
+          if (preview) preview.style.display = "none";
+          cargarPublicaciones();
+        } else {
+          alert("⚠️ Error al crear publicación: " + data.message);
+        }
+      } catch (err) {
+        console.error("❌ Error al publicar:", err);
+      }
+    });
+  }
+
+  // Cancelar
+  if (btnCancelar && descripcion && imagenInput && preview) {
+    btnCancelar.addEventListener("click", () => {
+      descripcion.value = "";
+      imagenInput.value = "";
+      preview.style.display = "none";
+    });
+  }
+
+  // Cargar publicaciones al inicio
+  cargarPublicaciones();
+});
