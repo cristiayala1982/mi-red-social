@@ -1,3 +1,5 @@
+const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
+
 document.addEventListener("DOMContentLoaded", async () => {
   const descripcion = document.getElementById("descripcion");
   const imagenInput = document.getElementById("imagen");
@@ -8,10 +10,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 1) Cargar foto del usuario logueado en el bloque de publicación
   try {
-    const meRes = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/usuarios/mis-datos", { credentials: "include" });
+    const meRes = await fetch(`${API_URL}/api/usuarios/mis-datos`, { credentials: "include" });
     const meData = await meRes.json();
     const foto = meData?.usuario?.foto_perfil;
-    perfilAutor.src = foto ? `http://localhost:3000/uploads/${foto}` : "img/usuario-camara.png";
+    perfilAutor.src = foto ? `${API_URL}/uploads/${foto}` : "img/usuario-camara.png";
     // 👇 Guardar el id del usuario logueado
     window.miUsuarioId = meData?.usuario?.id;
     console.log("Usuario logueado:", window.miUsuarioId); // debug
@@ -46,7 +48,7 @@ btnPublicar.addEventListener("click", async () => {
   if (imagen) formData.append("imagen", imagen); // 👈 solo si existe
 
   try {
-    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/publicaciones", {
+    const res = await fetch(`${API_URL}/api/publicaciones`, {
       method: "POST",
       body: formData,
       credentials: "include"
@@ -82,7 +84,7 @@ btnPublicar.addEventListener("click", async () => {
 // 📦 Listar publicaciones
 async function cargarPublicaciones() {
   try {
-    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/publicaciones", { credentials: "include" });
+    const res = await fetch(`${API_URL}/api/publicaciones`, { credentials: "include" });
     const data = await res.json();
 
     const contenedor = document.getElementById("lista-publicaciones");
@@ -107,7 +109,7 @@ function renderPublicacion(pub) {
   // Cabecera (autor + fecha + icono)
   div.innerHTML = `
     <div class="d-flex align-items-center gap-2 mb-2">
-      <img src="http://localhost:3000/uploads/${pub.autor_foto || "usuario-camara.png"}" 
+      <img src=`${API_URL}/uploads/${pub.autor_foto || "usuario-camara.png"}`
            alt="perfil" class="perfil-foto">
       <div>
         <strong>${pub.autor_nombre || "Usuario"}</strong>
@@ -122,7 +124,7 @@ function renderPublicacion(pub) {
   // Imagen (solo si existe)
   if (pub.imagen) {
     const img = document.createElement("img");
-    img.src = `http://localhost:3000/uploads/${pub.imagen}`;
+    img.src = `${API_URL}/uploads/${pub.imagen}`;
     img.alt = "foto";
     img.className = "publicacion-imagen";
     div.appendChild(img);
@@ -169,7 +171,7 @@ function renderPublicacion(pub) {
     btnEliminar.addEventListener("click", async () => {
       if (!confirm("¿Seguro que quieres eliminar esta publicación?")) return;
       try {
-        const res = await fetch(`https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/publicaciones/${pub.id}`, {
+        const res = await fetch(`${API_URL}/api/publicaciones/${pub.id}`, {
           method: "DELETE",
           credentials: "include"
         });
@@ -195,7 +197,7 @@ function renderPublicacion(pub) {
 // 💬 Listar comentarios de una publicación
 async function cargarComentarios(publicacionId) {
   try {
-    const res = await fetch(`https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/comentarios?publicacion_id=${publicacionId}`, {
+    const res = await fetch(`${API_URL}/api/comentarios?publicacion_id=${publicacionId}`, {
       credentials: "include"
     });
     const data = await res.json();
@@ -206,7 +208,7 @@ async function cargarComentarios(publicacionId) {
     if (data.success && Array.isArray(data.comentarios)) {
       data.comentarios.forEach(c => {
         const foto = c.foto_perfil
-          ? `http://localhost:3000/uploads/${c.foto_perfil}`
+          ? `${API_URL}/uploads/${c.foto_perfil}`
           : "img/usuario-camara.png";
 
         const comentarioDiv = document.createElement("div");
@@ -235,7 +237,7 @@ async function cargarComentarios(publicacionId) {
             if (!confirm("¿Seguro que quieres eliminar este comentario?")) return;
             const comentarioId = btnEliminar.dataset.id;
             try {
-              const res = await fetch(`https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/comentarios/${comentarioId}`, {
+              const res = await fetch(`${API_URL}/api/comentarios/${comentarioId}`, {
                 method: "DELETE",
                 credentials: "include"
               });
@@ -274,7 +276,7 @@ async function enviarComentario(publicacionId) {
   try {
     console.log({ publicacion_id: publicacionId, texto });
 
-    const res = await fetch("https://phonic-odyssey-480319-a4.rj.r.appspot.com/api/comentarios", {
+    const res = await fetch(`${API_URL}/api/comentarios`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -310,4 +312,5 @@ function tiempoRelativo(fechaISO) {
   const diffDias = Math.floor(diffHoras / 24);
   return `subida hace ${diffDias} días`;
 }
+
 
