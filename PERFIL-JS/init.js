@@ -32,33 +32,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 🤳 Configurar cámara para selfie
   configurarSelfieCamara();
 
-  // 🔍 Buscador de usuarios (solo si existe en el HTML)
- /* const formBusqueda = document.getElementById('form-busqueda');
-  const inputBusqueda = document.getElementById('input-busqueda');
 
-  if (formBusqueda && inputBusqueda) {
-    formBusqueda.addEventListener('submit', async e => {
-      e.preventDefault();
-      const query = inputBusqueda.value.trim();
-      if (!query) return;
 
-      try {
-        const res = await fetch(`${API_URL}/api/usuarios/buscar?nombre=${encodeURIComponent(query)}`, {
-          credentials: "include" // 👈 importante para que viaje la cookie
-        });
-        const data = await res.json();
-
-        if (data.success && data.resultados.length > 0) {
-          console.log('👤 Usuarios encontrados:', data.resultados);
-        } else {
-          console.log('⚠️ No se encontraron usuarios');
-        }
-      } catch (error) {
-        console.error('❌ Error al buscar usuarios', error);
-      }
-    });
-  }
-});*/
 
 
 
