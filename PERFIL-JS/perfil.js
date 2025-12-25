@@ -131,28 +131,39 @@ export async function enviarImagenAlBackend(imagenBlob) {
 }
 
 //ELIMINAR TODOS LOS DATOS DEL USUARIO
-export document.getElementById("eliminar-usuario")?.addEventListener("click", async () => {
-  console.log("Botón clickeado"); // 👈 debug
-  if (!confirm("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.")) return;
-
-  try {
-    const res = await fetch(`${API_URL}/api/usuario/eliminar`, {
-      method: "DELETE",
-      credentials: "include"
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      alert("✅ Tu cuenta fue eliminada correctamente.");
-      window.location.href = "index.html";
-    } else {
-      alert(`⚠️ Error: ${data.message}`);
-    }
-  } catch (err) {
-    console.error("❌ Error al eliminar usuario:", err);
-    alert("❌ No se pudo eliminar tu cuenta. Intenta de nuevo.");
+// perfil.js
+export function configurarEliminarUsuario() {
+  const btnEliminar = document.getElementById("eliminar-usuario");
+  if (!btnEliminar) {
+    console.error("❌ No se encontró el botón eliminar-usuario en el DOM");
+    return;
   }
-});
+
+  btnEliminar.addEventListener("click", async () => {
+    console.log("Botón clickeado"); // debug
+    if (!confirm("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.")) return;
+
+    try {
+      const res = await fetch(`${API_URL}/api/usuario/eliminar`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        alert("✅ Tu cuenta fue eliminada correctamente.");
+        window.location.href = "index.html";
+      } else {
+        alert(`⚠️ Error: ${data.message}`);
+      }
+    } catch (err) {
+      console.error("❌ Error al eliminar usuario:", err);
+      alert("❌ No se pudo eliminar tu cuenta. Intenta de nuevo.");
+    }
+  });
+}
+
+
 
 
 
