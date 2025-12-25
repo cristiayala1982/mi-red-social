@@ -1,456 +1,140 @@
-/* 🌐 Barra de navegación - Estilos base (Desktop First) */
+/* --- Estilos Base (Desktop) --- */
 .app-navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #007bff;
-  padding: 16px 30px;
-  border-bottom: 2px solid #0056b3;
+  padding: 8px 20px; /* Reducido para que sea menos alta */
   font-family: 'Segoe UI', sans-serif;
   color: white;
-  position: relative;
-  z-index: 100;
-  gap: 20px; /* Espacio entre elementos */
+  gap: 15px;
+  flex-wrap: nowrap;
 }
 
-/* 🔷 Logo + bienvenida */
 .app-navbar-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-shrink: 0; /* Evita que el logo se encoja */
-}
-
-.app-navbar-logo img {
-  width: 48px;
-  height: 48px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .bienvenida-texto {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 500;
-  color: white;
-  white-space: nowrap; /* Evita que el texto de bienvenida se rompa */
 }
 
-/* 🔍 Buscador */
+/* Buscador Desktop */
 .buscador-usuarios {
   display: flex;
   align-items: center;
   background: white;
-  border-radius: 30px;
-  padding: 8px 16px;
-  max-width: 400px; /* Limita el ancho en desktop */
-  flex: 1; /* Permite que el buscador crezca */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border-radius: 20px;
+  padding: 5px 15px;
+  flex: 1;
+  max-width: 400px;
   position: relative;
-  z-index: 10;
 }
 
 .buscador-usuarios input {
   border: none;
   outline: none;
-  flex: 1;
-  font-size: 16px;
-  background: transparent;
+  width: 100%;
+  padding: 5px;
 }
 
-.icono-lupa {
-  font-size: 20px;
-  color: #555;
-  margin-right: 10px;
-}
+.icono-lupa { color: #555; margin-right: 5px; }
 
-/* 🧑‍🤝‍🧑 Íconos de mensajes y amigos */
-.nav-icons {
+/* Contenedor Derecha */
+.nav-right-section {
   display: flex;
-  gap: 20px;
-  flex-shrink: 0; /* Evita que los iconos se encojan */
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
 }
+
+.nav-icons { display: flex; gap: 12px; }
 
 .icono-btn {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   color: white;
   cursor: pointer;
-  transition: transform 0.2s ease;
-  position: relative; /* Para posicionar el badge */
-}
-
-.icono-btn:hover {
-  transform: scale(1.2);
-}
-
-/* 👤 Foto de perfil con menú */
-.perfil-menu {
-  position: relative;
-  flex-shrink: 0; /* Evita que la foto de perfil se encoja */
 }
 
 .perfil-icono-nav {
-  width: 48px;
-  height: 48px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  object-fit: cover;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.3s ease;
   border: 2px solid white;
+  object-fit: cover;
 }
 
-.perfil-icono-nav:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(255,255,255,0.6);
-}
-
-/* 📂 Menú desplegable */
-.perfil-menu .dropdown-menu {
+/* Dropdown */
+.perfil-menu { position: relative; }
+.dropdown-menu {
   display: none;
   position: absolute;
-  right: 0;
-  top: 110%;
+  right: 0; top: 110%;
   background: white;
-  border: 1px solid #ddd;
   border-radius: 8px;
   list-style: none;
   padding: 5px 0;
-  margin: 0;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  min-width: 160px;
-  z-index: 1000;
-}
-
-.perfil-menu .dropdown-menu li a {
-  display: block;
-  padding: 10px 16px;
-  text-decoration: none;
-  color: #333;
-  font-size: 15px;
-}
-
-.perfil-menu .dropdown-menu li a:hover {
-  background: #f1f1f1;
-}
-
-.perfil-menu:hover .dropdown-menu {
-  display: block;
-}
-
-/* 📷 Icono de cámara (si es parte del perfil) */
-.icono-camara-overlay { /* Asegúrate de que esto se aplique donde deba */
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  background-color: rgba(0, 123, 255, 0.85);
-  color: white;
-  font-size: 22px;
-  padding: 8px;
-  border-radius: 50%;
-  box-shadow: 0 0 6px rgba(0,0,0,0.2);
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  z-index: 10;
-  display: none; /* Por defecto oculto */
-}
-
-.circulo-perfil:hover .icono-camara-overlay {
-  display: block;
-  transform: scale(1.1);
-}
-
-/* 🎞 Menú de opciones sobre la imagen */
-.overlay-camara-menu {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: none;
-  gap: 10px;
-  background-color: rgba(255,255,255,0.95);
-  padding: 8px 12px;
-  border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  z-index: 10;
-  opacity: 0;
-  animation: fadeZoom 0.3s ease forwards;
-}
-
-.overlay-camara-menu.visible {
-  display: flex;
-  opacity: 1;
-}
-
-.overlay-camara-menu button {
-  font-size: 14px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.overlay-camara-menu button:hover {
-  background-color: #e2e6ea;
-}
-
-/* ✨ Animación de entrada */
-@keyframes fadeZoom {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-/* 🧑 Foto de perfil en navbar (no estoy seguro si esta clase se usa o es .perfil-icono-nav) */
-/* Si "perfil-navbar" se usa, se aplicará esto. Si no, se ignorará. */
-.perfil-navbar {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #fff;
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-}
-
-.perfil-navbar:hover {
-  transform: scale(1.15);
-  border-color: violet;
-  box-shadow: 0 0 12px violet;
-}
-
-/* 🔍 Autocompletado del buscador */
-.resultados-autocompletado {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  margin-top: 5px;
-  list-style: none;
-  padding: 0;
-  max-height: 220px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  min-width: 150px;
   z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.perfil-menu:hover .dropdown-menu { display: block; }
+.dropdown-menu li a {
+  display: block; padding: 10px;
+  color: #333; text-decoration: none;
 }
 
-.resultados-autocompletado li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.resultados-autocompletado li img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #eee;
-  margin-right: 8px;
-}
-
-.resultados-autocompletado li span {
-  flex: 1;
-  font-size: 15px;
-  color: #333;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.estado-indicador {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  align-self: center;
-}
-
-.estado-online {
-  background-color: #4caf50;
-}
-
-.estado-offline {
-  background-color: #f44336;
-}
-
-.resultados-autocompletado li:hover {
-  background: #f0f0f0;
-}
-
-/*numeritos de iconos*/
+/* Badge */
 .badge {
-  background: #d11a2a;
-  color: white;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 12px;
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  white-space: nowrap; /* Evita que el número se corte */
+  background: red; color: white;
+  font-size: 10px; padding: 2px 6px;
+  border-radius: 10px; position: absolute;
+  top: -5px; right: -5px;
 }
+.oculto { display: none; }
 
-/* 🔔 Badge del icono de mensajes */
-#badge-mensajes {
-  transition: transform 0.2s ease, background-color 0.3s ease;
-}
-
-#badge-mensajes.updated {
-  transform: scale(1.3);
-  background-color: #ff4444;
-}
-
-.oculto {
-  display: none;
-}
-
-
-/* --- MEDIA QUERIES OPTIMIZADAS --- */
-
-/* Tablet y pantallas medianas (hasta 992px) */
-@media (max-width: 992px) {
-  .app-navbar {
-    flex-wrap: wrap; /* Permite que los elementos bajen de línea */
-    justify-content: center; /* Centra los elementos */
-    padding: 12px 20px;
-    gap: 15px; /* Espacio entre elementos */
-  }
-
-  /* El buscador ocupará toda la línea inferior */
-  .buscador-usuarios {
-    order: 3; /* Asegura que el buscador vaya al final en el flujo flex */
-    flex-basis: 100%; /* Ocupa el 100% del espacio disponible */
-    max-width: 600px; /* Limita su ancho máximo incluso si ocupa el 100% */
-    margin-top: 10px; /* Espacio superior para separarlo */
-    padding: 8px 16px;
-  }
-
-  /* Aseguramos que el logo y los iconos mantengan un tamaño razonable */
-  .app-navbar-logo img,
-  .perfil-icono-nav {
-    width: 40px;
-    height: 40px;
-  }
-
-  .bienvenida-texto {
-    font-size: 1rem;
-  }
-
-  .icono-btn {
-    font-size: 20px;
-  }
-}
-
-/* Celular y pantallas pequeñas (hasta 768px) */
+/* --- RESPONSIVE: AJUSTE PARA MÓVILES --- */
 @media (max-width: 768px) {
   .app-navbar {
-    flex-direction: column; /* Apila los elementos verticalmente */
-    align-items: center; /* Centra los elementos */
+    flex-wrap: wrap; /* Permite que el buscador baje */
     padding: 10px 15px;
+    gap: 5px;
+  }
+
+  /* El logo se queda a la izquierda arriba */
+  .app-navbar-logo {
+    order: 1;
+    flex: 1;
+  }
+
+  /* Los iconos y perfil se quedan a la derecha arriba */
+  .nav-right-section {
+    order: 2;
     gap: 10px;
   }
 
-  .app-navbar-logo {
-    order: 1; /* Logo primero */
-    gap: 8px;
-    justify-content: center; /* Centra el logo y el texto de bienvenida */
-    width: 100%; /* Para que el centrado funcione bien */
-  }
-
-  .bienvenida-texto {
-    font-size: 0.95rem;
-  }
-
+  /* El buscador baja y ocupa todo el ancho */
   .buscador-usuarios {
-    order: 2; /* Buscador segundo */
-    width: 100%;
-    max-width: 90%; /* Ancho que deja un pequeño margen */
-    margin: 0; /* Elimina márgenes extra */
-    padding: 6px 12px;
-  }
-
-  .buscador-usuarios input {
-    font-size: 14px;
-  }
-
-  .icono-lupa {
-    font-size: 18px;
-    margin-right: 6px;
-  }
-
-  .nav-icons {
-    order: 3; /* Iconos tercero */
-    width: 100%; /* Para que los iconos se distribuyan */
-    justify-content: space-evenly; /* Distribuye los iconos uniformemente */
-    gap: 0; /* Eliminamos el gap si usamos space-evenly */
-    margin-top: 5px; /* Pequeño margen para separarlos del buscador */
-  }
-
-  .icono-btn {
-    font-size: 22px;
-  }
-
-  .perfil-menu {
-    order: 4; /* Perfil último */
+    order: 3;
+    flex-basis: 100%;
+    max-width: 100%;
     margin-top: 8px;
-  }
-
-  .perfil-icono-nav {
-    width: 36px;
-    height: 36px;
-  }
-}
-
-/* Celular muy pequeño (hasta 480px - un poco más abajo que tu 576px) */
-@media (max-width: 480px) {
-  .app-navbar {
-    padding: 8px 10px;
-    gap: 8px;
-  }
-
-  .app-navbar-logo img,
-  .perfil-icono-nav {
-    width: 32px;
-    height: 32px;
+    height: 35px;
   }
 
   .bienvenida-texto {
     font-size: 0.9rem;
   }
+}
 
-  .buscador-usuarios {
-    max-width: 95%; /* Un poco más ancho en móviles muy pequeños */
-    padding: 5px 10px;
-  }
-
-  .buscador-usuarios input {
-    font-size: 13px;
-  }
-
-  .icono-lupa {
-    font-size: 16px;
-  }
-
-  .nav-icons {
-    gap: 10px; /* Ajustamos el gap si no usamos space-evenly */
-  }
-
-  .icono-btn {
-    font-size: 20px;
-  }
+@media (max-width: 480px) {
+  .bienvenida-texto { display: none; } /* Ocultar saludo en pantallas muy pequeñas */
 }
 
 
