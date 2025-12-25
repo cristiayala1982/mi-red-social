@@ -132,6 +132,7 @@ export async function enviarImagenAlBackend(imagenBlob) {
 
 //ELIMINAR TODOS LOS DATOS DEL USUARIO
 document.getElementById("eliminar-usuario")?.addEventListener("click", async () => {
+  console.log("Botón clickeado"); // 👈 debug
   if (!confirm("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.")) return;
 
   try {
@@ -152,6 +153,7 @@ document.getElementById("eliminar-usuario")?.addEventListener("click", async () 
     alert("❌ No se pudo eliminar tu cuenta. Intenta de nuevo.");
   }
 });
+
 
 
 
