@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   configurarSelfieCamara();
 
   // 🔍 Buscador de usuarios (solo si existe en el HTML)
-  const formBusqueda = document.getElementById('form-busqueda');
+ /* const formBusqueda = document.getElementById('form-busqueda');
   const inputBusqueda = document.getElementById('input-busqueda');
 
   if (formBusqueda && inputBusqueda) {
@@ -58,7 +58,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
   }
-});
+});*/
+
 
 
 
