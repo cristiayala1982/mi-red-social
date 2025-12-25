@@ -10,7 +10,7 @@
   color: white;
   position: relative;
   z-index: 100;
-  gap: 20px; /* Añadimos un gap para mejor espaciado entre elementos */
+  gap: 20px; /* Espacio entre elementos */
 }
 
 /* 🔷 Logo + bienvenida */
@@ -40,8 +40,8 @@
   background: white;
   border-radius: 30px;
   padding: 8px 16px;
-  max-width: 400px; /* Mantenemos un max-width para que no sea excesivamente ancho en desktop */
-  flex: 1; /* Permite que el buscador crezca y ocupe el espacio disponible */
+  max-width: 400px; /* Limita el ancho en desktop */
+  flex: 1; /* Permite que el buscador crezca */
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   position: relative;
   z-index: 10;
@@ -75,6 +75,7 @@
   color: white;
   cursor: pointer;
   transition: transform 0.2s ease;
+  position: relative; /* Para posicionar el badge */
 }
 
 .icono-btn:hover {
@@ -135,8 +136,8 @@
   display: block;
 }
 
-/* 📷 Icono de cámara */
-.icono-camara-overlay {
+/* 📷 Icono de cámara (si es parte del perfil) */
+.icono-camara-overlay { /* Asegúrate de que esto se aplique donde deba */
   position: absolute;
   bottom: 12px;
   right: 12px;
@@ -149,7 +150,7 @@
   cursor: pointer;
   transition: transform 0.3s ease;
   z-index: 10;
-  display: none;
+  display: none; /* Por defecto oculto */
 }
 
 .circulo-perfil:hover .icono-camara-overlay {
@@ -204,7 +205,8 @@
   }
 }
 
-/* 🧑 Foto de perfil en navbar */
+/* 🧑 Foto de perfil en navbar (no estoy seguro si esta clase se usa o es .perfil-icono-nav) */
+/* Si "perfil-navbar" se usa, se aplicará esto. Si no, se ignorará. */
 .perfil-navbar {
   width: 50px;
   height: 50px;
@@ -287,6 +289,8 @@
 .resultados-autocompletado li:hover {
   background: #f0f0f0;
 }
+
+/*numeritos de iconos*/
 .badge {
   background: #d11a2a;
   color: white;
@@ -296,9 +300,9 @@
   position: absolute;
   top: -5px;
   right: -5px;
+  white-space: nowrap; /* Evita que el número se corte */
 }
 
-/*numeritos de iconos*/
 /* 🔔 Badge del icono de mensajes */
 #badge-mensajes {
   transition: transform 0.2s ease, background-color 0.3s ease;
@@ -316,29 +320,25 @@
 
 /* --- MEDIA QUERIES OPTIMIZADAS --- */
 
-/* 💻 Desktop a Tablet grande (992px - breakpoint 'lg' de Bootstrap) */
+/* Tablet y pantallas medianas (hasta 992px) */
 @media (max-width: 992px) {
   .app-navbar {
     flex-wrap: wrap; /* Permite que los elementos bajen de línea */
-    justify-content: center; /* Centra los elementos cuando se envuelven */
+    justify-content: center; /* Centra los elementos */
     padding: 12px 20px;
-    gap: 15px; /* Ajusta el espacio entre elementos */
+    gap: 15px; /* Espacio entre elementos */
   }
 
-  .app-navbar-logo,
-  .nav-icons,
-  .perfil-menu {
-    flex-shrink: 0; /* Asegura que no se encojan */
-  }
-
+  /* El buscador ocupará toda la línea inferior */
   .buscador-usuarios {
-    order: 3; /* Mueve el buscador a la última posición en esta fila */
-    flex-basis: 100%; /* Ocupa todo el ancho disponible en su línea */
-    max-width: 600px; /* Limita el ancho máximo para que no sea demasiado grande */
-    margin: 10px 0 0 0; /* Margen superior para separarlo de los elementos de arriba */
+    order: 3; /* Asegura que el buscador vaya al final en el flujo flex */
+    flex-basis: 100%; /* Ocupa el 100% del espacio disponible */
+    max-width: 600px; /* Limita su ancho máximo incluso si ocupa el 100% */
+    margin-top: 10px; /* Espacio superior para separarlo */
     padding: 8px 16px;
   }
 
+  /* Aseguramos que el logo y los iconos mantengan un tamaño razonable */
   .app-navbar-logo img,
   .perfil-icono-nav {
     width: 40px;
@@ -354,11 +354,11 @@
   }
 }
 
-/* 📱 Tablet pequeña a Celular (768px - breakpoint 'md' de Bootstrap) */
+/* Celular y pantallas pequeñas (hasta 768px) */
 @media (max-width: 768px) {
   .app-navbar {
     flex-direction: column; /* Apila los elementos verticalmente */
-    align-items: center; /* Centra los elementos horizontalmente */
+    align-items: center; /* Centra los elementos */
     padding: 10px 15px;
     gap: 10px;
   }
@@ -366,6 +366,8 @@
   .app-navbar-logo {
     order: 1; /* Logo primero */
     gap: 8px;
+    justify-content: center; /* Centra el logo y el texto de bienvenida */
+    width: 100%; /* Para que el centrado funcione bien */
   }
 
   .bienvenida-texto {
@@ -374,8 +376,8 @@
 
   .buscador-usuarios {
     order: 2; /* Buscador segundo */
-    width: 100%; /* Ocupa el 100% del ancho */
-    max-width: 90%; /* Deja un pequeño margen a los lados */
+    width: 100%;
+    max-width: 90%; /* Ancho que deja un pequeño margen */
     margin: 0; /* Elimina márgenes extra */
     padding: 6px 12px;
   }
@@ -391,7 +393,10 @@
 
   .nav-icons {
     order: 3; /* Iconos tercero */
-    gap: 15px;
+    width: 100%; /* Para que los iconos se distribuyan */
+    justify-content: space-evenly; /* Distribuye los iconos uniformemente */
+    gap: 0; /* Eliminamos el gap si usamos space-evenly */
+    margin-top: 5px; /* Pequeño margen para separarlos del buscador */
   }
 
   .icono-btn {
@@ -409,8 +414,8 @@
   }
 }
 
-/* 📱 Celular muy pequeño (576px - breakpoint 'sm' de Bootstrap) */
-@media (max-width: 576px) {
+/* Celular muy pequeño (hasta 480px - un poco más abajo que tu 576px) */
+@media (max-width: 480px) {
   .app-navbar {
     padding: 8px 10px;
     gap: 8px;
@@ -440,7 +445,7 @@
   }
 
   .nav-icons {
-    gap: 12px;
+    gap: 10px; /* Ajustamos el gap si no usamos space-evenly */
   }
 
   .icono-btn {
