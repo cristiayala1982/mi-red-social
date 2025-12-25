@@ -1,4 +1,4 @@
-/* 🌐 Barra de navegación */
+/* 🌐 Barra de navegación - Estilos base (Desktop First) */
 .app-navbar {
   display: flex;
   justify-content: space-between;
@@ -9,7 +9,8 @@
   font-family: 'Segoe UI', sans-serif;
   color: white;
   position: relative;
-  z-index: 100; 
+  z-index: 100;
+  gap: 20px; /* Añadimos un gap para mejor espaciado entre elementos */
 }
 
 /* 🔷 Logo + bienvenida */
@@ -17,6 +18,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0; /* Evita que el logo se encoja */
 }
 
 .app-navbar-logo img {
@@ -28,6 +30,7 @@
   font-size: 1.1rem;
   font-weight: 500;
   color: white;
+  white-space: nowrap; /* Evita que el texto de bienvenida se rompa */
 }
 
 /* 🔍 Buscador */
@@ -37,9 +40,8 @@
   background: white;
   border-radius: 30px;
   padding: 8px 16px;
-  max-width: 400px;
-  flex: 1;
-  margin: 0 30px;
+  max-width: 400px; /* Mantenemos un max-width para que no sea excesivamente ancho en desktop */
+  flex: 1; /* Permite que el buscador crezca y ocupe el espacio disponible */
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   position: relative;
   z-index: 10;
@@ -63,6 +65,7 @@
 .nav-icons {
   display: flex;
   gap: 20px;
+  flex-shrink: 0; /* Evita que los iconos se encojan */
 }
 
 .icono-btn {
@@ -81,7 +84,7 @@
 /* 👤 Foto de perfil con menú */
 .perfil-menu {
   position: relative;
-  margin-left: 20px;
+  flex-shrink: 0; /* Evita que la foto de perfil se encoja */
 }
 
 .perfil-icono-nav {
@@ -311,15 +314,33 @@
 }
 
 
-/*media cueri*/
-/* 📱 Tablet */
-@media (max-width: 768px) {
+/* --- MEDIA QUERIES OPTIMIZADAS --- */
+
+/* 💻 Desktop a Tablet grande (992px - breakpoint 'lg' de Bootstrap) */
+@media (max-width: 992px) {
   .app-navbar {
-    flex-wrap: wrap; /* permite que los elementos bajen a otra línea */
+    flex-wrap: wrap; /* Permite que los elementos bajen de línea */
+    justify-content: center; /* Centra los elementos cuando se envuelven */
     padding: 12px 20px;
+    gap: 15px; /* Ajusta el espacio entre elementos */
   }
 
-  .app-navbar-logo img {
+  .app-navbar-logo,
+  .nav-icons,
+  .perfil-menu {
+    flex-shrink: 0; /* Asegura que no se encojan */
+  }
+
+  .buscador-usuarios {
+    order: 3; /* Mueve el buscador a la última posición en esta fila */
+    flex-basis: 100%; /* Ocupa todo el ancho disponible en su línea */
+    max-width: 600px; /* Limita el ancho máximo para que no sea demasiado grande */
+    margin: 10px 0 0 0; /* Margen superior para separarlo de los elementos de arriba */
+    padding: 8px 16px;
+  }
+
+  .app-navbar-logo img,
+  .perfil-icono-nav {
     width: 40px;
     height: 40px;
   }
@@ -328,40 +349,23 @@
     font-size: 1rem;
   }
 
-  .buscador-usuarios {
-    max-width: 280px;
-    margin: 10px 0; /* baja debajo del logo */
-    flex: 1 1 100%;
-  }
-
-  .nav-icons {
-    gap: 12px;
-  }
-
-  .perfil-icono-nav {
-    width: 40px;
-    height: 40px;
+  .icono-btn {
+    font-size: 20px;
   }
 }
 
-/* 📱 Celular */
-/* 📱 Celular optimizado */
-@media (max-width: 576px) {
+/* 📱 Tablet pequeña a Celular (768px - breakpoint 'md' de Bootstrap) */
+@media (max-width: 768px) {
   .app-navbar {
-    flex-direction: column;
-    align-items: center;
-    padding: 8px 12px;
+    flex-direction: column; /* Apila los elementos verticalmente */
+    align-items: center; /* Centra los elementos horizontalmente */
+    padding: 10px 15px;
     gap: 10px;
   }
 
   .app-navbar-logo {
-    justify-content: center;
+    order: 1; /* Logo primero */
     gap: 8px;
-  }
-
-  .app-navbar-logo img {
-    width: 36px;
-    height: 36px;
   }
 
   .bienvenida-texto {
@@ -369,9 +373,10 @@
   }
 
   .buscador-usuarios {
-    width: 100%;
-    max-width: 90%;
-    margin: 0 auto;
+    order: 2; /* Buscador segundo */
+    width: 100%; /* Ocupa el 100% del ancho */
+    max-width: 90%; /* Deja un pequeño margen a los lados */
+    margin: 0; /* Elimina márgenes extra */
     padding: 6px 12px;
   }
 
@@ -385,24 +390,65 @@
   }
 
   .nav-icons {
-    justify-content: center;
-    gap: 16px;
+    order: 3; /* Iconos tercero */
+    gap: 15px;
+  }
+
+  .icono-btn {
+    font-size: 22px;
+  }
+
+  .perfil-menu {
+    order: 4; /* Perfil último */
+    margin-top: 8px;
+  }
+
+  .perfil-icono-nav {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* 📱 Celular muy pequeño (576px - breakpoint 'sm' de Bootstrap) */
+@media (max-width: 576px) {
+  .app-navbar {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .app-navbar-logo img,
+  .perfil-icono-nav {
+    width: 32px;
+    height: 32px;
+  }
+
+  .bienvenida-texto {
+    font-size: 0.9rem;
+  }
+
+  .buscador-usuarios {
+    max-width: 95%; /* Un poco más ancho en móviles muy pequeños */
+    padding: 5px 10px;
+  }
+
+  .buscador-usuarios input {
+    font-size: 13px;
+  }
+
+  .icono-lupa {
+    font-size: 16px;
+  }
+
+  .nav-icons {
+    gap: 12px;
   }
 
   .icono-btn {
     font-size: 20px;
   }
-
-  .perfil-menu {
-    margin-top: 8px;
-    justify-content: center;
-  }
-
-  .perfil-icono-nav {
-    width: 34px;
-    height: 34px;
-  }
 }
+
+
 
 
 
