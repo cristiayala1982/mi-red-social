@@ -1,52 +1,52 @@
-/* --- Estilos Base mejorados --- */
+
+
+
+
+
+
+
+/* ================================================= */
+/* 🌐 BARRA DE NAVEGACIÓN COMPLETA (UNIFICADA)      */
+/* ================================================= */
+
 .app-navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #007bff;
-  padding: 10px 20px;
-  height: 65px; /* Altura fija para control total */
+  padding: 0 15px;
+  height: 60px; /* Altura delgada y profesional */
   color: white;
   position: sticky;
   top: 0;
   z-index: 1000;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.logo-img { width: 45px; height: 45px; } /* Más visible */
-
-.nav-right-section {
-  display: flex;
-  align-items: center;
-  gap: 18px; /* Más espacio entre iconos */
+/* 🔷 LOGO */
+.logo-img { 
+  width: 42px; 
+  height: 42px; 
+  display: block;
 }
 
-.icono-btn {
-  background: none;
-  border: none;
-  font-size: 26px; /* Iconos más grandes y visibles */
-  color: white;
-  cursor: pointer;
-  padding: 5px;
+.bienvenida-texto {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 10px;
 }
 
-.perfil-icono-nav {
-  width: 45px; /* Foto más grande */
-  height: 45px;
-  border-radius: 50%;
-  border: 2px solid white;
-  object-fit: cover;
-}
-
-/* Buscador Desktop */
+/* 🔍 BUSCADOR (ESCRITORIO) */
 .buscador-usuarios {
   display: flex;
   align-items: center;
   background: white;
-  border-radius: 25px;
+  border-radius: 20px;
   padding: 5px 15px;
   flex: 1;
   max-width: 400px;
   margin: 0 15px;
+  position: relative;
 }
 
 .buscador-usuarios input {
@@ -55,30 +55,116 @@
   width: 100%;
   font-size: 16px;
   padding: 6px;
+  color: #333;
 }
 
-.mobile-only { display: none; }
+.icono-lupa { color: #888; margin-right: 8px; font-size: 18px; }
 
-/* --- RESPONSIVE --- */
+/* 👥 SECCIÓN DERECHA (ICONOS Y PERFIL) */
+.nav-right-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-icons { 
+  display: flex; 
+  gap: 18px; 
+}
+
+.icono-btn {
+  background: none;
+  border: none;
+  font-size: 26px; /* Iconos grandes y visibles */
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.perfil-icono-nav {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* 📋 RESULTADOS DEL BUSCADOR (CORRECCIÓN DE FOTOS GIGANTES) */
+.resultados-autocompletado {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 2000;
+}
+
+.resultados-autocompletado li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+/* ESTA ES LA REGLA QUE CORRIGE TU ERROR */
+.resultados-autocompletado li img {
+  width: 38px !important;  /* Tamaño fijo para que no sea gigante */
+  height: 38px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  border: 1px solid #ddd;
+}
+
+.resultados-autocompletado li span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 🔴 BADGE DE NOTIFICACIONES */
+.badge {
+  background: #ff4444;
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  border: 2px solid #007bff;
+}
+
+.oculto { display: none; }
+
+/* 📱 OPTIMIZACIÓN PARA CELULARES */
 @media (max-width: 768px) {
+  .bienvenida-texto { display: none; } /* Quitamos texto para ganar espacio */
+
   .mobile-only { display: block; }
-  
-  /* Escondemos el buscador original en móvil por defecto */
+
+  /* Buscador oculto por defecto en móvil */
   .buscador-usuarios {
     display: none; 
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    margin: 0;
-    border-radius: 0;
-    z-index: 1001;
-    padding: 0 15px;
+    top: 0; left: 0;
+    width: 100%; height: 60px;
+    max-width: none; margin: 0;
+    border-radius: 0; z-index: 1001;
   }
 
-  /* Clase para mostrar el buscador cuando se toque la lupa */
+  /* Se activa al tocar la lupa */
   .buscador-usuarios.active {
     display: flex;
   }
@@ -86,17 +172,20 @@
   .btn-cerrar-busqueda {
     background: none;
     border: none;
-    font-size: 20px;
-    margin-right: 10px;
-    color: #555;
+    font-size: 24px;
+    color: #333;
+    padding: 10px;
   }
 
-  .nav-icons { gap: 15px; }
-  .icono-btn { font-size: 28px; } /* Aún más grandes en móvil */
+  .nav-icons { gap: 12px; }
+  .icono-btn { font-size: 28px; }
+
+  /* Resultados en móvil ocupan todo el ancho */
+  .resultados-autocompletado {
+    position: fixed;
+    top: 60px;
+    border-radius: 0;
+  }
 }
 
-
-
-
-
-
+.mobile-only { display: none; } /* Oculto en PC */
