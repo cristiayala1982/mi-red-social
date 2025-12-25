@@ -9,7 +9,7 @@ const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 document.addEventListener('DOMContentLoaded', async () => {
   mostrarNotificacion('✅ init.js está funcionando');
 
-  try {
+ /* try {
     // 🔄 Cargar datos del usuario desde el backend (cookie)
     const datos = await cargarDatosUsuario(); // 👈 ya no pasamos idUsuario
     if (datos) {
@@ -34,6 +34,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 👇 ESTA LÍNEA FALTABA 
   configurarEliminarUsuario();
+
+  document.addEventListener('DOMContentLoaded', async () => {
+  mostrarNotificacion('✅ init.js está funcionando');*/
+
+  try {
+    const datos = await cargarDatosUsuario();
+    if (datos) {
+      setDatosUsuario(datos);
+      cargarGaleria(datos.id);
+      configurarSubidaImagen(datos.id);
+    }
+  } catch (error) {
+    mostrarNotificacion('❌ Error al cargar datos del usuario');
+    console.error(error);
+  }
+
+  configurarImagenPerfil();
+  configurarSelfieCamara();
+
+  // 👇 ESTA LÍNEA FALTABA
+  configurarEliminarUsuario();
+});
+
+
 
 
 
