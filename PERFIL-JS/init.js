@@ -1,10 +1,11 @@
+
 import { mostrarNotificacion } from './notificaciones.js';
 import { cargarDatosUsuario } from './perfil.js';
 import { cargarGaleria, setDatosUsuario } from './galeria.js';
 import { configurarSubidaImagen } from './subirImagen.js';
 import { configurarImagenPerfil } from './selfieImagen.js';
 import { configurarSelfieCamara } from './selfieCamara.js';
-
+const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 document.addEventListener('DOMContentLoaded', async () => {
   mostrarNotificacion('✅ init.js está funcionando');
 
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!query) return;
 
       try {
-        const res = await fetch(`http://localhost:3000/api/usuarios/buscar?nombre=${encodeURIComponent(query)}`, {
+        const res = await fetch(`${API_URL}/api/usuarios/buscar?nombre=${encodeURIComponent(query)}`, {
           credentials: "include" // 👈 importante para que viaje la cookie
         });
         const data = await res.json();
@@ -58,5 +59,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 });
+
 
 
