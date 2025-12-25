@@ -1,6 +1,6 @@
-
 import { mostrarNotificacion } from './notificaciones.js';
-import { cargarDatosUsuario } from './perfil.js';
+//import { cargarDatosUsuario } from './perfil.js';
+import { cargarDatosUsuario, configurarEliminarUsuario } from './perfil.js';
 import { cargarGaleria, setDatosUsuario } from './galeria.js';
 import { configurarSubidaImagen } from './subirImagen.js';
 import { configurarImagenPerfil } from './selfieImagen.js';
@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 🤳 Configurar cámara para selfie
   configurarSelfieCamara();
+
 
 
 
