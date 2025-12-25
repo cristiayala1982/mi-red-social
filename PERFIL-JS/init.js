@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 🤳 Configurar cámara para selfie
   configurarSelfieCamara();
 
+  // 👇 ESTA LÍNEA FALTABA 
+  configurarEliminarUsuario();
 
 
 
