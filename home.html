@@ -28,29 +28,30 @@
     <span id="bienvenida" class="bienvenida-texto"></span>
   </div>
 
-  <!-- Buscador -->
   <form id="form-busqueda" class="buscador-usuarios">
     <span class="icono-lupa">🔍</span>
     <input type="text" id="input-busqueda" placeholder="Buscar usuario..." autocomplete="off">
     <ul id="resultados-busqueda" class="resultados-autocompletado"></ul>
   </form>
- <!-- Íconos de mensaje y amigos -->
-<div class="nav-icons">
-  <button id="btn-amigos" class="icono-btn">👥</button>
-<button id="btn-mensajes" class="icono-btn" style="position:relative;"> 💬 
-  <span id="badge-mensajes" class="badge oculto"></span> </button>
-</div>
 
+  <div class="nav-right-section">
+    <div class="nav-icons">
+      <button id="btn-amigos" class="icono-btn">👥</button>
+      <button id="btn-mensajes" class="icono-btn" style="position:relative;"> 
+        💬 <span id="badge-mensajes" class="badge oculto"></span> 
+      </button>
+    </div>
 
-  <!-- Foto de perfil con menú -->
-  <div class="perfil-menu">
-    <img id="nav-foto-perfil" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono-nav">
-    <ul class="dropdown-menu">
-      <li><a href="miPerfil.html">Mi perfil</a></li>
-      <li><a href="#">Cerrar sesión</a></li>
-    </ul>
+    <div class="perfil-menu">
+      <img id="nav-foto-perfil" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono-nav">
+      <ul class="dropdown-menu">
+        <li><a href="miPerfil.html">Mi perfil</a></li>
+        <li><a href="#">Cerrar sesión</a></li>
+      </ul>
+    </div>
   </div>
 </nav>
+
 <!-- Bloque de publicación estilo Facebook -->
 <div id="form-publicacion" class="publicacion-box">
   <div class="publicacion-header">
