@@ -116,6 +116,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+document.addEventListener('DOMContentLoaded', () => {
+  const btnAbrir = document.getElementById('btn-abrir-busqueda');
+  const btnCerrar = document.querySelector('.btn-cerrar-busqueda');
+  const buscador = document.querySelector('.buscador-usuarios');
+
+  // Abrir buscador en móvil
+  btnAbrir.addEventListener('click', () => {
+    buscador.classList.add('active');
+    document.getElementById('input-busqueda').focus();
+  });
+
+  // Cerrar buscador
+  btnCerrar.addEventListener('click', () => {
+    buscador.classList.remove('active');
+  });
+});
 
 
 
