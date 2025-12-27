@@ -8,7 +8,7 @@
   background: #fff;
   box-shadow: -2px 0 6px rgba(0,0,0,0.2);
   transition: right 0.3s ease;
-  z-index: 200;
+  z-index: 2100; /* más alto que el navbar */
   padding: 20px;
   overflow-y: auto;
 }
@@ -19,23 +19,36 @@
 
 /* Botón cerrar panel (X) */
 .cerrar-panel {
-  position: absolute;   /* siempre en la esquina */
+  position: absolute;
   top: 12px;
-  left: 12px;           /* 👈 ahora del lado izquierdo */
+  right: 12px;   /* 👉 ahora del lado derecho */
   font-size: 24px;
   cursor: pointer;
   color: #333;
-  z-index: 5;
+  z-index: 2200; /* más alto que todo */
 }
 .cerrar-panel:hover {
   color: #007bff;
+}
+
+/* Aviso de mensajes dentro del panel */
+#panel-chats .badge-panel {
+  position: absolute;
+  top: 20px;      /* 👉 no tan arriba */
+  left: 20px;     /* 👉 del lado izquierdo */
+  background: #ff4444;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: bold;
 }
 
 /* Lista de chats dentro del panel */
 #lista-chats {
   list-style: none;
   padding: 0;
-  margin-top: 60px; /* deja espacio para la X y el título */
+  margin-top: 60px; /* deja espacio para la X y el badge */
 }
 
 #lista-chats li {
@@ -94,84 +107,55 @@
 /* 📱 Tablet */
 @media (max-width: 768px) {
   #panel-chats {
-    width: 300px;   /* más angosto en tablet */
-    right: -300px;  /* oculto al inicio */
+    width: 300px;
+    right: -300px;
     padding: 15px;
   }
 
   .cerrar-panel {
     font-size: 22px;
     top: 10px;
-    left: 10px;
+    right: 10px;
   }
 
-  .foto-chat {
-    width: 36px;
-    height: 36px;
-  }
-
-  .info-chat strong {
-    font-size: 14px;
-  }
-
-  .info-chat p {
-    font-size: 12px;
-  }
-
-  .btn-borrar-chat {
-    font-size: 16px;
+  #panel-chats .badge-panel {
+    top: 15px;
+    left: 15px;
+    font-size: 11px;
+    padding: 3px 7px;
   }
 }
 
 /* 📱 Celular */
 @media (max-width: 576px) {
   #panel-chats {
-    width: 100%;       /* ocupa todo el ancho en móvil */
-    right: -100%;      /* oculto al inicio */
+    width: 100%;
+    right: -100%;
     padding: 12px;
   }
 
   #panel-chats.visible {
-    right: 0;          /* aparece ocupando toda la pantalla */
+    right: 0;
   }
 
   .cerrar-panel {
     font-size: 20px;
     top: 10px;
-    left: 10px;
+    right: 10px;
+  }
+
+  #panel-chats .badge-panel {
+    top: 12px;
+    left: 12px;
+    font-size: 11px;
+    padding: 3px 6px;
   }
 
   #lista-chats {
-    margin-top: 55px; /* espacio para la X en móvil */
-  }
-
-  #lista-chats li {
-    padding: 8px;
-    gap: 8px;
-  }
-
-  .foto-chat {
-    width: 32px;
-    height: 32px;
-  }
-
-  .info-chat strong {
-    font-size: 13px;
-  }
-
-  .info-chat p {
-    font-size: 11px;
-  }
-
-  .btn-borrar-chat {
-    font-size: 15px;
+    margin-top: 55px;
   }
 }
-/*resaltar chats no leidos*/
-.chat-no-leido {
-  background-color: #f0f8ff; /* azul claro */
-  font-weight: bold;
-  border-left: 4px solid #dc3545; /* rojo */
-}
+
+
 
 
