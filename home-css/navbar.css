@@ -200,5 +200,14 @@
   }
 }
 
-.mobile-only { display: none; } /* Oculto en PC */
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block;
+  }
+}
+
 
