@@ -31,24 +31,11 @@
   color: #007bff;
 }
 
-/* Aviso de mensajes dentro del panel */
-#panel-chats .badge-panel {
-  position: absolute;
-  top: 20px;      /* 👉 no tan arriba */
-  left: 20px;     /* 👉 del lado izquierdo */
-  background: #ff4444;
-  color: white;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-weight: bold;
-}
-
 /* Lista de chats dentro del panel */
 #lista-chats {
   list-style: none;
   padding: 0;
-  margin-top: 60px; /* deja espacio para la X y el badge */
+  margin-top: 60px; /* deja espacio para la X y el título */
 }
 
 #lista-chats li {
@@ -89,6 +76,18 @@
   margin: 2px 0 0;
 }
 
+/* Badge de mensajes no leídos dentro de cada chat */
+.chat-item .badge {
+  background: #dc3545; /* rojo intenso */
+  color: white;
+  font-size: 12px;
+  padding: 3px 7px;
+  border-radius: 12px;
+  margin-left: auto;
+  margin-right: 5px;
+  align-self: center;
+}
+
 /* Botón borrar chats */
 .btn-borrar-chat {
   background: none;
@@ -97,7 +96,6 @@
   color: #888;
   cursor: pointer;
   transition: color 0.2s ease;
-  margin-left: auto;
 }
 
 .btn-borrar-chat:hover {
@@ -118,11 +116,21 @@
     right: 10px;
   }
 
-  #panel-chats .badge-panel {
-    top: 15px;
-    left: 15px;
-    font-size: 11px;
-    padding: 3px 7px;
+  .foto-chat {
+    width: 36px;
+    height: 36px;
+  }
+
+  .info-chat strong {
+    font-size: 14px;
+  }
+
+  .info-chat p {
+    font-size: 12px;
+  }
+
+  .btn-borrar-chat {
+    font-size: 16px;
   }
 }
 
@@ -144,17 +152,42 @@
     right: 10px;
   }
 
-  #panel-chats .badge-panel {
-    top: 12px;
-    left: 12px;
-    font-size: 11px;
-    padding: 3px 6px;
-  }
-
   #lista-chats {
     margin-top: 55px;
   }
+
+  #lista-chats li {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .foto-chat {
+    width: 32px;
+    height: 32px;
+  }
+
+  .info-chat strong {
+    font-size: 13px;
+  }
+
+  .info-chat p {
+    font-size: 11px;
+  }
+
+  .btn-borrar-chat {
+    font-size: 15px;
+  }
 }
+
+/* Resaltar chats no leídos */
+.chat-no-leido {
+  background-color: #f0f8ff; /* azul claro */
+  font-weight: bold;
+  border-left: 4px solid #dc3545; /* rojo */
+  box-shadow: 0 0 4px rgba(220, 53, 69, 0.2);
+}
+
+
 
 
 
