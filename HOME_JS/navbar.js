@@ -1,273 +1,408 @@
-/*const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
-let usuarioId = null;
-export let datosUsuario = null;
-
-// 👉 función para obtener siempre el usuarioId actualizado
-export function getUsuarioId() {
-  return usuarioId;
+/* 🌐 Barra de navegación */
+.app-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #007bff;
+  padding: 16px 30px;
+  border-bottom: 2px solid #0056b3;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+  position: relative;
+  z-index: 100; 
 }
 
-// 🔄 Cargar foto y nombre de perfil en la navbar
-export async function cargarDatosNavbar() {
-  console.log("🔍 Llamando a /mis-datos con cookie...");
+/* 🔷 Logo + bienvenida */
+.app-navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-  try {
-    const res = await fetch(`${API_URL}/api/usuarios/mis-datos`, {
-      method: "GET",
-      credentials: "include" // 👈 manda la cookie automáticamente
-    });
+.app-navbar-logo img {
+  width: 48px;
+  height: 48px;
+}
 
-    const data = await res.json();
-    console.log("📦 Respuesta de /mis-datos:", data);
+.bienvenida-texto {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: white;
+}
 
-    if (data.success && data.usuario) {
-      datosUsuario = data.usuario;       // guarda todo el objeto
-      usuarioId = datosUsuario.id;       // guarda solo el id para comparaciones rápidas
-      console.log("✅ Usuario cargado:", datosUsuario.nombre);
+/* 🔍 Buscador */
+.buscador-usuarios {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 30px;
+  padding: 8px 16px;
+  max-width: 400px;
+  flex: 1;
+  margin: 0 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 10;
+}
 
-      // Mostrar foto de perfil con validación
-      const navFoto = document.getElementById("nav-foto-perfil");
-      const defaultImgPath = "/img/usuario-camara.png"; // Ruta a tu imagen por defecto
+.buscador-usuarios input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 16px;
+  background: transparent;
+}
 
-      if (navFoto) {
-        // Establecer el manejador onerror UNA SOLA VEZ
-        navFoto.onerror = function() {
-          console.error(`Navbar: No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
-          this.src = defaultImgPath;
-          this.onerror = null; // Evitar bucles infinitos
-        };
+.icono-lupa {
+  font-size: 20px;
+  color: #555;
+  margin-right: 10px;
+}
 
-        // --- LÓGICA MEJORADA PARA IMAGEN DE PERFIL EN NAVBAR ---
-        if (datosUsuario.foto_perfil && datosUsuario.foto_perfil.startsWith("http")) {
-          // ✅ Siempre guardamos URL completa en la DB, la usamos directamente
-          navFoto.src = `${datosUsuario.foto_perfil}?t=${Date.now()}`;
-        } else {
-          // Si no hay foto válida, mostramos la imagen por defecto
-          navFoto.src = defaultImgPath;
-        }
-      }
+/* 🧑‍🤝‍🧑 Íconos de mensajes y amigos */
+.nav-icons {
+  display: flex;
+  gap: 20px;
+}
 
-      // Mostrar saludo en el home (si existe)
-      const bienvenida = document.getElementById("bienvenida");
-      if (bienvenida) {
-        bienvenida.textContent = `Hola ${datosUsuario.nombre} 👋`;
-      }
-    } else {
-      console.warn("⚠️ No autenticado, navbar vacío (no se redirige)");
-      // Si no hay usuario autenticado, asegurar que la imagen de la navbar sea la por defecto
-      const navFoto = document.getElementById("nav-foto-perfil");
-      if (navFoto) {
-        navFoto.src = "/img/usuario-camara.png";
-      }
-    }
-  } catch (error) {
-    console.error("❌ Error al cargar datos del usuario", error);
-    console.warn("⚠️ No se pudieron cargar datos, navbar vacío");
-    // En caso de error, asegurar que la imagen de la navbar sea la por defecto
-    const navFoto = document.getElementById("nav-foto-perfil");
-    if (navFoto) {
-      navFoto.src = "/img/usuario-camara.png";
-    }
+.icono-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.icono-btn:hover {
+  transform: scale(1.2);
+}
+
+/* 👤 Foto de perfil con menú */
+.perfil-menu {
+  position: relative;
+  margin-left: 20px;
+}
+
+.perfil-icono-nav {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s ease;
+  border: 2px solid white;
+}
+
+.perfil-icono-nav:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255,255,255,0.6);
+}
+
+/* 📂 Menú desplegable */
+.perfil-menu .dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  list-style: none;
+  padding: 5px 0;
+  margin: 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  min-width: 160px;
+  z-index: 1000;
+}
+
+.perfil-menu .dropdown-menu li a {
+  display: block;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #333;
+  font-size: 15px;
+}
+
+.perfil-menu .dropdown-menu li a:hover {
+  background: #f1f1f1;
+}
+
+.perfil-menu:hover .dropdown-menu {
+  display: block;
+}
+
+/* 📷 Icono de cámara */
+.icono-camara-overlay {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background-color: rgba(0, 123, 255, 0.85);
+  color: white;
+  font-size: 22px;
+  padding: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 10;
+  display: none;
+}
+
+.circulo-perfil:hover .icono-camara-overlay {
+  display: block;
+  transform: scale(1.1);
+}
+
+/* 🎞 Menú de opciones sobre la imagen */
+.overlay-camara-menu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  gap: 10px;
+  background-color: rgba(255,255,255,0.95);
+  padding: 8px 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+  opacity: 0;
+  animation: fadeZoom 0.3s ease forwards;
+}
+
+.overlay-camara-menu.visible {
+  display: flex;
+  opacity: 1;
+}
+
+.overlay-camara-menu button {
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.overlay-camara-menu button:hover {
+  background-color: #e2e6ea;
+}
+
+/* ✨ Animación de entrada */
+@keyframes fadeZoom {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
-// 🚀 Ejecutar al cargar la página con delay
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    cargarDatosNavbar();
-  }, 300); // ⏱ espera 300ms para que la cookie esté lista
-});
-// 👉 Actualizar badge de mensajes no leídos
-export async function actualizarBadgeMensajes() {
-  try {
-    const res = await fetch(`${API_URL}/api/chats/noLeidos/count`, {
-      credentials: "include"
-    });
-    const data = await res.json();
+/* 🧑 Foto de perfil en navbar */
+.perfil-navbar {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
 
-    const badge = document.getElementById("badge-mensajes");
-    if (!badge) return;
+.perfil-navbar:hover {
+  transform: scale(1.15);
+  border-color: violet;
+  box-shadow: 0 0 12px violet;
+}
 
-    if (data.success && data.total > 0) {
-      badge.textContent = data.total;
-      badge.classList.remove("oculto");
+/* 🔍 Autocompletado del buscador */
+.resultados-autocompletado {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-top: 5px;
+  list-style: none;
+  padding: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
 
-      // animación suave para que se note el cambio
-      badge.classList.add("updated");
-      setTimeout(() => badge.classList.remove("updated"), 300);
-    } else {
-      badge.classList.add("oculto");
-    }
-  } catch (error) {
-    console.error("❌ Error al actualizar badge:", error);
-  }
+.resultados-autocompletado li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.resultados-autocompletado li img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #eee;
+  margin-right: 8px;
+}
+
+.resultados-autocompletado li span {
+  flex: 1;
+  font-size: 15px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.estado-indicador {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.estado-online {
+  background-color: #4caf50;
+}
+
+.estado-offline {
+  background-color: #f44336;
+}
+
+.resultados-autocompletado li:hover {
+  background: #f0f0f0;
+}
+.badge {
+  background: #d11a2a;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}
+
+/*numeritos de iconos*/
+/* 🔔 Badge del icono de mensajes */
+#badge-mensajes {
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+#badge-mensajes.updated {
+  transform: scale(1.3);
+  background-color: #ff4444;
+}
+
+.oculto {
+  display: none;
 }
 
 
-// 🚀 Ejecutar al cargar la página
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    cargarDatosNavbar();
-    actualizarBadgeMensajes(); // refresca badge al cargar
-  }, 300);
+/*media cueri*/
+/* 📱 Tablet */
+@media (max-width: 768px) {
+  .app-navbar {
+    flex-wrap: wrap; /* permite que los elementos bajen a otra línea */
+    padding: 12px 20px;
+  }
 
-  // refrescar cada 30 segundos
-  setInterval(actualizarBadgeMensajes, 5000);
-});
+  .app-navbar-logo img {
+    width: 40px;
+    height: 40px;
+  }
 
+  .bienvenida-texto {
+    font-size: 1rem;
+  }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const btnAbrir = document.getElementById('btn-abrir-busqueda');
-  const btnCerrar = document.querySelector('.btn-cerrar-busqueda');
-  const buscador = document.querySelector('.buscador-usuarios');
+  .buscador-usuarios {
+    max-width: 280px;
+    margin: 10px 0; /* baja debajo del logo */
+    flex: 1 1 100%;
+  }
 
-  // Abrir buscador en móvil
-  btnAbrir.addEventListener('click', () => {
-    buscador.classList.add('active');
-    document.getElementById('input-busqueda').focus();
-  });
+  .nav-icons {
+    gap: 12px;
+  }
 
-  // Cerrar buscador
-  btnCerrar.addEventListener('click', () => {
-    buscador.classList.remove('active');
-  });
-});*/
-const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
-let usuarioId = null;
-export let datosUsuario = null;
-
-// 👉 función para obtener siempre el usuarioId actualizado
-export function getUsuarioId() {
-  return usuarioId;
-}
-
-// 🔄 Cargar foto y nombre de perfil en la navbar
-export async function cargarDatosNavbar() {
-  console.log("🔍 Llamando a /mis-datos con cookie...");
-
-  try {
-    const res = await fetch(`${API_URL}/api/usuarios/mis-datos`, {
-      method: "GET",
-      credentials: "include"
-    });
-
-    const data = await res.json();
-    console.log("📦 Respuesta de /mis-datos:", data);
-
-    if (data.success && data.usuario) {
-      datosUsuario = data.usuario;
-      usuarioId = datosUsuario.id;
-      console.log("✅ Usuario cargado:", datosUsuario.nombre);
-
-      // Mostrar foto de perfil con validación
-      const navFoto = document.getElementById("nav-foto-perfil");
-      const defaultImgPath = "/img/usuario-camara.png";
-
-      if (navFoto) {
-        navFoto.onerror = function() {
-          console.error(`Navbar: No se pudo cargar la imagen: ${this.src}. Mostrando imagen por defecto.`);
-          this.src = defaultImgPath;
-          this.onerror = null;
-        };
-
-        if (datosUsuario.foto_perfil && datosUsuario.foto_perfil.startsWith("http")) {
-          navFoto.src = `${datosUsuario.foto_perfil}?t=${Date.now()}`;
-        } else {
-          navFoto.src = defaultImgPath;
-        }
-      }
-
-      const bienvenida = document.getElementById("bienvenida");
-      if (bienvenida) {
-        bienvenida.textContent = `Hola ${datosUsuario.nombre} 👋`;
-      }
-    } else {
-      console.warn("⚠️ No autenticado, navbar vacío");
-      const navFoto = document.getElementById("nav-foto-perfil");
-      if (navFoto) {
-        navFoto.src = "/img/usuario-camara.png";
-      }
-    }
-  } catch (error) {
-    console.error("❌ Error al cargar datos del usuario", error);
-    const navFoto = document.getElementById("nav-foto-perfil");
-    if (navFoto) {
-      navFoto.src = "/img/usuario-camara.png";
-    }
+  .perfil-icono-nav {
+    width: 40px;
+    height: 40px;
   }
 }
 
-// 👉 Actualizar badge de mensajes no leídos
-export async function actualizarBadgeMensajes() {
-  try {
-    const res = await fetch(`${API_URL}/api/chats/noLeidos/count`, {
-      credentials: "include"
-    });
-    const data = await res.json();
+/* 📱 Celular */
+/* 📱 Celular optimizado */
+@media (max-width: 576px) {
+  .app-navbar {
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 10px;
+  }
 
-    const badge = document.getElementById("badge-mensajes");
-    if (!badge) return;
+  .app-navbar-logo {
+    justify-content: center;
+    gap: 8px;
+  }
 
-    if (data.success && data.total > 0) {
-      badge.textContent = data.total;
-      badge.classList.remove("oculto");
+  .app-navbar-logo img {
+    width: 36px;
+    height: 36px;
+  }
 
-      badge.classList.add("updated");
-      setTimeout(() => badge.classList.remove("updated"), 300);
-    } else {
-      badge.classList.add("oculto");
-    }
-  } catch (error) {
-    console.error("❌ Error al actualizar badge:", error);
+  .bienvenida-texto {
+    font-size: 0.95rem;
+  }
+
+  .buscador-usuarios {
+    width: 100%;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 6px 12px;
+  }
+
+  .buscador-usuarios input {
+    font-size: 14px;
+  }
+
+  .icono-lupa {
+    font-size: 18px;
+    margin-right: 6px;
+  }
+
+  .nav-icons {
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .icono-btn {
+    font-size: 20px;
+  }
+
+  .perfil-menu {
+    margin-top: 8px;
+    justify-content: center;
+  }
+
+  .perfil-icono-nav {
+    width: 34px;
+    height: 34px;
   }
 }
-
-// 🚀 Ejecutar al cargar la página
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    cargarDatosNavbar();
-    actualizarBadgeMensajes();
-  }, 300);
-
-  setInterval(actualizarBadgeMensajes, 5000);
-
-  // 🔍 Buscador en móvil
-  const btnAbrir = document.getElementById('btn-abrir-busqueda');
-  const btnCerrar = document.querySelector('.btn-cerrar-busqueda');
-  const buscador = document.querySelector('.buscador-usuarios');
-
-  if (btnAbrir && btnCerrar && buscador) {
-    btnAbrir.addEventListener('click', () => {
-      buscador.classList.add('active');
-      document.getElementById('input-busqueda').focus();
-    });
-
-    btnCerrar.addEventListener('click', () => {
-      buscador.classList.remove('active');
-    });
-  }
-
-  // 👤 Menú de perfil en móvil (click)
-  const perfilIcono = document.getElementById('nav-foto-perfil');
-  const dropdown = document.querySelector('.perfil-menu .dropdown-menu');
-
-  if (perfilIcono && dropdown) {
-    perfilIcono.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const visible = dropdown.style.display === 'block';
-      dropdown.style.display = visible ? 'none' : 'block';
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!perfilIcono.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.style.display = 'none';
-      }
-    });
-  }
-});
-
-
-
 
 
 
