@@ -66,37 +66,28 @@ export async function cargarDatosNavbar() {
 // 👉 Actualizar badge de mensajes no leídos
 export async function actualizarBadgeMensajes() {
   try {
-    const res = await fetch(`${API_URL}/api/chats/noLeidos/count`, {
-      credentials: "include"
-    });
+    const res = await fetch(`${API_URL}/api/chats/noLeidos/count`, { credentials: "include" });
     const data = await res.json();
 
     const navbarBadge = document.getElementById("badge-mensajes");
     const panelBadge = document.getElementById("contador-mensajes");
 
-    if (data.success && data.total > 0) {
-      if (navbarBadge) {
-        navbarBadge.textContent = data.total;
-        navbarBadge.classList.remove("oculto");
-      }
-      if (panelBadge) {
-        panelBadge.textContent = data.total;
-        panelBadge.classList.remove("oculto");
-      }
-    } else {
-      if (navbarBadge) {
-        navbarBadge.textContent = "";
-        navbarBadge.classList.add("oculto");
-      }
-      if (panelBadge) {
-        panelBadge.textContent = "";
-        panelBadge.classList.add("oculto");
-      }
+    const total = data.success ? data.total : 0;
+
+    if (navbarBadge) {
+      navbarBadge.textContent = total > 0 ? String(total) : "";
+      navbarBadge.classList.toggle("oculto", total === 0);
+    }
+
+    if (panelBadge) {
+      panelBadge.textContent = total > 0 ? String(total) : "";
+      panelBadge.classList.toggle("oculto", total === 0);
     }
   } catch (error) {
     console.error("❌ Error al actualizar badge:", error);
   }
 }
+
 
 
 
@@ -144,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
