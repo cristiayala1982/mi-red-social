@@ -185,6 +185,14 @@ function inicializarPanelChats() {
 
   btnMensajes.addEventListener("click", () => {
     panelChats.classList.add("visible");
+
+    // 🔧 limpiar badge antes de cargar
+    const panelBadge = document.getElementById("contador-mensajes");
+    if (panelBadge) {
+      panelBadge.textContent = "";
+      panelBadge.classList.add("oculto");
+    }
+
     cargarChats();
     actualizarBadgeMensajes();
   });
@@ -193,6 +201,7 @@ function inicializarPanelChats() {
     panelChats.classList.remove("visible");
   });
 }
+
 
 // 🚀 Inicialización única
 document.addEventListener("DOMContentLoaded", () => {
@@ -206,6 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function abrirChat(id, nombre) {
   window.location.href = `chats.html?id=${id}`;
 }
+
 
 
 
