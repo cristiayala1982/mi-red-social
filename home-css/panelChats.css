@@ -8,19 +8,19 @@
   background: #fff;
   box-shadow: -2px 0 6px rgba(0,0,0,0.2);
   transition: right 0.3s ease;
-  z-index: 2100; /* más alto que el navbar */
+  z-index: 2100;
   padding: 20px;
   overflow-y: auto;
 }
 
 #panel-chats.visible {
-  right: 0; /* aparece al mostrar */
+  right: 0;
 }
 
 /* Encabezado con ❌ y numerito rojo */
 .encabezado-panel-chats {
   display: flex;
-  justify-content: space-between; /* ❌ a la izquierda, badge a la derecha */
+  justify-content: space-between;
   align-items: center;
   padding: 10px 5px;
   margin-bottom: 10px;
@@ -37,7 +37,7 @@
 }
 
 .badge-global {
-  background: #dc3545; /* rojo intenso */
+  background: #dc3545;
   color: white;
   font-size: 13px;
   padding: 4px 10px;
@@ -49,7 +49,7 @@
 #lista-chats {
   list-style: none;
   padding: 0;
-  margin-top: 10px; /* espacio después del encabezado */
+  margin-top: 10px;
 }
 
 #lista-chats li {
@@ -206,6 +206,7 @@
   border-left: 4px solid #dc3545;
   box-shadow: 0 0 4px rgba(220, 53, 69, 0.2);
 }
+
 
 
 
