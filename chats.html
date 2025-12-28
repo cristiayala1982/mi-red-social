@@ -189,19 +189,7 @@ btnAudio.addEventListener("click", async () => {
   }
 });
 
-// --- LÓGICA DE MENSAJES (corregida para audio) ---
-/*async function cargarMensajes(chatId) {
-  try {
-    const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
-      credentials: "include"
-    });
-    const data = await res.json();
-
-    if (!data.success) {
-      listaMensajes.innerHTML = "<li>Error al cargar mensajes</li>";
-      return;
-    }*/
-      // --- LÓGICA DE MENSAJES (corregida para audio y duplicados) ---
+// --- LÓGICA DE MENSAJES (corregida para audio y duplicados) ---
 async function cargarMensajes(chatId) {
   try {
     const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
@@ -291,82 +279,7 @@ async function cargarMensajes(chatId) {
   }
 }
 
-
-    // Encabezado
-    document.getElementById("nombre-chat").textContent = data.nombre || "";
-    const fotoValida = typeof data.fotoPerfil === "string" && data.fotoPerfil.trim() !== "";
-    const foto = fotoValida ? `${data.fotoPerfil}?t=${Date.now()}` : "img/usuario-camara.png";
-    const fotoChat = document.getElementById("foto-chat");
-    if (fotoChat) {
-      fotoChat.onerror = () => { fotoChat.src = "img/usuario-camara.png"; };
-      fotoChat.src = foto;
-    }
-
-    // Depuración
-    console.log("📩 Mensajes recibidos:", data.mensajes);
-
-    // --- Mejor: no vaciamos toda la lista, solo agregamos los nuevos ---
-    const idsExistentes = new Set([...listaMensajes.querySelectorAll("li")].map(li => li.dataset.id));
-
-    // Ordenar por fecha ascendente
-    const mensajesOrdenados = Array.isArray(data.mensajes)
-      ? [...data.mensajes].sort((a, b) => new Date(a.fecha_envio) - new Date(b.fecha_envio))
-      : [];
-
-    mensajesOrdenados.forEach(msg => {
-      if (!idsExistentes.has(String(msg.id))) {
-        const li = document.createElement("li");
-        li.dataset.id = String(msg.id);
-
-        const fecha = new Date(msg.fecha_envio);
-        const hora = isNaN(fecha.getTime())
-          ? ""
-          : fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        const emisorNombre = msg.emisor_nombre || "Usuario";
-        const esAudio = (msg.tipo === "audio") ||
-                        (typeof msg.contenido === "string" && msg.contenido.endsWith(".webm"));
-
-        let contenidoHTML;
-        if (esAudio) {
-          let audioURL = msg.contenido || "";
-          if (audioURL && !audioURL.startsWith("http")) {
-            audioURL = `https://storage.googleapis.com/${BUCKET_NAME}/${audioURL}`;
-          }
-          contenidoHTML = `
-            <div class="contenido">
-              <strong>${emisorNombre}:</strong>
-              <audio controls src="${audioURL}"></audio>
-              <span class="hora">${hora}</span>
-            </div>
-          `;
-        } else {
-          const textoSeguro = (msg.contenido ?? "").toString();
-          contenidoHTML = `
-            <div class="contenido">
-              <strong>${emisorNombre}:</strong> ${textoSeguro}
-              <span class="hora">${hora}</span>
-            </div>
-          `;
-        }
-
-        li.innerHTML = contenidoHTML;
-        li.classList.add(String(msg.emisor_id) === String(data.usuarioActualId) ? "mio" : "otro");
-
-        listaMensajes.appendChild(li);
-      }
-    });
-
-    // Scroll al último mensaje
-    listaMensajes.scrollTop = listaMensajes.scrollHeight;
-
-  } catch (error) {
-    console.error("Error al cargar mensajes:", error);
-    listaMensajes.innerHTML = "<li>Error de conexión</li>";
-  }
-}
 // --- INICIALIZACIÓN ---
-      // --- INICIALIZACIÓN ---
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const chatId = params.get("id");
@@ -389,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       if (data.success) {
         nuevoMensaje.value = "";
-        cargarMensajes(chatId);
+        await cargarMensajes(chatId); // 👈 refresca inmediatamente
       }
     }
   });
@@ -402,9 +315,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 </script>  
 </body>
 </html>
+
 
 
 
