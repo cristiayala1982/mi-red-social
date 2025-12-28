@@ -66,7 +66,9 @@ export async function cargarDatosNavbar() {
 // 👉 Actualizar badge de mensajes no leídos
 export async function actualizarBadgeMensajes() {
   try {
-    const res = await fetch(`${API_URL}/api/chats/noLeidos/count`, { credentials: "include" });
+    const res = await fetch(`${API_URL}/api/chats/noLeidos/count`, {
+      credentials: "include"
+    });
     const data = await res.json();
 
     const navbarBadge = document.getElementById("badge-mensajes");
@@ -87,6 +89,7 @@ export async function actualizarBadgeMensajes() {
     console.error("❌ Error al actualizar badge:", error);
   }
 }
+
 
 
 
@@ -135,6 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
