@@ -17,25 +17,39 @@
   right: 0; /* aparece al mostrar */
 }
 
-/* Botón cerrar panel (X) */
+/* Encabezado con ❌ y numerito rojo */
+.encabezado-panel-chats {
+  display: flex;
+  justify-content: space-between; /* ❌ a la izquierda, badge a la derecha */
+  align-items: center;
+  padding: 10px 5px;
+  margin-bottom: 10px;
+}
+
 .cerrar-panel {
-  position: absolute;
-  top: 12px;
-  right: 12px;   /* 👉 ahora del lado derecho */
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
   color: #333;
-  z-index: 2200; /* más alto que todo */
 }
+
 .cerrar-panel:hover {
   color: #007bff;
+}
+
+.badge-global {
+  background: #dc3545; /* rojo intenso */
+  color: white;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-weight: bold;
 }
 
 /* Lista de chats dentro del panel */
 #lista-chats {
   list-style: none;
   padding: 0;
-  margin-top: 60px; /* deja espacio para la X y el título */
+  margin-top: 10px; /* espacio después del encabezado */
 }
 
 #lista-chats li {
@@ -78,7 +92,7 @@
 
 /* Badge de mensajes no leídos dentro de cada chat */
 .chat-item .badge {
-  background: #dc3545; /* rojo intenso */
+  background: #dc3545;
   color: white;
   font-size: 12px;
   padding: 3px 7px;
@@ -111,9 +125,12 @@
   }
 
   .cerrar-panel {
-    font-size: 22px;
-    top: 10px;
-    right: 10px;
+    font-size: 26px;
+  }
+
+  .badge-global {
+    font-size: 12px;
+    padding: 3px 8px;
   }
 
   .foto-chat {
@@ -147,13 +164,16 @@
   }
 
   .cerrar-panel {
-    font-size: 20px;
-    top: 10px;
-    right: 10px;
+    font-size: 24px;
+  }
+
+  .badge-global {
+    font-size: 11px;
+    padding: 3px 7px;
   }
 
   #lista-chats {
-    margin-top: 55px;
+    margin-top: 8px;
   }
 
   #lista-chats li {
@@ -181,11 +201,13 @@
 
 /* Resaltar chats no leídos */
 .chat-no-leido {
-  background-color: #f0f8ff; /* azul claro */
+  background-color: #f0f8ff;
   font-weight: bold;
-  border-left: 4px solid #dc3545; /* rojo */
+  border-left: 4px solid #dc3545;
   box-shadow: 0 0 4px rgba(220, 53, 69, 0.2);
 }
+
+
 
 
 
