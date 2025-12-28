@@ -71,26 +71,25 @@ export async function actualizarBadgeMensajes() {
     });
     const data = await res.json();
 
-    const badge = document.getElementById("badge-mensajes");
-    if (!badge) return;
+    const navbarBadge = document.getElementById("badge-mensajes");
+    const panelBadge = document.getElementById("contador-mensajes");
 
     if (data.success && data.total > 0) {
-      // Navbar
-      badge.textContent = data.total;
-      badge.classList.remove("oculto");
-      badge.classList.add("updated");
-      setTimeout(() => badge.classList.remove("updated"), 300);
-
-      // Panel lateral 👇
-      const panelBadge = document.getElementById("contador-mensajes");
+      if (navbarBadge) {
+        navbarBadge.textContent = data.total;
+        navbarBadge.classList.remove("oculto");
+        navbarBadge.classList.add("updated");
+        setTimeout(() => navbarBadge.classList.remove("updated"), 300);
+      }
       if (panelBadge) {
         panelBadge.textContent = data.total;
         panelBadge.classList.remove("oculto");
       }
     } else {
-      badge.classList.add("oculto");
-
-      const panelBadge = document.getElementById("contador-mensajes");
+      if (navbarBadge) {
+        navbarBadge.textContent = "";
+        navbarBadge.classList.add("oculto");
+      }
       if (panelBadge) {
         panelBadge.textContent = "";
         panelBadge.classList.add("oculto");
@@ -100,6 +99,7 @@ export async function actualizarBadgeMensajes() {
     console.error("❌ Error al actualizar badge:", error);
   }
 }
+
 
 
 // 🚀 Ejecutar al cargar la página
@@ -145,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
