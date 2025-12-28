@@ -63,10 +63,11 @@ export async function cargarDatosNavbar() {
   }
 }
 
-// 👉 Actualizar badge de mensajes no leídos
+// 👉 Actualizar badge de mensajes no leídos (Corregido para contar CHATS, no mensajes)
 export async function actualizarBadgeMensajes() {
   try {
-    const res = await fetch(`${API_URL}/api/chats/noLeidos/count`, {
+    // 1. Consultamos la lista completa de chats
+    const res = await fetch(`${API_URL}/api/chats`, {
       credentials: "include"
     });
     const data = await res.json();
@@ -74,21 +75,28 @@ export async function actualizarBadgeMensajes() {
     const navbarBadge = document.getElementById("badge-mensajes");
     const panelBadge = document.getElementById("contador-mensajes");
 
-    const total = data.success ? data.total : 0;
+    if (data.success && data.chats) {
+      // 2. Filtramos cuántos chats tienen al menos 1 mensaje no leído
+      const chatsConMensajes = data.chats.filter(chat => chat.noLeidos > 0);
+      const totalChatsSinLeer = chatsConMensajes.length; // Esto dará 3 en tu ejemplo
 
-    if (navbarBadge) {
-      navbarBadge.textContent = total > 0 ? String(total) : "";
-      navbarBadge.classList.toggle("oculto", total === 0);
-    }
+      // 3. Actualizamos el Badge de la Navbar
+      if (navbarBadge) {
+        navbarBadge.textContent = totalChatsSinLeer > 0 ? String(totalChatsSinLeer) : "";
+        navbarBadge.classList.toggle("oculto", totalChatsSinLeer === 0);
+      }
 
-    if (panelBadge) {
-      panelBadge.textContent = total > 0 ? String(total) : "";
-      panelBadge.classList.toggle("oculto", total === 0);
+      // 4. Actualizamos el Badge del Panel (al lado de la X)
+      if (panelBadge) {
+        panelBadge.textContent = totalChatsSinLeer > 0 ? String(totalChatsSinLeer) : "";
+        panelBadge.classList.toggle("oculto", totalChatsSinLeer === 0);
+      }
     }
   } catch (error) {
     console.error("❌ Error al actualizar badge:", error);
   }
 }
+
 
 
 
