@@ -201,7 +201,6 @@ async function cargarMensajes(chatId) {
       listaMensajes.innerHTML = "<li>Error al cargar mensajes</li>";
       return;
     }
-
     // Encabezado
     document.getElementById("nombre-chat").textContent = data.nombre || "";
     const fotoValida = typeof data.fotoPerfil === "string" && data.fotoPerfil.trim() !== "";
@@ -319,6 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>  
 </body>
 </html>
+
 
 
 
