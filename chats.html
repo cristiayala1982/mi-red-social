@@ -22,33 +22,34 @@
 <nav class="app-navbar">
   <div class="app-navbar-logo">
     <a href="home.html">
-      <img src="img/icono home.webp" alt="Inicio" width="40" height="40">
+      <img src="img/icono home.webp" alt="Inicio" class="logo-img">
     </a>
-    <span id="bienvenida" class="bienvenida-texto"></span>
   </div>
 
-  <!-- Buscador -->
   <form id="form-busqueda" class="buscador-usuarios">
+    <button type="button" class="btn-cerrar-busqueda mobile-only">✕</button>
     <span class="icono-lupa">🔍</span>
     <input type="text" id="input-busqueda" placeholder="Buscar usuario..." autocomplete="off">
     <ul id="resultados-busqueda" class="resultados-autocompletado"></ul>
   </form>
- <!-- Íconos de mensaje y amigos -->
-<div class="nav-icons">
-  <button id="btn-amigos" class="icono-btn">👥</button>
-  <button id="btn-mensajes" class="icono-btn" style="position:relative;">
-    💬
-    <span id="badge-mensajes" class="badge" style="display:none;"></span>
-  </button>
-</div>
 
-  <!-- Foto de perfil con menú -->
-  <div class="perfil-menu">
-    <img id="nav-foto-perfil" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono-nav">
-    <ul class="dropdown-menu">
-      <li><a href="miPerfil.html">Mi perfil</a></li>
-      <li><a href="#">Cerrar sesión</a></li>
-    </ul>
+  <div class="nav-right-section">
+    <button class="icono-btn mobile-only" id="btn-abrir-busqueda">🔍</button>
+    
+    <div class="nav-icons">
+      <button id="btn-amigos" class="icono-btn">👥</button>
+      <button id="btn-mensajes" class="icono-btn">
+        💬 <span id="badge-mensajes" class="badge oculto"></span>
+      </button>
+    </div>
+
+    <div class="perfil-menu">
+      <img id="nav-foto-perfil" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono-nav">
+      <ul class="dropdown-menu">
+        <li><a href="miPerfil.html">Mi perfil</a></li>
+        <li><a href="#">Cerrar sesión</a></li>
+      </ul>
+    </div>
   </div>
 </nav>
 <!-- Contenedor principal de la app -->
@@ -323,6 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>  
 </body>
 </html>
+
 
 
 
