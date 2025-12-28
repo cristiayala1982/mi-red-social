@@ -50,6 +50,7 @@
 }
 
 
+
 /* Lista de chats dentro del panel */
 #lista-chats {
   list-style: none;
@@ -219,6 +220,7 @@
     min-width: 20px;
   }
 }
+
 
 
 
