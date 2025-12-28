@@ -75,18 +75,32 @@ export async function actualizarBadgeMensajes() {
     if (!badge) return;
 
     if (data.success && data.total > 0) {
+      // Navbar
       badge.textContent = data.total;
       badge.classList.remove("oculto");
-
       badge.classList.add("updated");
       setTimeout(() => badge.classList.remove("updated"), 300);
+
+      // Panel lateral 👇
+      const panelBadge = document.getElementById("contador-mensajes");
+      if (panelBadge) {
+        panelBadge.textContent = data.total;
+        panelBadge.classList.remove("oculto");
+      }
     } else {
       badge.classList.add("oculto");
+
+      const panelBadge = document.getElementById("contador-mensajes");
+      if (panelBadge) {
+        panelBadge.textContent = "";
+        panelBadge.classList.add("oculto");
+      }
     }
   } catch (error) {
     console.error("❌ Error al actualizar badge:", error);
   }
 }
+
 
 // 🚀 Ejecutar al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
@@ -131,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
