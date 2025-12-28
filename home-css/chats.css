@@ -1,69 +1,27 @@
-/* Panel lateral de chats */
-#panel-chats {
-  position: fixed;
-  right: -400px; /* oculto al inicio */
-  top: 0;
-  width: 400px;
-  height: 100%;
-  background: #fff;
-  box-shadow: -2px 0 6px rgba(0,0,0,0.2);
-  transition: right 0.3s ease;
-  z-index: 2100; /* más alto que el navbar */
-  padding: 20px;
-  overflow-y: auto;
-}
-
-#panel-chats.visible {
-  right: 0; /* aparece al mostrar */
-}
-
-/* Encabezado con ❌ y numerito rojo */
-.encabezado-panel-chats {
+/* 💬 Chat principal */
+.chat-container {
+  flex-grow: 1;
   display: flex;
-  justify-content: space-between; /* ❌ a la izquierda, badge a la derecha */
-  align-items: center;
-  padding: 10px 5px;
-  margin-bottom: 10px;
+  flex-direction: column;
+  background: white;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  margin: 0 auto;
+  width: 100%;
+  max-width: 500px;
+  /* 👇 ocupa toda la altura disponible */
+  height: calc(100vh - 70px); /* resta la altura de la navbar si es fija */
+  overflow: hidden;
 }
 
-.cerrar-panel {
-  font-size: 28px;
-  cursor: pointer;
-  color: #333;
-}
-
-.cerrar-panel:hover {
-  color: #007bff;
-}
-
-.badge-global {
-  background: #dc3545; /* rojo intenso */
-  color: white;
-  font-size: 13px;
-  padding: 4px 10px;
-  border-radius: 16px;
-  font-weight: bold;
-}
-
-/* Lista de chats dentro del panel */
-#lista-chats {
-  list-style: none;
-  padding: 0;
-  margin-top: 10px; /* espacio después del encabezado */
-}
-
-#lista-chats li {
+/* 🧢 Encabezado del chat */
+.encabezado-chat {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-#lista-chats li:hover {
-  background: #f5f5f5;
+  gap: 10px;
+  padding: 15px;
+  background: #d6d6d6d0;
+  border-bottom: 1px solid #ccc;
 }
 
 .foto-chat {
@@ -73,64 +31,227 @@
   object-fit: cover;
 }
 
-.info-chat {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.info-chat strong {
-  font-size: 15px;
+.nombre-chat {
+  font-size: 18px;
+  font-weight: bold;
   color: #333;
 }
 
-.info-chat p {
-  font-size: 13px;
-  color: #666;
-  margin: 2px 0 0;
+/* 📜 Mensajes */
+.mensajes-wrapper {
+  flex-grow: 1;
+  overflow-y: auto;   /* 👈 aquí va el scroll */
+  display: flex;
+  justify-content: center;
+  padding: 15px;
 }
 
-/* Badge de mensajes no leídos dentro de cada chat */
-.chat-item .badge {
-  background: #dc3545;
-  color: white;
-  font-size: 12px;
-  padding: 3px 7px;
-  border-radius: 12px;
+.mensajes-centro {
+  width: 100%;
+  max-width: 500px;
+}
+
+#lista-mensajes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#lista-mensajes li {
+  margin: 8px 0;
+  padding: 10px 14px;
+  border-radius: 18px;
+  max-width: 70%;
+  word-wrap: break-word;
+  font-size: 14px;
+  animation: fadeIn 0.3s ease-in;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+/* Mensajes míos */
+#lista-mensajes li.mio {
+  background: #cce5ff;
+  color: #003366;
   margin-left: auto;
-  margin-right: 5px;
-  align-self: center;
 }
 
-/* Botón borrar chats */
-.btn-borrar-chat {
+#lista-mensajes li.mio:hover {
+  background: #b3d8ff;
+  transform: scale(1.02);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Mensajes del otro */
+#lista-mensajes li.otro {
+  background: #eeeeee;
+  color: #333;
+  margin-right: auto;
+}
+
+#lista-mensajes li.otro:hover {
+  background: #dddddd;
+  transform: scale(1.02);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* 🕒 Hora */
+#lista-mensajes li .hora {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+  text-align: right;
+}
+
+#lista-mensajes li.otro .hora {
+  text-align: left;
+}
+
+/* 📝 Input de mensaje */
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  background: #fff;
+}
+
+.input-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+#nuevo-mensaje {
+  flex-grow: 1;
+  width: 100%;
+  padding: 10px 40px 10px 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+  resize: none;
+}
+
+#enviar {
+  margin-left: 10px;
+  padding: 10px 20px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+#enviar:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+
+/* ✨ Animación de entrada */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/*BORRAR MENSAJES*/
+#btn-borrar-chat {
   background: none;
   border: none;
   font-size: 18px;
   color: #888;
+  margin-left: auto;
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
-.btn-borrar-chat:hover {
+#btn-borrar-chat:hover {
   color: #d11a2a;
+}
+
+/*CONFIRMACIÓN BORRAR*/
+.notificacion {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.notificacion.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.notificacion.oculto {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* 🎤 Microfono */
+.icono-audio {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #4caf50;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.icono-audio:hover {
+  color: #388e3c;
+}
+
+.ondas {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.ondas span {
+  display: block;
+  width: 3px;
+  height: 6px;
+  background: #4caf50;
+  animation: onda 1s infinite ease-in-out;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+.ondas span:nth-child(2) { animation-delay: 0.2s; }
+.ondas span:nth-child(3) { animation-delay: 0.4s; }
+.ondas span:nth-child(4) { animation-delay: 0.6s; }
+
+@keyframes onda {
+  0%, 100% { height: 6px; }
+  50% { height: 12px; }
+}
+
+.oculto {
+  display: none;
 }
 
 /* 📱 Tablet */
 @media (max-width: 768px) {
-  #panel-chats {
-    width: 300px;
-    right: -300px;
-    padding: 15px;
-  }
-
-  .cerrar-panel {
-    font-size: 26px;
-  }
-
-  .badge-global {
-    font-size: 12px;
-    padding: 3px 8px;
+  .chat-container {
+    max-width: 100%;
+    height: calc(100vh - 60px);
   }
 
   .foto-chat {
@@ -138,46 +259,34 @@
     height: 36px;
   }
 
-  .info-chat strong {
-    font-size: 14px;
-  }
-
-  .info-chat p {
-    font-size: 12px;
-  }
-
-  .btn-borrar-chat {
+  .nombre-chat {
     font-size: 16px;
+  }
+
+  #lista-mensajes li {
+    font-size: 13px;
+    max-width: 80%;
+  }
+
+  #nuevo-mensaje {
+    font-size: 13px;
+  }
+
+  #enviar {
+    padding: 8px 16px;
+    font-size: 13px;
   }
 }
 
 /* 📱 Celular */
 @media (max-width: 576px) {
-  #panel-chats {
-    width: 100%;
-    right: -100%;
-    padding: 12px;
+  .chat-container {
+    max-width: 100%;
+    height: calc(100vh - 55px);
   }
 
-  #panel-chats.visible {
-    right: 0;
-  }
-
-  .cerrar-panel {
-    font-size: 24px;
-  }
-
-  .badge-global {
-    font-size: 11px;
-    padding: 3px 7px;
-  }
-
-  #lista-chats {
-    margin-top: 8px;
-  }
-
-  #lista-chats li {
-    padding: 8px;
+  .encabezado-chat {
+    padding: 10px;
     gap: 8px;
   }
 
@@ -186,26 +295,31 @@
     height: 32px;
   }
 
-  .info-chat strong {
-    font-size: 13px;
-  }
-
-  .info-chat p {
-    font-size: 11px;
-  }
-
-  .btn-borrar-chat {
+  .nombre-chat {
     font-size: 15px;
   }
+
+  #lista-mensajes li {
+    font-size: 12px;
+    max-width: 85%;
+  }
+
+  #nuevo-mensaje {
+    font-size: 12px;
+    padding: 8px 35px 8px 8px;
+  }
+
+  #enviar {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+
+  .icono-audio {
+    font-size: 16px;
+  }
 }
 
-/* Resaltar chats no leídos */
-.chat-no-leido {
-  background-color: #f0f8ff;
-  font-weight: bold;
-  border-left: 4px solid #dc3545;
-  box-shadow: 0 0 4px rgba(220, 53, 69, 0.2);
-}
+
 
 
 
