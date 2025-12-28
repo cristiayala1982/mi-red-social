@@ -78,8 +78,6 @@ export async function actualizarBadgeMensajes() {
       if (navbarBadge) {
         navbarBadge.textContent = data.total;
         navbarBadge.classList.remove("oculto");
-        navbarBadge.classList.add("updated");
-        setTimeout(() => navbarBadge.classList.remove("updated"), 300);
       }
       if (panelBadge) {
         panelBadge.textContent = data.total;
@@ -99,6 +97,7 @@ export async function actualizarBadgeMensajes() {
     console.error("❌ Error al actualizar badge:", error);
   }
 }
+
 
 
 
@@ -145,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
