@@ -29,17 +29,29 @@
 
   <!-- Barra de navegación -->
   <nav class="app-navbar">
-    <div class="app-navbar-logo">
-      <a href="home.html">
-        <img src="img/icono home.webp" alt="Inicio" width="40" height="40">
-      </a>
-      <span id="bienvenida" class="bienvenida-texto"></span>
+  <div class="app-navbar-logo">
+    <a href="home.html">
+      <img src="img/icono home.webp" alt="Inicio" class="logo-img">
+    </a>
+  </div>
+
+  <form id="form-busqueda" class="buscador-usuarios">
+    <button type="button" class="btn-cerrar-busqueda mobile-only">✕</button>
+    <span class="icono-lupa">🔍</span>
+    <input type="text" id="input-busqueda" placeholder="Buscar usuario..." autocomplete="off">
+    <ul id="resultados-busqueda" class="resultados-autocompletado"></ul>
+  </form>
+
+  <div class="nav-right-section">
+    <button class="icono-btn mobile-only" id="btn-abrir-busqueda">🔍</button>
+
+    <div class="nav-icons">
+      <button id="btn-amigos" class="icono-btn">👥</button>
+      <button id="btn-mensajes" class="icono-btn">
+        💬 <span id="badge-mensajes" class="badge oculto"></span>
+      </button>
     </div>
-<div class="nav-icons">
-  <button id="btn-amigos" class="icono-btn">👥</button>
-<button id="btn-mensajes" class="icono-btn" style="position:relative;"> 💬 
-  <span id="badge-mensajes" class="badge oculto"></span> </button>
-</div>
+
     <div class="perfil-menu">
       <img id="nav-foto-perfil" src="img/usuario-camara.png" alt="Perfil" class="perfil-icono-nav">
       <ul class="dropdown-menu">
@@ -47,7 +59,8 @@
         <li><a href="#">Cerrar sesión</a></li>
       </ul>
     </div>
-  </nav>
+  </div>
+</nav>
 
 <div class="container py-5">
   <h1 class="text-center mb-5">Mi perfil</h1>
