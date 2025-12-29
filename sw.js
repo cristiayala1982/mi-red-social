@@ -1,18 +1,13 @@
-// Este código corre en segundo plano
+// sw.js - Manejador de mensajes en segundo plano
 self.addEventListener('push', function(event) {
-    const data = event.data ? event.data.json() : { title: 'Nuevo Mensaje', body: 'Tienes un nuevo mensaje.' };
-
     const options = {
-        body: data.body,
-        icon: 'img/icono home.webp', // Asegúrate de que esta ruta sea correcta
-        badge: 'img/icono home.webp',
-        vibrate: [100, 50, 100],
-        data: { url: 'home.html' }
+        body: 'Tienes un nuevo mensaje en la red social',
+        icon: 'img/icono home.webp',
+        badge: 'img/icono home.webp'
     };
 
     event.waitUntil(
-        self.notificationPermission === 'granted' && 
-        self.registration.showNotification(data.title, options)
+        self.registration.showNotification('Nuevo Mensaje', options)
     );
 });
 
