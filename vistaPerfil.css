@@ -195,4 +195,36 @@
   border-radius: 6px;
   letter-spacing: 0.5px;    /* 👈 más legible */
 }
+/* ✅ Arreglo para que el perfil no se corte en celulares */
+@media (max-width: 600px) {
+  .perfil-encabezado {
+    flex-direction: column; /* Apila la foto arriba y los datos abajo */
+    gap: 20px;
+    text-align: center; /* Centra los textos en móvil */
+  }
+
+  .foto-perfil-container img {
+    width: 140px; /* Reducimos un poco la foto en móvil */
+    height: 140px;
+  }
+
+  .datos-usuario {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los datos */
+  }
+
+  .acciones-perfil {
+    justify-content: center; /* Centra los botones Seguir y Mensaje */
+    width: 100%;
+    flex-wrap: wrap; /* Si los botones son muy largos, bajan de fila en vez de cortarse */
+  }
+  
+  .btn-seguir, .btn-mensaje {
+    flex: 1; /* Hace que los botones tengan el mismo tamaño */
+    min-width: 120px;
+    max-width: 200px;
+  }
+}
 
