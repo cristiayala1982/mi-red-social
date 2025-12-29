@@ -1,5 +1,5 @@
 /* ================================================= */
-/* 🌐 BARRA DE NAVEGACIÓN COMPLETA (UNIFICADA)      */
+/* 🌐 BARRA DE NAVEGACIÓN COMPLETA (CORREGIDA)      */
 /* ================================================= */
 
 .app-navbar {
@@ -16,21 +16,16 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* 🔷 LOGO */
-.logo-img { 
-  width: 55px; 
-  height: 55px; 
-  display: block;
-}
+.logo-img { width: 55px; height: 55px; display: block; }
 
-/* 🔍 BUSCADOR (ESCRITORIO) */
+/* 🔍 BUSCADOR Y LA X */
 .buscador-usuarios {
   display: flex;
   align-items: center;
   background: white;
   border-radius: 20px;
   padding: 5px 15px;
-  flex: 0 0 280px; /* Un poco más ancho para que quepa la X */
+  flex: 0 0 250px; 
   margin: 0 15px;
   position: relative;
 }
@@ -42,45 +37,35 @@
   font-size: 16px;
   padding: 6px;
   color: #333;
-  background: transparent;
 }
 
 .icono-lupa { color: #888; margin-right: 8px; font-size: 18px; }
 
-/* ✨ ESTILO DE LA X (BOTÓN CERRAR) */
+/* Estilo de la X (Botón cerrar) */
 .btn-cerrar-busqueda {
-  background: #e0e0e0;
+  background: #f0f0f0;
   border: none;
   border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  display: none; /* Se activa por JS cuando hay texto */
+  width: 24px;
+  height: 24px;
+  display: none; /* Se activa por JS */
   align-items: center;
   justify-content: center;
   font-size: 12px;
   cursor: pointer;
-  color: #555;
-  padding: 0;
-  transition: all 0.2s;
+  color: #666;
+  margin-left: 5px;
   flex-shrink: 0;
 }
 
-.btn-cerrar-busqueda:hover {
-  background: #d0d0d0;
-  color: #000;
-}
-
-/* 👥 SECCIÓN DERECHA */
+/* 👥 ICONOS Y BADGE ROJO (¡CORREGIDO!) */
 .nav-right-section {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-.nav-icons { 
-  display: flex; 
-  gap: 18px; 
-}
+.nav-icons { display: flex; gap: 18px; }
 
 .icono-btn {
   background: none;
@@ -91,45 +76,40 @@
   padding: 5px;
   display: flex;
   align-items: center;
-  position: relative;
+  position: relative; /* Necesario para que el badge se pegue aquí */
 }
 
+/* 🔴 BURBUJA ROJA DE NOTIFICACIONES */
+.badge {
+  background: #ff4444 !important; /* Rojo vibrante */
+  color: white !important;
+  font-size: 11px;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  padding: 2px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #007bff; /* Borde del mismo color que la navbar */
+  z-index: 10;
+}
+
+.oculto { display: none !important; }
+
+/* 🔽 MENÚ PERFIL */
 .perfil-icono-nav {
-  width: 55px;
-  height: 55px;
+  width: 55px; height: 55px;
   border-radius: 50%;
   border: 2px solid white;
   object-fit: cover;
   cursor: pointer;
 }
 
-/* 📋 RESULTADOS */
-.resultados-autocompletado {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background: white;
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 2000;
-}
-
-.resultados-autocompletado li {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  color: #333;
-  cursor: pointer;
-}
-
-/* 🔽 MENÚ PERFIL */
 .perfil-menu .dropdown-menu {
   display: none;
   position: absolute;
@@ -142,6 +122,15 @@
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   z-index: 2000;
+  border: 1px solid #eee;
+}
+
+.perfil-menu .dropdown-menu li a {
+  display: block;
+  padding: 12px 20px;
+  color: #333;
+  text-decoration: none;
+  font-size: 15px;
 }
 
 @media (min-width: 769px) {
@@ -151,30 +140,16 @@
 /* 📱 MÓVIL */
 @media (max-width: 768px) {
   .bienvenida-texto { display: none; }
-
   .buscador-usuarios {
     display: none; 
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 75px;
-    margin: 0; border-radius: 0; z-index: 1001;
-    padding: 0 20px;
+    z-index: 1001;
+    background: white;
   }
-
-  .buscador-usuarios.active {
-    display: flex;
-  }
-
-  /* En móvil la X es un poco más grande para el dedo */
-  .btn-cerrar-busqueda {
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-    background: transparent; /* En móvil queda mejor sin fondo si está al inicio */
-  }
-
-  .nav-icons { gap: 12px; }
+  .buscador-usuarios.active { display: flex; }
   .icono-btn { font-size: 32px; }
+  .perfil-menu .dropdown-menu { top: 70px; right: 5px; }
 }
-
 
