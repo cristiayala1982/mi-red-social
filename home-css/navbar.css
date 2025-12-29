@@ -8,7 +8,7 @@
   align-items: center;
   background: #007bff;
   padding: 0 15px;
-  height: 75px; /* más alta en PC y móvil */
+  height: 75px; 
   color: white;
   position: sticky;
   top: 0;
@@ -36,7 +36,7 @@
   background: white;
   border-radius: 20px;
   padding: 5px 15px;
-  flex: 0 0 250px; /* ancho fijo más chico */
+  flex: 0 0 250px; 
   margin: 0 15px;
   position: relative;
 }
@@ -67,13 +67,24 @@
 .icono-btn {
   background: none;
   border: none;
-  font-size: 30px; /* iconos más grandes */
-  color: white;
+  font-size: 30px; 
+  color: white !important; /* Forzado blanco */
   cursor: pointer;
   padding: 5px;
   display: flex;
   align-items: center;
   position: relative;
+  transition: opacity 0.2s;
+}
+
+.icono-btn:hover {
+  opacity: 0.8;
+}
+
+/* Asegurar visibilidad de iconos FontAwesome */
+.icono-btn i {
+  color: white !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 .perfil-icono-nav {
@@ -119,11 +130,6 @@
   border: 1px solid #ddd;
 }
 
-.resultados-autocompletado li span {
-  font-size: 14px;
-  font-weight: 500;
-}
-
 /* 🔴 BADGE DE NOTIFICACIONES */
 .badge {
   background: #ff4444;
@@ -139,7 +145,7 @@
 
 .oculto { display: none; }
 
-/* 🔽 MENÚ DE PERFIL */
+/* 🔽 MENÚ DE PERFIL (DROPDOWN) */
 .perfil-menu {
   position: relative;
 }
@@ -148,32 +154,55 @@
   display: none;
   position: absolute;
   right: 0;
-  top: 100%;
+  top: 65px; /* Separación de la navbar */
   background: white;
-  color: #333;
+  min-width: 170px;
   list-style: none;
-  padding: 10px 0;
+  padding: 8px 0;
   margin: 0;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   z-index: 2000;
+  border: 1px solid #eee;
 }
 
-.perfil-menu:hover .dropdown-menu {
-  display: block; /* aparece al pasar el mouse en PC */
+/* Estilo links del menú */
+.perfil-menu .dropdown-menu li a {
+  display: block;
+  padding: 12px 20px;
+  color: #333;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.perfil-menu .dropdown-menu li:not(:last-child) {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.perfil-menu .dropdown-menu li a:hover {
+  background-color: #f8f9fa;
+  color: #007bff;
+}
+
+/* En escritorio aparece al pasar el mouse */
+@media (min-width: 769px) {
+  .perfil-menu:hover .dropdown-menu {
+    display: block;
+  }
 }
 
 /* 📱 OPTIMIZACIÓN PARA CELULARES */
 @media (max-width: 768px) {
   .bienvenida-texto { display: none; }
 
-  .mobile-only { display: block; } /* corregido */
+  .mobile-only { display: block; }
 
   .buscador-usuarios {
     display: none; 
     position: absolute;
     top: 0; left: 0;
-    width: 100%; height: 75px; /* más alta en móvil */
+    width: 100%; height: 75px;
     max-width: none; margin: 0;
     border-radius: 0; z-index: 1001;
   }
@@ -182,31 +211,19 @@
     display: flex;
   }
 
-  .btn-cerrar-busqueda {
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #333;
-    padding: 10px;
-  }
-
   .nav-icons { gap: 12px; }
   .icono-btn { font-size: 32px; }
+
+  /* Ajuste menú perfil en móvil */
+  .perfil-menu .dropdown-menu {
+    top: 70px;
+    right: 5px;
+  }
 
   .resultados-autocompletado {
     position: fixed;
     top: 75px;
     border-radius: 0;
-  }
-}
-
-.mobile-only {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .mobile-only {
-    display: block;
   }
 }
 
