@@ -82,7 +82,7 @@ async function cargarChats() {
       mostrarNotificacion("❌ Error al cargar chats", "error");
       return;
     }
-
+data.chats.sort((a, b) => (b.noLeidos > 0 ? 1 : 0) - (a.noLeidos > 0 ? 1 : 0));
     data.chats.forEach(chat => {
       const fotoValida = typeof chat.foto_perfil === "string" && chat.foto_perfil.trim() !== "";
       const foto = fotoValida
