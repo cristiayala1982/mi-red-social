@@ -1,5 +1,5 @@
 /* ================================================= */
-/* 🌐 BARRA DE NAVEGACIÓN COMPLETA (CORREGIDA)      */
+/* 🌐 BARRA DE NAVEGACIÓN COMPLETA (FINAL CORREGIDA) */
 /* ================================================= */
 
 .app-navbar {
@@ -18,7 +18,7 @@
 
 .logo-img { width: 55px; height: 55px; display: block; }
 
-/* 🔍 BUSCADOR Y LA X */
+/* 🔍 BUSCADOR (ESCRITORIO) */
 .buscador-usuarios {
   display: flex;
   align-items: center;
@@ -41,24 +41,26 @@
 
 .icono-lupa { color: #888; margin-right: 8px; font-size: 18px; }
 
-/* Estilo de la X (Botón cerrar) */
+/* ✨ ARREGLO DE LA X (Solo visible si hay texto) */
 .btn-cerrar-busqueda {
-  background: #f0f0f0;
+  background: #eee;
   border: none;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   display: none; /* Se activa por JS */
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 10px;
   cursor: pointer;
   color: #666;
-  margin-left: 5px;
   flex-shrink: 0;
+  margin-left: 5px;
 }
 
-/* 👥 ICONOS Y BADGE ROJO (¡CORREGIDO!) */
+.btn-cerrar-busqueda:hover { background: #ddd; color: #333; }
+
+/* 👥 SECCIÓN DERECHA E ICONOS */
 .nav-right-section {
   display: flex;
   align-items: center;
@@ -76,70 +78,77 @@
   padding: 5px;
   display: flex;
   align-items: center;
-  position: relative; /* Necesario para que el badge se pegue aquí */
+  position: relative;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
-/* 🔴 BURBUJA ROJA DE NOTIFICACIONES */
+/* Efecto Hover que pedías */
+.icono-btn:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+/* 🔴 BADGE ROJO (¡Vuelve a ser circular!) */
 .badge {
-  background: #ff4444 !important; /* Rojo vibrante */
+  background: #ff4444 !important;
   color: white !important;
   font-size: 11px;
   font-weight: bold;
   min-width: 18px;
   height: 18px;
   padding: 2px;
-  border-radius: 50%;
+  border-radius: 50%; /* Esto lo hace redondo */
   position: absolute;
   top: 0;
   right: -5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #007bff; /* Borde del mismo color que la navbar */
-  z-index: 10;
+  border: 2px solid #007bff;
 }
 
 .oculto { display: none !important; }
 
-/* 🔽 MENÚ PERFIL */
-.perfil-icono-nav {
-  width: 55px; height: 55px;
-  border-radius: 50%;
-  border: 2px solid white;
-  object-fit: cover;
+/* 📋 RESULTADOS DE BÚSQUEDA (Arreglo tamaño imagen) */
+.resultados-autocompletado {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 2000;
+}
+
+.resultados-autocompletado li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  color: #333;
   cursor: pointer;
 }
 
-.perfil-menu .dropdown-menu {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 65px;
-  background: white;
-  min-width: 170px;
-  list-style: none;
-  padding: 8px 0;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  z-index: 2000;
-  border: 1px solid #eee;
+.resultados-autocompletado li:hover { background: #f8f9fa; }
+
+/* AQUÍ EL ARREGLO DE LA IMAGEN ENORME */
+.resultados-autocompletado li img {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  flex-shrink: 0; /* Evita que se aplaste */
 }
 
-.perfil-menu .dropdown-menu li a {
-  display: block;
-  padding: 12px 20px;
-  color: #333;
-  text-decoration: none;
-  font-size: 15px;
-}
-
-@media (min-width: 769px) {
-  .perfil-menu:hover .dropdown-menu { display: block; }
-}
-
-/* 📱 MÓVIL */
+/* 📱 OPTIMIZACIÓN MÓVIL */
 @media (max-width: 768px) {
-  .bienvenida-texto { display: none; }
   .buscador-usuarios {
     display: none; 
     position: absolute;
