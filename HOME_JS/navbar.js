@@ -63,7 +63,7 @@ export async function cargarDatosNavbar() {
   }
 }
 
-// 👉 Actualizar badge de mensajes no leídos (Corregido para contar CHATS, no mensajes)
+// 👉 Actualizar badge de mensajes no leídos (Corregido para contar CHATS, no mensajes)
 export async function actualizarBadgeMensajes() {
   try {
     // 1. Consultamos la lista completa de chats
@@ -146,6 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
