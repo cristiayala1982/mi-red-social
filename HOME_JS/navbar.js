@@ -2,13 +2,23 @@ const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 let usuarioId = null;
 export let datosUsuario = null;
 
-// Pedir permiso para notificaciones
-if ("Notification" in window) {
-  Notification.requestPermission().then(permission => {
-    if (permission === "granted") {
-      console.log("✅ Permiso de notificaciones concedido");
-    }
-  });
+// 🔔 Configuración de Notificaciones
+if ("serviceWorker" in navigator && "PushManager" in window) {
+  // 1. Registramos el archivo sw.js
+  navigator.serviceWorker.register("sw.js")
+    .then(reg => {
+      console.log("✅ Service Worker listo");
+      
+      // 2. Pedimos permiso
+      return Notification.requestPermission();
+    })
+    .then(permission => {
+      if (permission === "granted") {
+        console.log("✅ Permiso concedido");
+        // Aquí deberías llamar a una función para enviar la suscripción a tu API
+      }
+    })
+    .catch(err => console.error("❌ Error registrando notificaciones:", err));
 }
 
 // 👉 función para obtener siempre el usuarioId actualizado
@@ -155,6 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
