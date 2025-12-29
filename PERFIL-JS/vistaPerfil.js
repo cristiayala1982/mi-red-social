@@ -175,13 +175,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const estadoData = await estadoRes.json();
       const yaSigues = !!estadoData?.sigo;
 
-      // --- Busca esta parte en vistaPerfil.js ---
+      // ✅ Con este cambio el CSS nuevo reconocerá ambos botones y los hará iguales
 acciones.innerHTML = `
   <button id="btn-seguir" class="btn-seguir ${yaSigues ? "siguiendo" : ""}">
     ${yaSigues ? "Siguiendo" : "Seguir"}
   </button>
   <button id="btn-mensaje" class="btn-mensaje">Mensaje</button>
 `;
+
 
 
       const btnMensaje = document.getElementById("btn-mensaje");
