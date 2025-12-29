@@ -1,5 +1,5 @@
 /* ================================================= */
-/* 🌐 BARRA DE NAVEGACIÓN COMPLETA (FINAL CORREGIDA) */
+/* 🌐 NAVBAR UNIFICADA - CORRECCIÓN DE ERRORES      */
 /* ================================================= */
 
 .app-navbar {
@@ -25,7 +25,7 @@
   background: white;
   border-radius: 20px;
   padding: 5px 15px;
-  flex: 0 0 250px; 
+  flex: 0 0 280px; 
   margin: 0 15px;
   position: relative;
 }
@@ -37,37 +37,35 @@
   font-size: 16px;
   padding: 6px;
   color: #333;
+  background: transparent;
 }
 
 .icono-lupa { color: #888; margin-right: 8px; font-size: 18px; }
 
-/* ✨ ARREGLO DE LA X (Solo visible si hay texto) */
+/* Botón X dentro del buscador */
 .btn-cerrar-busqueda {
   background: #eee;
   border: none;
   border-radius: 50%;
   width: 22px;
   height: 22px;
-  display: none; /* Se activa por JS */
+  display: none; 
   align-items: center;
   justify-content: center;
   font-size: 10px;
   cursor: pointer;
   color: #666;
   flex-shrink: 0;
-  margin-left: 5px;
 }
 
-.btn-cerrar-busqueda:hover { background: #ddd; color: #333; }
-
-/* 👥 SECCIÓN DERECHA E ICONOS */
+/* 👥 SECCIÓN DERECHA */
 .nav-right-section {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-.nav-icons { display: flex; gap: 18px; }
+.nav-icons { display: flex; gap: 18px; align-items: center; }
 
 .icono-btn {
   background: none;
@@ -79,25 +77,20 @@
   display: flex;
   align-items: center;
   position: relative;
-  transition: transform 0.2s, opacity 0.2s;
+  transition: all 0.2s;
 }
 
-/* Efecto Hover que pedías */
-.icono-btn:hover {
-  opacity: 0.8;
-  transform: scale(1.1);
-}
+.icono-btn:hover { opacity: 0.8; transform: scale(1.1); }
 
-/* 🔴 BADGE ROJO (¡Vuelve a ser circular!) */
+/* 🔴 BADGE ROJO CIRCULAR */
 .badge {
   background: #ff4444 !important;
   color: white !important;
   font-size: 11px;
   font-weight: bold;
-  min-width: 18px;
+  width: 18px;
   height: 18px;
-  padding: 2px;
-  border-radius: 50%; /* Esto lo hace redondo */
+  border-radius: 50%;
   position: absolute;
   top: 0;
   right: -5px;
@@ -107,58 +100,81 @@
   border: 2px solid #007bff;
 }
 
-.oculto { display: none !important; }
+/* 🖼️ FOTO DE PERFIL (SOLUCIÓN AL TAMAÑO ENORME) */
+.perfil-icono-nav {
+  width: 50px !important;    /* Forzamos tamaño pequeño */
+  height: 50px !important;   /* Forzamos tamaño pequeño */
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+  cursor: pointer;
+  flex-shrink: 0;
+}
 
-/* 📋 RESULTADOS DE BÚSQUEDA (Arreglo tamaño imagen) */
+/* 📋 RESULTADOS DE BÚSQUEDA */
 .resultados-autocompletado {
   position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
+  top: 100%; left: 0; width: 100%;
   background: white;
   border-radius: 0 0 10px 10px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 2000;
+  list-style: none; padding: 0; margin: 0;
+  max-height: 300px; overflow-y: auto; z-index: 2000;
 }
 
 .resultados-autocompletado li {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  color: #333;
-  cursor: pointer;
+  display: flex; align-items: center;
+  padding: 10px; border-bottom: 1px solid #eee;
+  color: #333; cursor: pointer;
 }
 
-.resultados-autocompletado li:hover { background: #f8f9fa; }
-
-/* AQUÍ EL ARREGLO DE LA IMAGEN ENORME */
 .resultados-autocompletado li img {
   width: 40px !important;
   height: 40px !important;
   border-radius: 50%;
-  object-fit: cover;
   margin-right: 12px;
-  flex-shrink: 0; /* Evita que se aplaste */
+  object-fit: cover;
 }
 
-/* 📱 OPTIMIZACIÓN MÓVIL */
+/* 🔽 MENÚ DROPDOWN */
+.perfil-menu .dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0; top: 60px;
+  background: white;
+  min-width: 160px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  z-index: 2000;
+  padding: 10px 0;
+}
+
+.perfil-menu .dropdown-menu li a {
+  display: block; padding: 10px 20px;
+  color: #333; text-decoration: none;
+}
+
+/* 📱 REGLAS DE VISIBILIDAD (PARA OCULTAR LUPA EN PC) */
+.mobile-only { display: none; } /* Oculto por defecto en PC */
+
+@media (min-width: 769px) {
+  .perfil-menu:hover .dropdown-menu { display: block; }
+}
+
 @media (max-width: 768px) {
+  .mobile-only { display: block; } /* Solo se ve en celular */
+  
   .buscador-usuarios {
     display: none; 
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 75px;
-    z-index: 1001;
-    background: white;
+    top: 0; left: 0; width: 100%; height: 75px;
+    z-index: 1001; background: white;
   }
+  
   .buscador-usuarios.active { display: flex; }
+  
   .icono-btn { font-size: 32px; }
-  .perfil-menu .dropdown-menu { top: 70px; right: 5px; }
 }
+
+.oculto { display: none !important; }
 
