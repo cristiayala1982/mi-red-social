@@ -284,6 +284,36 @@ async function cargarMensajes(chatId) {
   }
 }
 
+// 🗑️ Función para borrar el chat actual y volver al Home
+async function borrarChatActual() {
+    const params = new URLSearchParams(window.location.search);
+    const chatId = params.get("id");
+
+    if (!chatId) return;
+
+    const confirmar = confirm("¿Estás seguro de que quieres borrar TODA la conversación?");
+    if (!confirmar) return;
+
+    try {
+        const res = await fetch(`${API_URL}/api/chats/${chatId}`, {
+            method: "DELETE",
+            credentials: "include"
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            // 🚀 Segundo paso: Redirección al Home
+            window.location.href = "home.html";
+        } else {
+            alert("No se pudo borrar el chat: " + (data.mensaje || "Error desconocido"));
+        }
+    } catch (error) {
+        console.error("❌ Error en la petición DELETE:", error);
+        alert("Error de conexión al intentar borrar.");
+    }
+}
+
 // --- INICIALIZACIÓN ---
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
@@ -292,6 +322,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (chatId) {
     cargarMensajes(chatId);
     setInterval(() => cargarMensajes(chatId), 5000); // Actualiza cada 5 segundos
+  }
+  // 👇 AÑADE ESTO AQUÍ escuchar el boton de eliminar
+  const btnBorrarChat = document.getElementById("btn-borrar-chat");
+  if (btnBorrarChat) {
+    btnBorrarChat.addEventListener("click", borrarChatActual);
   }
 
   // Enviar con botón
@@ -324,6 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>  
 </body>
 </html>
+
 
 
 
