@@ -175,11 +175,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const estadoData = await estadoRes.json();
       const yaSigues = !!estadoData?.sigo;
 
-      acciones.innerHTML = `
-        <button id="btn-seguir" class="${yaSigues ? "siguiendo" : ""}">
-          ${yaSigues ? "Siguiendo" : "Seguir"}
-        </button>
-        <button id="btn-mensaje" class="btn-mensaje">Mensaje</button>`;
+      // --- Busca esta parte en vistaPerfil.js ---
+acciones.innerHTML = `
+  <button id="btn-seguir" class="btn-seguir ${yaSigues ? "siguiendo" : ""}">
+    ${yaSigues ? "Siguiendo" : "Seguir"}
+  </button>
+  <button id="btn-mensaje" class="btn-mensaje">Mensaje</button>
+`;
+
 
       const btnMensaje = document.getElementById("btn-mensaje");
       if (btnMensaje) btnMensaje.addEventListener("click", abrirChatConUsuario);
