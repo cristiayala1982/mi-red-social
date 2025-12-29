@@ -3,19 +3,43 @@ let usuarioId = null;
 export let datosUsuario = null;
 
 // 🔔 Configuración de Notificaciones
+// 1. Definimos la función (puedes ponerla arriba o abajo)
+async function suscribirUsuario() {
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    
+    // ⚠️ IMPORTANTE: 'TU_LLAVE_PUBLICA_VAPID' debe ser una cadena real generada en tu backend
+    const subscription = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: 'TU_LLAVE_PUBLICA_VAPID_AQUI' 
+    });
+
+    console.log("📍 Suscripción creada:", subscription);
+
+    await fetch(`${API_URL}/api/notificaciones/suscribir`, {
+      method: 'POST',
+      body: JSON.stringify(subscription),
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
+    });
+    console.log("🚀 Suscripción enviada al servidor");
+  } catch (error) {
+    console.error("❌ Error al suscribir al usuario:", error);
+  }
+}
+
+// 2. Configuración y ejecución
 if ("serviceWorker" in navigator && "PushManager" in window) {
-  // 1. Registramos el archivo sw.js
   navigator.serviceWorker.register("sw.js")
     .then(reg => {
       console.log("✅ Service Worker listo");
-      
-      // 2. Pedimos permiso
       return Notification.requestPermission();
     })
     .then(permission => {
       if (permission === "granted") {
         console.log("✅ Permiso concedido");
-        // Aquí deberías llamar a una función para enviar la suscripción a tu API
+        // 🔥 LLAMAMOS A LA FUNCIÓN AQUÍ
+        suscribirUsuario(); 
       }
     })
     .catch(err => console.error("❌ Error registrando notificaciones:", err));
@@ -165,6 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
