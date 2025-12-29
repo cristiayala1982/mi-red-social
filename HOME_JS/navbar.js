@@ -2,24 +2,37 @@ const API_URL = "https://phonic-odyssey-480319-a4.rj.r.appspot.com";
 let usuarioId = null;
 export let datosUsuario = null;
 
-// 🔔 Configuración de Notificaciones
-// --- CONFIGURACIÓN DE NOTIFICACIONES SIMPLE ---
+// 🔔 CONFIGURACIÓN DE NOTIFICACIONES CON TU LLAVE REAL
 if ("serviceWorker" in navigator && "PushManager" in window) {
-  // Registramos el archivo sw.js
   navigator.serviceWorker.register("sw.js")
     .then(reg => {
-      console.log("✅ Service Worker registrado");
-      // Pedimos permiso al usuario para mostrar avisos
-      return Notification.requestPermission();
+      console.log("✅ Service Worker listo");
+      return Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          // Si aceptó, generamos la suscripción
+          return reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            // Aquí ya puse tu Public Key real:
+            applicationServerKey: 'BOlhOQCx-3lyfKJLk92o_4iYy3i8ymUv5cvt0xxz7-UXKH7dKYQvZpkDt15Q5NvevQJb_y_SqfVSqbekuPLzumI'
+          });
+        }
+      });
     })
-    .then(permission => {
-      if (permission === "granted") {
-        console.log("✅ El usuario aceptó las notificaciones");
+    .then(subscription => {
+      if (subscription) {
+        console.log("📍 Suscripción creada con éxito");
+        
+        // Enviamos la suscripción a tu servidor
+        return fetch(`${API_URL}/api/notificaciones/suscribir`, {
+          method: 'POST',
+          body: JSON.stringify(subscription),
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include'
+        });
       }
     })
-    .catch(err => {
-      console.log("Aviso: Las notificaciones no están activas aún.");
-    });
+    .then(() => console.log("🚀 Servidor avisado de la nueva suscripción"))
+    .catch(err => console.log("Aviso: Configurando notificaciones..."));
 }
 
 // 👉 función para obtener siempre el usuarioId actualizado
@@ -166,6 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
